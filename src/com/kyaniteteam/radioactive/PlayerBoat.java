@@ -19,8 +19,6 @@ public class PlayerBoat extends RectangleShape implements AnimatedEntity, KeyLis
 
     private static AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
     private static Texture tex = assets.get("texture.player_boat");
-
-
     private Window window = GameContext.getInstance().getWindow();
 
     public PlayerBoat() {
