@@ -24,8 +24,7 @@ public class GameHUD extends HUD {
             if (!scene.isSuspended()) {
                 scene.suspend();
                 pauseText.setText(lang.getString("button.resume"));
-            }
-            else {
+            } else {
                 scene.resume();
                 pauseText.setText(lang.getString("button.pause"));
             }
