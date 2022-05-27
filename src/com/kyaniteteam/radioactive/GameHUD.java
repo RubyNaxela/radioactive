@@ -17,10 +17,18 @@ public class GameHUD extends HUD {
 
     private final DataAsset lang = getContext().getAssetsBundle().get("lang.en_us");
     private final Text day = new Text(), barrels = new Text(), money = new Text(), time = new Text(), pauseText = new Text();
-    private final RectangleButton pause = new RectangleButton(Vec2.f(60, 40)) {
+    private final RectangleButton pause = new RectangleButton(Vec2.f(75, 40)) {
         @Override
         public void mouseButtonPressed(@NotNull MouseButtonEvent event) {
-            getContext().getWindow().getScene().suspend();
+            final GameScene scene = getContext().getWindow().getScene();
+            if (!scene.isSuspended()) {
+                scene.suspend();
+                pauseText.setText(lang.getString("button.resume"));
+            }
+            else {
+                scene.resume();
+                pauseText.setText(lang.getString("button.pause"));
+            }
         }
     };
 
@@ -57,7 +65,7 @@ public class GameHUD extends HUD {
 
         pause.setFillColor(Colors.RED);
         pause.setOrigin(pause.getSize());
-        pause.setPosition(Vec2.subtract(window.getSize(), Vec2.f(margin, margin)));
+        pause.setPosition(window.getSize().x - margin, margin + pause.getSize().y);
         add(pause);
 
         pauseText.setText(lang.getString("button.pause"));
