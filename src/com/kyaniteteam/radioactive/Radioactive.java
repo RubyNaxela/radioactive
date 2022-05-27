@@ -15,6 +15,7 @@ public class Radioactive extends Game {
 
     @Override
     protected void init() {
-        getContext().setupWindow(800, 600, "Radioactive").setScene(new GameScene());
+        getContext().setupWindow(1024, 768, "Radioactive")
+                    .setScene(new GameScene()).setHUD(new GameHUD());
     }
 }
