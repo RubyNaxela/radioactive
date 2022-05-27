@@ -15,12 +15,13 @@ public class Radioactive extends Game {
     protected void preInit() {
         final AssetsBundle assets = getContext().getAssetsBundle();
         assets.register("lang.en_us", new DataAsset("src/res/en_us.json"));
+        assets.register("texture.barrel", new Texture("src/res/textures/barrel_clean.png"));
         assets.register("texture.player_boat", new Texture("src/res/textures/boat_test.png"));
     }
 
     @Override
     protected void init() {
         getContext().setupWindow(1280, 720, "Radioactive")
-                    .setScene(new GameScene()).setHUD(new GameHUD());
+                    .setHUD(new GameHUD()).setScene(new GameScene());
     }
 }
