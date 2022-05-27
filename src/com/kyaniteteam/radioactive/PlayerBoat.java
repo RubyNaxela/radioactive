@@ -45,6 +45,7 @@ public class PlayerBoat extends RectangleShape implements AnimatedEntity, KeyLis
         if (event.key.equals(Keyboard.Key.H) && gameState.barrels > 0
                 && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
             scene.scheduleToAdd(new DroppedBarrel(getPosition()));
+            scene.schedule(s -> s.bringToTop(this));
             gameState.barrels--;
             hud.update(gameState);
             lastBarrelDroppedTime = clock.getTime().asSeconds();
@@ -53,9 +54,9 @@ public class PlayerBoat extends RectangleShape implements AnimatedEntity, KeyLis
 
     @Override
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
-        float baseVelocity = 40;
-        if (Keyboard.isKeyPressed(Keyboard.Key.A)) rotate(-10 * deltaTime.asSeconds());
-        if (Keyboard.isKeyPressed(Keyboard.Key.D)) rotate(10 * deltaTime.asSeconds());
+        float baseVelocity = 80;
+        if (Keyboard.isKeyPressed(Keyboard.Key.A)) rotate(-100 * deltaTime.asSeconds());
+        if (Keyboard.isKeyPressed(Keyboard.Key.D)) rotate(100 * deltaTime.asSeconds());
         final float rotation = getRotation();
         final float velocityX = baseVelocity * (float) Math.sin(MathUtils.degToRad(rotation));
         final float velocityY = baseVelocity * (float) -Math.cos(MathUtils.degToRad(rotation));
