@@ -15,9 +15,9 @@ public class Radioactive extends Game {
     protected void preInit() {
         final AssetsBundle assets = getContext().getAssetsBundle();
         assets.register("lang.en_us", new DataAsset("src/res/en_us.json"));
-        assets.register("texture.patrol_boat", new Texture("src/res/textures/barrel_boat.png"));
+        assets.register("texture.patrol_boat", new Texture("src/res/textures/boat_control_v1.png"));
         assets.register("texture.barrel", new Texture("src/res/textures/barrel_clean.png"));
-        assets.register("texture.player_boat", new Texture("src/res/textures/boat_test.png"));
+        assets.register("texture.player_boat", new Texture("src/res/textures/barrel_boat.png"));
     }
 
     @Override
