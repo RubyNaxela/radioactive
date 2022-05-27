@@ -1,6 +1,7 @@
 package com.kyaniteteam.radioactive;
 
 import com.rubynaxela.kyanite.game.GameContext;
+import com.rubynaxela.kyanite.game.assets.Texture;
 import com.rubynaxela.kyanite.game.entities.AnimatedEntity;
 import com.rubynaxela.kyanite.game.entities.CompoundEntity;
 import com.rubynaxela.kyanite.game.entities.GlobalRect;
@@ -21,7 +22,7 @@ import java.util.Arrays;
 public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
 
     private int currentPoint = 0;
-    private final float maxMoveSpeed = 160, maxRotateSpeed = 40;
+    private final float minMoveSpeed = 40, maxMoveSpeed = 160, maxRotateSpeed = 40;
     private float currentSpeed = 50, desiredRotation = 0;
     private boolean patrolling = true, investigating = false, turning = false, reachedDestination = false, msg = false;
 
@@ -36,17 +37,14 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
     }
 
     public PatrolBoat() {
-//        Texture texture_boat = GameContext.getInstance().getAssetsBundle().get("texture_boat");
+        Texture texture_boat = new Texture("src/res/textures/barrel_clean.png");
 //        Texture texture_ray = GameContext.getInstance().getAssetsBundle().get("texture_light_ray");
 
-        boat = new RectangleShape();
-        lightRay = new RectangleShape();
+        boat = new RectangleShape(Vec2.f(40, 120));
+        lightRay = new RectangleShape(Vec2.f(60, 100));
 
-//        texture_boat.apply(boat);
+        texture_boat.apply(boat);
 //        texture_ray.apply(lightRay);
-
-        boat.setSize(Vec2.f(40, 120));
-        lightRay.setSize(Vec2.f(60, 100));
 
         boat.setFillColor(Colors.SANDY_BROWN);
         lightRay.setFillColor(Colors.LIGHT_LIGHT_YELLOW);
@@ -62,7 +60,7 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
                 Vec2.f(window.getSize().x - 200, 200),
                 Vec2.f(window.getSize().x - 200, window.getSize().y - 200),
                 Vec2.f(100, window.getSize().y - 200));
-        setScale(0.2f, 0.2f);
+//        setScale(0.2f, 0.2f);
         setRotation(110);
     }
 
@@ -106,6 +104,7 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
             }
             deltaRot = maxRotateSpeed * factor;
         }
+        currentSpeed = minMoveSpeed + (maxMoveSpeed - minMoveSpeed) * (1 - Math.abs(deltaRot) / maxRotateSpeed);
         rotate(deltaRot * deltaTime.asSeconds());
 
 
@@ -143,7 +142,7 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
                 System.out.println("Destination: " + destination);
                 System.out.println("Desired rotation: " + desiredRotation);
 //                System.out.println("Vector from desired rotation: " + Vec2.f(Math.sin(desiredRotation), -Math.cos(desiredRotation)));
-                System.out.println("Vector from desired rotation: " + Vec2.multiply(MathUtils.direction(getPosition(), destination), Vec2.f(1, 1)));
+                System.out.println("Vector from desired rotation: " + Vec2.multiply(MathUtils.direction(getPosition(), destination),MathUtils.distance(getPosition(), destination)));
                 System.out.println("Delta distance: " + Vec2.subtract(destination, centerOfLight));
                 System.out.println("Delta rotation: " + deltaRot);
 //                System.out.println("Distance: " + distance);
