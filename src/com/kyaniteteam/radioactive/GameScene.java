@@ -5,12 +5,13 @@ import com.rubynaxela.kyanite.util.Colors;
 
 public class GameScene extends Scene {
 
-    private final PlayerBoat player = new PlayerBoat();
+    public final GameState gameState = new GameState();
+    public final PlayerBoat player = new PlayerBoat(gameState);
     private final PatrolBoat patrolBoat = new PatrolBoat();
+
 
     @Override
     protected void init() {
-        patrolBoat.setPosition(700, 500);
         setBackgroundColor(Colors.DARK_BLUE);
         add(player);
         add(patrolBoat);

@@ -59,9 +59,9 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
         add(lightRay, boat);
 
         setPatrolPath(Vec2.f(200, 200),
-                      Vec2.f(window.getSize().x - 200, 200),
-                      Vec2.f(window.getSize().x - 200, window.getSize().y - 200),
-                      Vec2.f(100, window.getSize().y - 200));
+                Vec2.f(window.getSize().x - 200, 200),
+                Vec2.f(window.getSize().x - 200, window.getSize().y - 200),
+                Vec2.f(100, window.getSize().y - 200));
 //        setScale(0.2f, 0.2f);
 //        setRotation(110);
     }
@@ -164,7 +164,6 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
 //                -currentSpeed * (float) Math.cos(Math.toRadians(getRotation())) * deltaTime.asSeconds());
         currentSpeed = 100;
         Vector2f direction = MathUtils.direction(getPosition(), destination);
-        System.out.println(direction);
         move(Vec2.multiply(direction, currentSpeed * deltaTime.asSeconds()));
     }
 }
