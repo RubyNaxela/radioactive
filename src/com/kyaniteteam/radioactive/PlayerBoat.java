@@ -55,6 +55,7 @@ public class PlayerBoat extends RectangleShape implements AnimatedEntity, KeyLis
     @Override
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
         float baseVelocity = 80;
+        //if()
         if (Keyboard.isKeyPressed(Keyboard.Key.A)) rotate(-100 * deltaTime.asSeconds());
         if (Keyboard.isKeyPressed(Keyboard.Key.D)) rotate(100 * deltaTime.asSeconds());
         final float rotation = getRotation();
