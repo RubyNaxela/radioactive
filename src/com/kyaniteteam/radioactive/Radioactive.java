@@ -5,7 +5,7 @@ import com.rubynaxela.kyanite.game.Game;
 public class Radioactive extends Game {
 
     public static void main(String[] args) {
-        // write your code here
+        Game.run(Radioactive.class, args);
     }
 
     @Override
@@ -15,6 +15,6 @@ public class Radioactive extends Game {
 
     @Override
     protected void init() {
-
+        getContext().setupWindow(800, 600, "Radioactive").setScene(new GameScene());
     }
 }
