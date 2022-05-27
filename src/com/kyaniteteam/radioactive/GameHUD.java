@@ -57,7 +57,7 @@ public class GameHUD extends HUD {
 
         pause.setFillColor(Colors.RED);
         pause.setOrigin(pause.getSize());
-        pause.setPosition(Vec2.subtract(window.getSize(), Vec2.f(margin, margin)));
+        pause.setPosition(window.getSize().x - margin, margin + pause.getSize().y);
         add(pause);
 
         pauseText.setText(lang.getString("button.pause"));
