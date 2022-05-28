@@ -4,7 +4,6 @@ import com.kyaniteteam.radioactive.GameScene;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.assets.AssetsBundle;
 import com.rubynaxela.kyanite.game.assets.Texture;
-import com.rubynaxela.kyanite.game.debug.Marker;
 import com.rubynaxela.kyanite.game.entities.AnimatedEntity;
 import com.rubynaxela.kyanite.game.entities.CompoundEntity;
 import com.rubynaxela.kyanite.util.Colors;
@@ -12,11 +11,11 @@ import com.rubynaxela.kyanite.util.MathUtils;
 import com.rubynaxela.kyanite.util.Vec2;
 import com.rubynaxela.kyanite.window.Window;
 import org.jetbrains.annotations.NotNull;
-import org.jsfml.graphics.CircleShape;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.RectangleShape;
 import org.jsfml.system.Time;
 import org.jsfml.system.Vector2f;
+import org.jsfml.window.Keyboard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,23 +34,24 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
     private boolean patrolling = true, investigating = false, chasing = false;
     private Vector2f destination;
 
-    public PatrolBoat(float lightLength, float lightSpread, Color fogColor) {
-        this(lightLength, lightSpread);
+    public PatrolBoat(@NotNull GameScene scene, float lightLength, float lightSpread, Color fogColor) {
+        this(scene, lightLength, lightSpread);
         setFogColor(fogColor);
     }
 
-    public PatrolBoat(float lightLength, float lightSpread) {
+    public PatrolBoat(@NotNull GameScene scene, float lightLength, float lightSpread) {
         boat = new RectangleShape(Vec2.f(120, 120));
         lightRay = new FieldOfView(lightLength, lightSpread);
 
         assets.<Texture>get("texture.patrol_boat").apply(boat);
 
         boat.setOrigin(Vec2.divideFloat(boat.getSize(), 2));
-        setOrigin(boat.getOrigin());
 
-        lightRay.setPosition(0, -50);
+        lightRay.setPosition(Vec2.add(getPosition(), Vec2.f(0, -50f)));
 
-        add(lightRay, boat);
+        scene.scheduleToAdd(lightRay);
+        scene.schedule(s -> s.bringToTop(this));
+        add(boat);
     }
 
     public void setFogColor(Color color) {
@@ -61,7 +61,7 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
     public void setBoatSize(Vector2f size) {
         boat.setSize(size);
         boat.setOrigin(Vec2.divideFloat(boat.getSize(), 2));
-        lightRay.setPosition(0, -boat.getSize().y / 2.4f);
+        lightRay.setPosition(Vec2.add(getPosition(), Vec2.f(0, -boat.getSize().y / 2.4f)));
     }
 
     public void investigate(Vector2f place) {
@@ -78,12 +78,12 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
     private float calculateRotation(Vector2f currentPosition, Vector2f desiredPosition) {
         float distX = desiredPosition.x - currentPosition.x;
         float distY = desiredPosition.y - currentPosition.y;
-        return (float)Math.toDegrees(Math.atan2(distX, -distY));
+        return (float) Math.toDegrees(Math.atan2(distX, -distY));
     }
 
     private void motionLogic(float loopDuration) {
         if (getRotation() >= 360)
-        setRotation(getRotation() - 360);
+            setRotation(getRotation() - 360);
         if (getRotation() <= -360)
             setRotation(getRotation() + 360);
         float deltaRot = calculateRotation(getPosition(), destination) - getRotation();
@@ -138,15 +138,17 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
 
 
             if (patrolling) {
-                if (false) {//TODO change to fov containing the point
+                if (lightRay.containsPoint(destination)) {
                     if (targetIndex != patrolPath.size() - 1)
                         targetIndex++;
-                    else
+                    else{
+                        System.out.println("BLERGH");
                         targetIndex = 0;
+                    }
                     destination = patrolPath.get(targetIndex);
                 }
             } else {
-                if (false) {//TODO change to fov containing the point
+                if (lightRay.containsPoint(destination)) {
                     patrolling = true;
                     investigating = false;
                     destination = patrolPath.get(targetIndex);
@@ -154,8 +156,45 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
             }
         }
 
-        move(currentSpeed * (float)Math.sin(Math.toRadians(getRotation())) * deltaTime.asSeconds(),
-                -currentSpeed * (float)Math.cos(Math.toRadians(getRotation())) * deltaTime.asSeconds());
+        if (Keyboard.isKeyPressed(Keyboard.Key.P)) {
+            System.out.println("HI");
+        }
+
+        if (lightRay.containsPoint(Vec2.subtract(destination, getPosition())))
+            System.out.println("I SEE YOU.");
+
+        move(currentSpeed * (float) Math.sin(Math.toRadians(getRotation())) * deltaTime.asSeconds(),
+                -currentSpeed * (float) Math.cos(Math.toRadians(getRotation())) * deltaTime.asSeconds());
+    }
+
+    @Override
+    public void move(float x, float y) {
+        super.move(x, y);
+        lightRay.move(x, y);
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
+        lightRay.setPosition(x, y);
+    }
+
+    @Override
+    public void setPosition(@NotNull Vector2f position) {
+        super.setPosition(position);
+        lightRay.setPosition(position);
+    }
+
+    @Override
+    public void rotate(float angle) {
+        super.rotate(angle);
+        lightRay.rotate(angle);
+    }
+
+    @Override
+    public void setRotation(float angle) {
+        super.setRotation(angle);
+        lightRay.setRotation(angle);
     }
 }
 

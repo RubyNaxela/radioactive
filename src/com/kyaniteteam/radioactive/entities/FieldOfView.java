@@ -45,10 +45,23 @@ public class FieldOfView implements Drawable, Transformable {
         return ret;
     }
 
+    private static float normalizeAngle(float angle) {
+        int fullRotations = (int) (angle / 360f);
+        angle -= 360 * fullRotations;
+        if (angle < 0) angle += 360;
+//        if (angle > 360) return positiveAngle(angle - 360);
+//        if (angle < 0) return positiveAngle(angle + 360);
+        return angle;
+    }
+
     public boolean containsPoint(@NotNull Vector2f point) {
-        float alpha = MathUtils.radToDeg((float) Math.atan2(point.x - getPosition().x, getPosition().y - point.y));
-        return MathUtils.distance(getPosition(), point) <= distance &&
-               alpha >= getRotation() - angle / 2 && alpha <= getRotation() + angle / 2;
+        float alpha = normalizeAngle(MathUtils.radToDeg((float) Math.atan2(point.x - getPosition().x, getPosition().y - point.y)));
+        boolean heck;
+        if (normalizeAngle(getRotation() - angle / 2f) < normalizeAngle(getRotation() + angle / 2f))
+            heck = alpha >= normalizeAngle(getRotation() - angle / 2f) && alpha <= normalizeAngle(getRotation() + angle / 2f);
+        else
+            heck = alpha <= normalizeAngle(getRotation() - angle / 2f) || alpha >= normalizeAngle(getRotation() + angle / 2f);
+        return MathUtils.distance(getPosition(), point) <= distance && heck;
     }
 
     public FloatRect getGlobalBounds() {
@@ -58,8 +71,8 @@ public class FieldOfView implements Drawable, Transformable {
     @Override
     public void draw(@NotNull RenderTarget target, @NotNull RenderStates states) {
         final RenderStates renderStates = new RenderStates(states.blendMode,
-                                                           Transform.combine(states.transform, getTransform()),
-                                                           states.texture, states.shader);
+                Transform.combine(states.transform, getTransform()),
+                states.texture, states.shader);
         target.draw(vertices, renderStates);
     }
 
