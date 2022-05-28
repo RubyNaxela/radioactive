@@ -15,6 +15,7 @@ import com.rubynaxela.kyanite.util.Vec2;
 import com.rubynaxela.kyanite.window.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jsfml.graphics.RectangleShape;
+import org.jsfml.system.Vector2f;
 import org.jsfml.window.Mouse;
 import org.jsfml.window.event.MouseButtonEvent;
 
@@ -117,6 +118,7 @@ public class GameHUD extends HUD {
         if(!scene.isSuspended()){
             scene.suspend();
             dialogueBox.setText(lang.getString("dialogue.intro"));
+            dialogueBox.setLocation(new Vector2f(1080,480));
             dialogueBox.show();
             add(dialogueBox);
         }else{

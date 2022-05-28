@@ -25,31 +25,32 @@ public class DialogBox extends CompoundEntity {
     private int fontSize = 24, margin = 16;
 
     public DialogBox(){
-        textBox = new RectangleShape(new Vector2f(1240, 240));
-        textBox.setPosition(40, 480);
+        textBox = new RectangleShape();
         textBox.setFillColor(Color.WHITE);
-        //textBox.setOrigin(new Vector2f(margin, 0));
         add(textBox);
 
         label = new Label(true);
-        label.setPosition(40 + margin, 480 + margin);
         label.setCharacterSize(fontSize);
         label.setColor(Color.WHITE);
-        //label.setOrigin(new Vector2f(-margin, -0));
         add(label);
 
-        talkingDude = new RectangleShape();
-        talkingDude.setPosition(40, 480);
-        talkingDude.setFillColor(Color.WHITE);
+        talkingDude = new RectangleShape(new Vector2f(200,200));
+        SquirrelBasicTexture.apply(talkingDude);
         add(talkingDude);
     }
     public void setText(String text) {
         label.setText(text);
-        textBox.setSize(new Vector2f(label.getGlobalBounds().width + 4 * margin, label.getGlobalBounds().height + 4 * margin));
+        textBox.setSize(new Vector2f(label.getGlobalBounds().width + 6 * margin, label.getGlobalBounds().height + 6 * margin));
         textBox.setFillColor(Color.WHITE);
         speechBoxTalkTexture.apply(textBox);
+        //talkingDude.setPosition(new Vector2f(textBox.getPosition().x + textBox.getGlobalBounds().width - 50, textBox.getPosition().y + textBox.getGlobalBounds().height - 50));
         //GlobalRect.from(label.getGlobalBounds());
-
+    }
+    // x 1080
+    public void setLocation(Vector2f location){
+        talkingDude.setPosition(location);
+        textBox.setPosition(new Vector2f(talkingDude.getPosition().x - textBox.getGlobalBounds().width + 2 * margin, talkingDude.getPosition().y - textBox.getGlobalBounds().height + 2 * margin));
+        label.setPosition(new Vector2f(textBox.getPosition().x + 3 * margin, textBox.getPosition().y + 3 * margin));
     }
     /*
     public void setTexture(Texture inTexture){
