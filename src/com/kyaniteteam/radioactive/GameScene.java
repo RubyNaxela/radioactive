@@ -11,8 +11,7 @@ import java.util.stream.Collectors;
 public class GameScene extends Scene {
 
     private final Background background = new Background();
-    private final GameState gameState = new GameState();
-    private final PlayerBoat player = new PlayerBoat(this, gameState);
+    private final PlayerBoat player = new PlayerBoat(this);
     private final PatrolBoat patrolBoat = new PatrolBoat();
 
     public List<DroppedBarrel> getBarrels() {

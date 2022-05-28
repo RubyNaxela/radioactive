@@ -42,12 +42,12 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     private float baseVelocity = 80;
     private float lastBarrelDroppedTime = -1;
 
-    public PlayerBoat(@NotNull GameScene scene, @NotNull GameState state) {
+    public PlayerBoat(@NotNull GameScene scene) {
         super(Vec2.f(600, 600));
         this.scene = scene;
         this.hud = window.getHUD();
-        this.gameState = state;
-        this.gameState.barrels = 5;
+        this.gameState = GameContext.getInstance().getResource("data.game_state");
+        GameContext.getInstance().putResource("data.game_state", gameState.withBarrels(5));
 
         final RectangleShape hull = hullTexture.createRectangleShape(false);
         hull.setSize(Vec2.f(100, 100));
@@ -55,7 +55,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         add(hull);
 
         final float barrelSlotSize = 32f;
-        for (int i = 0; i < state.barrels; i++) {
+        for (int i = 0; i < gameState.barrels; i++) {
             final RectangleShape barrelSlot = barrelTexture.createRectangleShape(true);
             barrelSlot.setSize(Vec2.f(barrelSlotSize, barrelSlotSize));
             barrelSlot.setPosition(Vec2.f((i % 2 + 0.5f) * barrelSlotSize / 2, (i % 3 - 0.5f) * barrelSlotSize / 2));
@@ -64,7 +64,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         }
 
         window.addKeyListener(this);
-        hud.update(gameState);
+        hud.update();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
             scene.scheduleToAdd(new DroppedBarrel(getPosition()));
             scene.schedule(s -> s.bringToTop(this));
             if (gameState.barrels-- > 0) barrelSlots.get(gameState.barrels).setFillColor(Colors.TRANSPARENT);
-            hud.update(gameState);
+            hud.update();
             lastBarrelDroppedTime = clock.getTime().asSeconds();
         }
     }

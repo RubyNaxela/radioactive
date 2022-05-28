@@ -2,6 +2,7 @@ package com.kyaniteteam.radioactive.ui;
 
 import com.kyaniteteam.radioactive.GameScene;
 import com.kyaniteteam.radioactive.GameState;
+import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.HUD;
 import com.rubynaxela.kyanite.game.assets.DataAsset;
 import com.rubynaxela.kyanite.game.entities.GlobalRect;
@@ -75,7 +76,8 @@ public class GameHUD extends HUD {
         add(pauseText);
     }
 
-    public void update(@NotNull GameState state) {
+    public void update() {
+        final GameState state = GameContext.getInstance().getResource("data.game_state");
         day.setText(String.format(lang.getString("label.day"), state.day));
         barrels.setBarrelsCount(state.barrels);
         money.setText(String.format(lang.getString("label.money"), state.money));
