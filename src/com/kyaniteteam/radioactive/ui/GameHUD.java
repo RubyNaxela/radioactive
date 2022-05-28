@@ -98,7 +98,7 @@ public class GameHUD extends HUD {
 
     public void update() {
         day.setText(String.format(lang.getString("label.day"), state.day));
-        barrels.setBarrelsCount(state.barrels);
+        barrels.setBarrelsCount(state.barrels, state.barrelStates);
         money.setText(String.format(lang.getString("label.money"), state.money));
         fuel.setPercentage(state.fuel);
         barrelBar.setBarColor(new Color(0, 0, 0, 0));

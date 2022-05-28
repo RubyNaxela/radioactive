@@ -23,8 +23,9 @@ public class BarrelCounter extends CompoundEntity {
     private static final Texture checkTexture = assets.get("texture.barrel_check");
 
     private final Label label = new Label();
-    private final List<RectangleShape> barrels = new ArrayList<>(6);
-    private final List<RectangleShape> checks = new ArrayList<>(6);
+    private final List<RectangleShape> barrels = new ArrayList<>(5);
+    private final List<RectangleShape> leakedBarrels = new ArrayList<>(5);
+    private final List<RectangleShape> checks = new ArrayList<>(5);
 
     public BarrelCounter(int characterSize) {
 
@@ -34,6 +35,11 @@ public class BarrelCounter extends CompoundEntity {
             barrel.setPosition(i * characterSize * 2, characterSize);
             add(barrel);
             barrels.add(barrel);
+            final RectangleShape leakedBarrel = barrelLeakedTexture.createRectangleShape();
+            leakedBarrel.setSize(Vec2.f(characterSize * 3.0f, characterSize * 3.0f));
+            leakedBarrel.setPosition(i * characterSize * 2, characterSize);
+            add(leakedBarrel);
+            leakedBarrels.add(leakedBarrel);
             final RectangleShape check = checkTexture.createRectangleShape();
             check.setSize(Vec2.f(characterSize * 3.0f, characterSize * 3.0f));
             check.setPosition(i * characterSize * 2, characterSize);
@@ -42,8 +48,11 @@ public class BarrelCounter extends CompoundEntity {
         }
     }
 
-    public void setBarrelsCount(int barrelsCount) {
-        //for (int i = 0; i < 5; i++) barrels.get(i).setFillColor(i < barrelsCount ? Colors.WHITE : Colors.TRANSPARENT);
+    public void setBarrelsCount(int barrelsCount, ArrayList<String> barrelStates) {
+        for (int i = 0; i < 5; i++) barrels.get(i).setFillColor(barrelStates.get(i).equals("leakyDropped")
+                ? Colors.TRANSPARENT : Colors.WHITE);
+        for (int i = 0; i < 5; i++) leakedBarrels.get(i).setFillColor(barrelStates.get(i).equals("leakyDropped")
+                ? Colors.WHITE : Colors.TRANSPARENT);
         for (int i = 0; i < 5; i++) checks.get(i).setFillColor(i < barrelsCount ? Colors.TRANSPARENT : Colors.WHITE);
     }
 
