@@ -30,7 +30,8 @@ public class Radioactive extends Game {
         assets.register("texture.toxic_water", new Texture("src/res/textures/terrain/toxic_waters.png"));
         assets.register("texture.water_circles", new TextureAtlas("src/res/textures/particles/water_circles.png"));
         assets.register("texture.squirrel_basic", new Texture("src/res/textures/squirrel_basic.png"));
-        assets.register("texture.dialogBox_narrow", new Texture("src/res/speech_boxes/narratoru_boxu.png"));
+        assets.register("texture.dialogBox_narrow", new Texture("src/res/textures/speech_boxes/narratoru_boxu.png"));
+        assets.register("texture.dialogBox_talking", new Texture("src/res/textures/speech_boxes/talking_boxu.png"));
     }
 
     @Override

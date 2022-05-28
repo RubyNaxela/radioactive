@@ -17,7 +17,8 @@
 public class DialogBox extends CompoundEntity {
     private final Texture SquirrelBasicTexture = GameContext.getInstance().getAssetsBundle().get("texture.squirrel_basic");
 
-    private static Texture talkingBox = GameContext.getInstance().getAssetsBundle().get("texture.squirrel_basic");
+    private static Texture speechBoxNarrTexture = GameContext.getInstance().getAssetsBundle().get("texture.dialogBox_narrow");
+    private static Texture speechBoxTalkTexture = GameContext.getInstance().getAssetsBundle().get("texture.dialogBox_talking");
     private final RectangleShape textBox;
     private final RectangleShape talkingDude;
     private final Label label;
@@ -31,10 +32,10 @@ public class DialogBox extends CompoundEntity {
         add(textBox);
 
         label = new Label(true);
-        label.setPosition(40, 480);
+        label.setPosition(40 + margin, 480 + margin);
         label.setCharacterSize(fontSize);
         label.setColor(Color.WHITE);
-        label.setOrigin(new Vector2f(-margin, 0));
+        //label.setOrigin(new Vector2f(-margin, -0));
         add(label);
 
         talkingDude = new RectangleShape();
@@ -44,7 +45,9 @@ public class DialogBox extends CompoundEntity {
     }
     public void setText(String text) {
         label.setText(text);
-        textBox.setSize(new Vector2f(label.getGlobalBounds().width + 2 * margin, label.getGlobalBounds().height + 2 * margin));
+        textBox.setSize(new Vector2f(label.getGlobalBounds().width + 4 * margin, label.getGlobalBounds().height + 4 * margin));
+        textBox.setFillColor(Color.WHITE);
+        speechBoxTalkTexture.apply(textBox);
         //GlobalRect.from(label.getGlobalBounds());
 
     }
