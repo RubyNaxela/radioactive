@@ -70,8 +70,9 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     @Override
     public void keyPressed(KeyEvent event) {
         if (event.key.equals(Keyboard.Key.H) && gameState.barrels > 0
-            && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
+                && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
             scene.scheduleToAdd(new DroppedBarrel(scene, getPosition()));
+            scene.schedule(s -> ((GameScene) s).getPatrolBoats().forEach(s::bringToTop));
             scene.schedule(s -> s.bringToTop(this));
             if (gameState.barrels-- > 0) barrelSlots.get(gameState.barrels).setFillColor(Colors.TRANSPARENT);
             hud.update();
@@ -90,7 +91,8 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
 
     @Override
     public @NotNull Vector2f getVelocity() {
-        if (Keyboard.isKeyPressed(Keyboard.Key.W)) return Vec2.multiply(MathUtils.direction(getRotation()), baseVelocity);
+        if (Keyboard.isKeyPressed(Keyboard.Key.W))
+            return Vec2.multiply(MathUtils.direction(getRotation()), baseVelocity);
         else return Vector2f.ZERO;
     }
 

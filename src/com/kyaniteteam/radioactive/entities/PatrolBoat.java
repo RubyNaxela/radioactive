@@ -23,15 +23,16 @@ import java.util.Arrays;
 
 public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
 
-    private final float minMoveSpeed = 20, maxMoveSpeed = 60, maxRotationSpeed = 40;
+    private PlayerBoat chaseTarget = null;
     private final RectangleShape boat, lightRay;
     private final ArrayList<Vector2f> patrolPath = new ArrayList<>();
     private final Window window = GameContext.getInstance().getWindow();
     private final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
     private final Texture boatTexture = assets.get("texture.patrol_boat");
     private int targetIndex = 0;
-    private float currentSpeed = 50, desiredRotation = 0;
-    private boolean patrolling = true, investigating = false, turning = false, reachedDestination = false, msg = false;
+    private final float minMoveSpeed = 20, maxMoveSpeed = 60, maxRotationSpeed = 40, aggroTime = 1.5f, deAggroTime = 5;
+    private float currentSpeed = 50, chaseTime = 0;
+    private boolean patrolling = true, investigating = false, chasing = false;
     private Vector2f destination;
 
     public PatrolBoat(Color fogColor) {
@@ -66,6 +67,7 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
 
     public void investigate(Vector2f place) {
         investigating = true;
+        patrolling = false;
         destination = place;
     }
 
@@ -80,10 +82,9 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
         return (float) Math.toDegrees(Math.atan2(distX, -distY));
     }
 
-    @Override
-    public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
+    private void motionLogic(float loopDuration) {
         if (getRotation() >= 360)
-            setRotation(getRotation() - 360);
+        setRotation(getRotation() - 360);
         if (getRotation() <= -360)
             setRotation(getRotation() + 360);
         float deltaRot = calculateRotation(getPosition(), destination) - getRotation();
@@ -99,27 +100,60 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
                 factor = -1;
             deltaRot = maxRotationSpeed * factor;
         }
-        rotate(deltaRot * deltaTime.asSeconds());
-
+        rotate(deltaRot * loopDuration);
         currentSpeed = minMoveSpeed + (maxMoveSpeed - minMoveSpeed) * (1 - Math.abs(deltaRot) / maxRotationSpeed);
         if (((GameScene) window.getScene()).getBarrels().stream().anyMatch(b -> MathUtils.isInsideCircle(
-                getPosition(), b.getPosition(), b.getGlobalBounds().width / 2))) currentSpeed *= 0.5f;//TODO here
+                getPosition(), b.getPosition(), b.getToxicRadius()))) currentSpeed *= 0.5f;
+    }
 
-        if (patrolling) {
-            if (getGlobalBounds().contains(destination)) {
-                if (targetIndex != patrolPath.size() - 1)
-                    targetIndex++;
-                else
-                    targetIndex = 0;
-                destination = patrolPath.get(targetIndex);
-            }
-        }
-        else {
-            if (getGlobalBounds().contains(destination)) {
+    @Override
+    public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
+        motionLogic(deltaTime.asSeconds());
+
+
+        if (chasing) {
+            if (chaseTarget != null) {
+                destination = chaseTarget.getPosition();
+                if (false/*player boat is not in the field of view*/) {//TODO
+                    chaseTime += deltaTime.asSeconds();
+                    if (chaseTime > deAggroTime) {
+                        chasing = false;
+                        patrolling = true;
+                        chaseTarget = null;
+                    }
+                } else chaseTime = 0;
+            } else {
                 patrolling = true;
-                destination = patrolPath.get(targetIndex);
+                chasing = false;
+            }
+        } else {
+            if (false/*player boat is in the field of view*/) {//TODO
+                chaseTime += deltaTime.asSeconds();
+                if (chaseTime > aggroTime) {
+                    patrolling = false;
+                    chasing = true;
+                    chaseTarget = ((GameScene) GameContext.getInstance().getWindow().getScene()).getPlayer();
+                }
+            } else chaseTime = 0;
+
+
+            if (patrolling) {
+                if (getGlobalBounds().contains(destination)) {
+                    if (targetIndex != patrolPath.size() - 1)
+                        targetIndex++;
+                    else
+                        targetIndex = 0;
+                    destination = patrolPath.get(targetIndex);
+                }
+            } else {
+                if (getGlobalBounds().contains(destination)) {
+                    patrolling = true;
+                    investigating = false;
+                    destination = patrolPath.get(targetIndex);
+                }
             }
         }
+
         move(currentSpeed * (float)Math.sin(Math.toRadians(getRotation())) * deltaTime.asSeconds(),
                 -currentSpeed * (float)Math.cos(Math.toRadians(getRotation())) * deltaTime.asSeconds());
     }

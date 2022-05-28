@@ -3,7 +3,6 @@ package com.kyaniteteam.radioactive;
 import com.kyaniteteam.radioactive.entities.DroppedBarrel;
 import com.kyaniteteam.radioactive.entities.PatrolBoat;
 import com.kyaniteteam.radioactive.entities.PlayerBoat;
-import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.Scene;
 import com.rubynaxela.kyanite.util.Vec2;
 import com.rubynaxela.kyanite.window.Window;
@@ -19,9 +18,18 @@ public class GameScene extends Scene {
     private final PlayerBoat player = new PlayerBoat(this);
     private final PatrolBoat patrolBoat = new PatrolBoat();
 
+    public PlayerBoat getPlayer() {
+        return player;
+    }
+
     public List<DroppedBarrel> getBarrels() {
         return drawables.stream().filter(d -> d instanceof DroppedBarrel)
                         .map(d -> (DroppedBarrel) d).collect(Collectors.toList());
+    }
+
+    public List<PatrolBoat> getPatrolBoats() {
+        return drawables.stream().filter(p -> p instanceof PatrolBoat)
+                .map(p -> (PatrolBoat) p).collect(Collectors.toList());
     }
 
     @Override
