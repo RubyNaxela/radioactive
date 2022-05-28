@@ -38,6 +38,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     private final GameHUD hud;
     private final GameState gameState;
 
+    private final RectangleShape hull = hullTexture.createRectangleShape(false);
     private final List<RectangleShape> barrelSlots = new ArrayList<>(6);
     private float baseVelocity = 80;
     private float lastBarrelDroppedTime = -1;
@@ -49,7 +50,6 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         this.gameState = GameContext.getInstance().getResource("data.game_state");
         GameContext.getInstance().putResource("data.game_state", gameState.withBarrels(5));
 
-        final RectangleShape hull = hullTexture.createRectangleShape(false);
         hull.setSize(Vec2.f(100, 100));
         hull.setPosition(Vec2.divideFloat(hull.getSize(), -2));
         add(hull);
@@ -67,10 +67,19 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         hud.update();
     }
 
+    public boolean isVisibleBy(@NotNull PatrolBoat boat) {
+        for (int i = 0; i < 4; i++) if (boat.isPointWithinFOV(hull.getPoint(i))) return true;
+        for (int i = 0; i < 4; i++) {
+            final Vector2f point1 = hull.getPoint(i), point2 = hull.getPoint(i % 4);
+            if (boat.isPointWithinFOV(Vec2.f((point1.x + point2.x) / 2f, (point1.y + point2.y) / 2f))) return true;
+        }
+        return false;
+    }
+
     @Override
     public void keyPressed(KeyEvent event) {
         if (event.key.equals(Keyboard.Key.H) && gameState.barrels > 0
-                && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
+            && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
             scene.scheduleToAdd(new DroppedBarrel(scene, getPosition()));
             scene.schedule(s -> ((GameScene) s).getPatrolBoats().forEach(s::bringToTop));
             scene.schedule(s -> s.bringToTop(this));

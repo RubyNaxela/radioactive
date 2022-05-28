@@ -54,6 +54,10 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
         add(lightRay, boat);
     }
 
+    public boolean isPointWithinFOV(@NotNull Vector2f point) {
+        return lightRay.containsPoint(point);
+    }
+
     public void setFogColor(Color color) {
         boat.setFillColor(Colors.opacity(color, 0.2f));
     }
