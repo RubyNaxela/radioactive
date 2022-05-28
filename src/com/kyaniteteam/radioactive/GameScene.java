@@ -17,8 +17,7 @@ import java.util.stream.Collectors;
 public class GameScene extends Scene {
 
     private static final AudioHandler audioHandler = GameContext.getInstance().getAudioHandler();
-    private final Window window = getContext().getWindow();
-    //    private final Background background = new Background();
+        private final Background backgroundShader = new Background();
     private final PlayerBoat player = new PlayerBoat(this);
 
     private final Depth depth1 = new Depth(this);
@@ -27,7 +26,7 @@ public class GameScene extends Scene {
 
     public GameScene(@NotNull SceneLoader.SceneData data) {
         add(data.enemies.stream().map(e -> e.createEnemyBoat(this)).toList());
-        setBackgroundColor(new Color(83, 85, 158));
+        setBackgroundColor(new Color(25, 25, 50));
     }
 
     public PlayerBoat getPlayer() {
@@ -52,6 +51,7 @@ public class GameScene extends Scene {
     @Override
     protected void init() {
         add(depth1, depth2, depth3);
+        add(backgroundShader);
         add(player);
         audioHandler.playSound("sound.astronomia", "music", 100, 1, true);
     }
