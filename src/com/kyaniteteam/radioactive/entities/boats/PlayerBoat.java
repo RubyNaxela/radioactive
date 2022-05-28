@@ -90,15 +90,10 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
 
     @Override
     public void keyPressed(KeyEvent event) {
-
     }
 
     private void dropBarrel(boolean safe) {
-        if(!safe){
-            if (MathUtils.probability(0.5f)){
-                safe = true;
-            }
-        }
+        if (!safe && MathUtils.probability(0.5f)) safe = true;
         scene.scheduleToAdd(new DroppedBarrel(scene, getPosition(), safe));
         scene.schedule(s -> ((GameScene) s).getEnemyBoats().forEach(s::bringToTop));
         scene.schedule(s -> s.bringToTop(this));
@@ -123,7 +118,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
             rotating = true;
         }
         if (Keyboard.isKeyPressed(Keyboard.Key.SPACE) && scene.getDepths().stream().anyMatch(Depth::isPlayerInside) &&
-                gameState.barrels > 0 && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
+            gameState.barrels > 0 && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
             if (!currentlyDropping) {
                 currentlyDropping = true;
                 barrelDropOrderTime = elapsedTime.asSeconds();
