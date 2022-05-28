@@ -18,7 +18,7 @@ import java.util.List;
 public class BarrelCounter extends CompoundEntity {
 
     private static final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
-    private static final Texture barrelTexture = assets.get("texture.barrel_top");
+    private static final Texture barrelTexture = assets.get("texture.barrel");
 
     private final Label label = new Label();
     private final List<RectangleShape> barrels = new ArrayList<>(6);
@@ -32,8 +32,8 @@ public class BarrelCounter extends CompoundEntity {
         final FloatRect labelBounds = label.getGlobalBounds();
         for (int i = 0; i < 6; i++) {
             final RectangleShape barrel = barrelTexture.createRectangleShape();
-            barrel.setSize(Vec2.f(characterSize * 1.5f, characterSize * 1.5f));
-            barrel.setPosition(i * characterSize + labelBounds.width, 0);
+            barrel.setSize(Vec2.f(characterSize * 3.0f, characterSize * 3.0f));
+            barrel.setPosition(i * characterSize * 2, characterSize * 2);
             add(barrel);
             barrels.add(barrel);
         }

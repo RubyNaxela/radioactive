@@ -22,13 +22,13 @@ import java.util.Arrays;
 
 public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
 
-    private final float minMoveSpeed = 40, maxMoveSpeed = 160, maxRotateSpeed = 40;
+    private final float minMoveSpeed = 40, maxMoveSpeed = 160, maxRotationSpeed = 40;
     private final RectangleShape boat, lightRay;
     private final ArrayList<Vector2f> patrolPath = new ArrayList<>();
     private final Window window = GameContext.getInstance().getWindow();
     private final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
     private final Texture boatTexture = assets.get("texture.patrol_boat");
-    private int currentPoint = 0;
+    private int targetIndex = 0;
     private float currentSpeed = 50, desiredRotation = 0;
     private boolean patrolling = true, investigating = false, turning = false, reachedDestination = false, msg = false;
     private Vector2f destination;
@@ -67,7 +67,7 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
     }
 
     public void setFogColor(Color color) {
-        boat.setFillColor(Colors.opacity(color, 90));
+        boat.setFillColor(Colors.opacity(color, 0.2f));
     }
 
     public void investigate(Vector2f place) {
@@ -78,14 +78,6 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
     public void setPatrolPath(Vector2f... points) {
         patrolPath.addAll(Arrays.asList(points));
         destination = patrolPath.get(0);
-        CircleShape dest = new CircleShape(4);
-        dest.setFillColor(Colors.RED);
-        dest.setPosition(destination);
-        window.getScene().scheduleToAdd(dest);
-    }
-
-    public void patrol() {
-        patrolling = true;
     }
 
     private float calculateRotation(Vector2f currentPosition, Vector2f desiredPosition) {
@@ -162,9 +154,47 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
 //
 //        move(currentSpeed * (float) Math.sin(Math.toRadians(getRotation())) * deltaTime.asSeconds(),
 //                -currentSpeed * (float) Math.cos(Math.toRadians(getRotation())) * deltaTime.asSeconds());
-        currentSpeed = 100;
-        Vector2f direction = MathUtils.direction(getPosition(), destination);
-        move(Vec2.multiply(direction, currentSpeed * deltaTime.asSeconds()));
+
+        if (getRotation() >= 360)
+            setRotation(getRotation() - 360);
+        if (getRotation() <= -360)
+            setRotation(getRotation() + 360);
+        float deltaRot = calculateRotation(destination, /*Vec2.f(
+                    getPosition().x + beakOffset.x * Math.cos(Math.toRadians(getRotation())),
+                    getPosition().y + beakOffset.x * Math.sin(Math.toRadians(getRotation())))*/getPosition()) - getRotation();
+
+        if (deltaRot > 180)
+            deltaRot -= 360;
+        if (deltaRot < -180)
+            deltaRot += 360;
+
+        if (Math.abs(deltaRot) > maxRotationSpeed) {
+            int factor = 1;
+            if (deltaRot < 0)
+                factor = -1;
+            deltaRot = maxRotationSpeed * factor;
+        }
+        rotate(deltaRot * deltaTime.asSeconds());
+
+        currentSpeed = minMoveSpeed + (maxMoveSpeed - minMoveSpeed) * (1 - Math.abs(deltaRot) / maxRotationSpeed);
+
+        if (patrolling) {
+            if (getGlobalBounds().contains(destination)) {
+                if (targetIndex != patrolPath.size() - 1)
+                    targetIndex++;
+                else
+                    targetIndex = 0;
+                destination = patrolPath.get(targetIndex);
+            }
+        }
+        else {
+            if (getGlobalBounds().contains(destination)) {
+                patrolling = true;
+                destination = patrolPath.get(targetIndex);
+            }
+        }
+        move(currentSpeed * (float)Math.sin(Math.toRadians(getRotation())) * deltaTime.asSeconds(),
+                -currentSpeed * (float)Math.cos(Math.toRadians(getRotation())) * deltaTime.asSeconds());
     }
 }
 
