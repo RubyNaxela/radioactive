@@ -1,15 +1,11 @@
 package com.kyaniteteam.radioactive;
 
 import com.kyaniteteam.radioactive.entities.DroppedBarrel;
-import com.kyaniteteam.radioactive.entities.FieldOfView;
 import com.kyaniteteam.radioactive.entities.PatrolBoat;
 import com.kyaniteteam.radioactive.entities.PlayerBoat;
 import com.rubynaxela.kyanite.game.Scene;
-import com.rubynaxela.kyanite.util.Colors;
 import com.rubynaxela.kyanite.util.Vec2;
 import com.rubynaxela.kyanite.window.Window;
-import org.jsfml.graphics.FloatRect;
-import org.jsfml.graphics.RectangleShape;
 
 import java.util.List;
 import java.util.stream.Collectors;
