@@ -170,7 +170,11 @@ public class EnemyBoat extends CompoundEntity implements AnimatedEntity {
         }
 
         move(currentSpeed * (float) Math.sin(Math.toRadians(getRotation())) * deltaTime.asSeconds(),
-                -currentSpeed * (float) Math.cos(Math.toRadians(getRotation())) * deltaTime.asSeconds());
+             -currentSpeed * (float) Math.cos(Math.toRadians(getRotation())) * deltaTime.asSeconds());
+    }
+
+    public void setLightColor(@NotNull Color color) {
+        lightRay.setFillColor(color);
     }
 
     @Override
