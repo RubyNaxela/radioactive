@@ -12,26 +12,23 @@ import com.rubynaxela.kyanite.util.Colors;
 import com.rubynaxela.kyanite.util.Vec2;
 import com.rubynaxela.kyanite.window.Window;
 import org.jetbrains.annotations.NotNull;
+import org.jsfml.graphics.RectangleShape;
+import org.jsfml.window.Mouse;
 import org.jsfml.window.event.MouseButtonEvent;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class GameHUD extends HUD {
 
     private final DataAsset lang = getContext().getAssetsBundle().get("lang.en_us");
-    private final Label day = new Label(), money = new Label(), time = new Label(), pauseText = new Label();
     private final int fontSize = 24, margin = 16;
     private final BarrelCounter barrels = new BarrelCounter(fontSize);
-    private final RectangleButton pause = new RectangleButton(Vec2.f(75, 40)) {
+    private final Label day = new Label(), money = new Label(), time = new Label(),
+            pauseText = new Label(), pausedLabel = new Label(false);
+    private final RectangleShape overlay = new RectangleShape();
+    private final RectangleButton pause = new RectangleButton(Vec2.f(80, 40)) {
         @Override
         public void mouseButtonPressed(@NotNull MouseButtonEvent event) {
-            final GameScene scene = getContext().getWindow().getScene();
-            if (!scene.isSuspended()) {
-                scene.suspend();
-                pauseText.setText(lang.getString("button.resume"));
-            } else {
-                scene.resume();
-                pauseText.setText(lang.getString("button.pause"));
-            }
+            if (event.button == Mouse.Button.LEFT) togglePause();
         }
     };
 
@@ -63,10 +60,21 @@ public class GameHUD extends HUD {
         day.setColor(Colors.WHITE);
         add(day);
 
+        overlay.setSize(Vec2.f(window.getSize()));
+        overlay.setFillColor(Colors.TRANSPARENT);
+        add(overlay);
+
         pause.setFillColor(Colors.RED);
         pause.setOrigin(pause.getSize());
         pause.setPosition(window.getSize().x - margin, margin + pause.getSize().y);
         add(pause);
+
+        pausedLabel.setText(lang.getString("label.paused"));
+        pausedLabel.setCharacterSize(fontSize * 2);
+        pausedLabel.setAlignment(Text.Alignment.BOTTOM_CENTER);
+        pausedLabel.setPosition(Vec2.divideFloat(window.getSize(), 2));
+        pausedLabel.setColor(Colors.TRANSPARENT);
+        add(pausedLabel);
 
         pauseText.setText(lang.getString("button.pause"));
         pauseText.setCharacterSize(fontSize);
@@ -82,5 +90,20 @@ public class GameHUD extends HUD {
         barrels.setBarrelsCount(state.barrels);
         money.setText(String.format(lang.getString("label.money"), state.money));
         time.setText(String.format(lang.getString("label.time"), state.time));
+    }
+
+    public void togglePause() {
+        final GameScene scene = getContext().getWindow().getScene();
+        if (!scene.isSuspended()) {
+            scene.suspend();
+            pauseText.setText(lang.getString("button.resume"));
+            overlay.setFillColor(Colors.opacity(Colors.BLACK, 0.5f));
+            pausedLabel.setColor(Colors.WHITE);
+        } else {
+            scene.resume();
+            pauseText.setText(lang.getString("button.pause"));
+            overlay.setFillColor(Colors.TRANSPARENT);
+            pausedLabel.setColor(Colors.TRANSPARENT);
+        }
     }
 }

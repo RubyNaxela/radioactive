@@ -4,5 +4,6 @@
   "label.barrels": "Barrels left:",
   "label.day": "Day %d",
   "label.money": "Money: %d",
+  "label.paused": "Paused",
   "label.time": "Time: %d"
 }

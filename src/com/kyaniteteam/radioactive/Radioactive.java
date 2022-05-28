@@ -3,6 +3,9 @@ package com.kyaniteteam.radioactive;
 import com.kyaniteteam.radioactive.ui.GameHUD;
 import com.rubynaxela.kyanite.game.Game;
 import com.rubynaxela.kyanite.game.assets.*;
+import com.rubynaxela.kyanite.window.event.KeyListener;
+import org.jsfml.window.Keyboard;
+import org.jsfml.window.event.KeyEvent;
 
 public class Radioactive extends Game {
 
@@ -27,7 +30,15 @@ public class Radioactive extends Game {
     @Override
     protected void init() {
         getContext().putResource("data.game_state", new GameState());
+        final GameHUD hud = new GameHUD();
         getContext().setupWindow(1280, 720, "Radioactive")
-                    .setHUD(new GameHUD()).setScene(new GameScene());
+                    .setHUD(hud)
+                    .setScene(new GameScene())
+                    .addKeyListener(new KeyListener() {
+                        @Override
+                        public void keyPressed(KeyEvent e) {
+                            if (e.key == Keyboard.Key.ESCAPE) hud.togglePause();
+                        }
+                    });
     }
 }

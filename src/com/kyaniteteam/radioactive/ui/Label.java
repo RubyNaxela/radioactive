@@ -13,36 +13,42 @@ import java.util.Objects;
 public class Label extends CompoundEntity {
 
     private static final FontFace font = GameContext.getInstance().getAssetsBundle().get("font.dpcomic");
-    private final Text foreground = new Text(), shadow = new Text();
+    private final Text foregroundText = new Text(), shadowText = new Text();
+
+    public Label(boolean shadow) {
+        setColor(Colors.WHITE);
+        foregroundText.setPosition(0, 0);
+        font.apply(foregroundText);
+        if (shadow) {
+            shadowText.setPosition(2, 2);
+            font.apply(shadowText);
+            add(shadowText);
+        }
+        add(foregroundText);
+    }
 
     public Label() {
-        setColor(Colors.WHITE);
-        foreground.setPosition(0, 0);
-        font.apply(foreground);
-        shadow.setPosition(2, 2);
-        font.apply(shadow);
-        add(shadow);
-        add(foreground);
+        this(true);
     }
 
     public void setCharacterSize(int characterSize) {
-        Objects.requireNonNull(FontFace.of(foreground)).disableAntialiasing(characterSize);
-        foreground.setCharacterSize(characterSize);
-        shadow.setCharacterSize(characterSize);
+        Objects.requireNonNull(FontFace.of(foregroundText)).disableAntialiasing(characterSize);
+        foregroundText.setCharacterSize(characterSize);
+        shadowText.setCharacterSize(characterSize);
     }
 
     public void setColor(Color color) {
-        foreground.setColor(color);
-        shadow.setColor(Colors.darker(Colors.darker(color)));
+        foregroundText.setColor(color);
+        shadowText.setColor(Colors.darker(Colors.darker(color)));
     }
 
     public void setText(@NotNull String text) {
-        foreground.setText(text);
-        shadow.setText(text);
+        foregroundText.setText(text);
+        shadowText.setText(text);
     }
 
     public void setAlignment(@NotNull Text.Alignment alignment) {
-        foreground.setAlignment(alignment);
-        shadow.setAlignment(alignment);
+        foregroundText.setAlignment(alignment);
+        shadowText.setAlignment(alignment);
     }
 }
