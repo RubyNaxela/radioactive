@@ -35,6 +35,8 @@ public class EnemyBoat extends CompoundEntity implements AnimatedEntity {
     private float chaseTime = 0;
     private boolean patrolling = true, investigating = false;
     private Vector2f destination;
+    private Color idleLightColor = new Color(89, 221, 117, (int)(255 * 0.2f));
+    private Color aggroLightColor = new Color(219, 74, 44, (int)(255 * 0.6f));
 
     public EnemyBoat(@NotNull GameScene scene, @NotNull Vector2f size, float lightLength, float lightSpread, Color fogColor) {
         this(scene, size, lightLength, lightSpread);
@@ -114,6 +116,7 @@ public class EnemyBoat extends CompoundEntity implements AnimatedEntity {
     @Override
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
         motionLogic(deltaTime.asSeconds());
+        updateColor();
 
         if (chasing) {
             if (chaseTarget != null) {
@@ -175,6 +178,20 @@ public class EnemyBoat extends CompoundEntity implements AnimatedEntity {
 
     public void setLightColor(@NotNull Color color) {
         lightRay.setFillColor(color);
+    }
+
+    private void updateColor(){
+        if(patrolling){
+            setLightColor(new Color((int)(aggroLightColor.r - (aggroLightColor.r - idleLightColor.r)
+                        * Math.min(aggroTime - chaseTime, aggroTime) / aggroTime),
+                    (int)(aggroLightColor.g - (aggroLightColor.g - idleLightColor.g)
+                        * Math.min(aggroTime - chaseTime, aggroTime) / aggroTime),
+                    (int)(aggroLightColor.b - (aggroLightColor.b - idleLightColor.b)
+                        * Math.min(aggroTime - chaseTime, aggroTime) / aggroTime),
+                    (int)(aggroLightColor.a - (aggroLightColor.a - idleLightColor.a)
+                        * Math.min(aggroTime - chaseTime, aggroTime) / aggroTime)));
+        }
+        
     }
 
     @Override
