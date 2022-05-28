@@ -34,12 +34,16 @@ public class FieldOfView implements Drawable, Transformable {
 
     private static List<Vector2f> getCirclePoints(float distance, float angle) {
         List<Vector2f> ret = new ArrayList<>();
-        final int maxpts = 10;
+        final int maxpts = 24;
         for (int i = 0; i < maxpts; i++) {
-            float a = (-angle / 2.f) + (i * angle) / (maxpts - 1);
-            ret.add(Vec2.multiply(Vec2.f(Math.cos(a), Math.sin(a)), distance));
+            final float alpha = (float) ((Math.PI / -2 - angle / 2) + (i * angle) / (maxpts - 1));
+            ret.add(Vec2.multiply(Vec2.f(Math.cos(alpha), Math.sin(alpha)), distance));
         }
         return ret;
+    }
+
+    public FloatRect getGlobalBounds() {
+        return getTransform().transformRect(vertices.getBounds());
     }
 
     @Override
