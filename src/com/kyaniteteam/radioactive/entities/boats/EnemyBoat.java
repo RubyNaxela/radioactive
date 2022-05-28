@@ -29,9 +29,10 @@ public class EnemyBoat extends CompoundEntity implements AnimatedEntity {
     private final GameScene scene;
     private final float minMoveSpeed = 20, maxMoveSpeed = 60, maxRotationSpeed = 40, aggroTime = 0.5f, deAggroTime = 2.5f;
     protected boolean chasing = false;
+    protected float currentSpeed = 50;
     private PlayerBoat chaseTarget = null;
     private int targetIndex = 0;
-    private float currentSpeed = 50, chaseTime = 0;
+    private float chaseTime = 0;
     private boolean patrolling = true, investigating = false;
     private Vector2f destination;
 
@@ -96,15 +97,12 @@ public class EnemyBoat extends CompoundEntity implements AnimatedEntity {
             setRotation(getRotation() + 360);
         float deltaRot = calculateRotation(getPosition(), destination) - getRotation();
 
-        if (deltaRot > 180)
-            deltaRot -= 360;
-        if (deltaRot < -180)
-            deltaRot += 360;
+        if (deltaRot > 180) deltaRot -= 360;
+        if (deltaRot < -180) deltaRot += 360;
 
         if (Math.abs(deltaRot) > maxRotationSpeed) {
             int factor = 1;
-            if (deltaRot < 0)
-                factor = -1;
+            if (deltaRot < 0) factor = -1;
             deltaRot = maxRotationSpeed * factor;
         }
         rotate(deltaRot * loopDuration);
@@ -172,7 +170,7 @@ public class EnemyBoat extends CompoundEntity implements AnimatedEntity {
         }
 
         move(currentSpeed * (float) Math.sin(Math.toRadians(getRotation())) * deltaTime.asSeconds(),
-             -currentSpeed * (float) Math.cos(Math.toRadians(getRotation())) * deltaTime.asSeconds());
+                -currentSpeed * (float) Math.cos(Math.toRadians(getRotation())) * deltaTime.asSeconds());
     }
 
     @Override

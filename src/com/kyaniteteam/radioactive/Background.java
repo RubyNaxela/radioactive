@@ -27,6 +27,7 @@ public class Background extends CompoundEntity implements AnimatedEntity {
         tile2.setScale(1, -1);
         tile2.setOrigin(0, size.y);
         add(tile1, tile2);
+
     }
 
     @Override

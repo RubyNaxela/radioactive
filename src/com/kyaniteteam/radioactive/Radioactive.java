@@ -25,6 +25,8 @@ public class Radioactive extends Game {
         assets.register("sound.police", new Sound("src/res/sounds/police.ogg"));
         assets.register("texture.background", new Texture("src/res/textures/terrain/background.png"));
         assets.register("texture.barrel", new Texture("src/res/textures/barrels/barrel_clean.png"));
+        assets.register("texture.barrel_leaked", new Texture("src/res/textures/barrels/barrel_leak.png"));
+        assets.register("texture.barrel_check", new Texture("src/res/textures/barrels/x_for_barrel.png"));
         assets.register("texture.barrel_top", new Texture("src/res/textures/barrels/barrel_top.png"));
         assets.register("texture.barrel_top_leak", new Texture("src/res/textures/barrels/barrel_top_leak.png"));
         assets.register("texture.patrol_boat", new Texture("src/res/textures/boats/boat_control_v1.png"));
