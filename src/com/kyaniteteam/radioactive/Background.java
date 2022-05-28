@@ -32,8 +32,8 @@ public class Background extends CompoundEntity implements AnimatedEntity {
 
     @Override
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
-        tile1.move(0, -50 * deltaTime.asSeconds());
-        tile2.move(0, -50 * deltaTime.asSeconds());
+        tile1.move(0, -10 * deltaTime.asSeconds());
+        tile2.move(0, -10 * deltaTime.asSeconds());
         if (!window.isInside(tile1)) tile1.setPosition(Vec2.add(tile2.getPosition(), Vec2.f(0, size.y)));
         if (!window.isInside(tile2)) tile2.setPosition(Vec2.add(tile1.getPosition(), Vec2.f(0, size.y)));
     }

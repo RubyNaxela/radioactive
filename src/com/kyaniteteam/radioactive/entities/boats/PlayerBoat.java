@@ -94,6 +94,11 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     }
 
     private void dropBarrel(boolean safe) {
+        if(!safe){
+            if (MathUtils.probability(0.5f)){
+                safe = true;
+            }
+        }
         scene.scheduleToAdd(new DroppedBarrel(scene, getPosition(), safe));
         scene.schedule(s -> ((GameScene) s).getEnemyBoats().forEach(s::bringToTop));
         scene.schedule(s -> s.bringToTop(this));
