@@ -5,6 +5,7 @@ import com.kyaniteteam.radioactive.GameState;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.HUD;
 import com.rubynaxela.kyanite.game.assets.DataAsset;
+import com.rubynaxela.kyanite.game.assets.Texture;
 import com.rubynaxela.kyanite.game.entities.GlobalRect;
 import com.rubynaxela.kyanite.game.gui.RectangleButton;
 import com.rubynaxela.kyanite.game.gui.Text;
@@ -32,6 +33,9 @@ public class GameHUD extends HUD {
             if (event.button == Mouse.Button.LEFT) togglePause();
         }
     };
+
+    private final Texture SquirrelBasicTexture = GameContext.getInstance().getAssetsBundle().get("texture.squirrel_basic");
+    DialogBox dialogueBox = new DialogBox();
 
     @Override
     protected void init() {
@@ -102,6 +106,18 @@ public class GameHUD extends HUD {
             pauseText.setText(lang.getString("button.pause"));
             overlay.setFillColor(Colors.TRANSPARENT);
             pausedLabel.setColor(Colors.TRANSPARENT);
+        }
+    }
+    public void showDialog(){
+        final GameScene scene = getContext().getWindow().getScene();
+        if(!scene.isSuspended()){
+            scene.suspend();
+            dialogueBox.setText(lang.getString("dialogue.intro"));
+            dialogueBox.show();
+            add(dialogueBox);
+        }else{
+            scene.resume();
+            dialogueBox.hide();
         }
     }
 }
