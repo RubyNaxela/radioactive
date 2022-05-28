@@ -62,10 +62,10 @@ public class GameScene extends Scene {
                                  Vec2.f(window.getSize().x / 2, window.getSize().y - 200),
                                  Vec2.f(200, window.getSize().y / 2));
         add(background);
+        add(depth1,depth2,depth3);
         add(player);
         add(patrolBoat);
         add(policeBoat);
-        add(depth1,depth2,depth3);
         audioHandler.playSound("sound.astronomia", "music", 100, 1, true);
     }
 

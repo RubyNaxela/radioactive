@@ -1,6 +1,7 @@
 package com.kyaniteteam.radioactive.terrain;
 
 import com.kyaniteteam.radioactive.GameScene;
+import com.kyaniteteam.radioactive.entities.DroppedBarrel;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.assets.AssetsBundle;
 import com.rubynaxela.kyanite.game.assets.Texture;
@@ -12,7 +13,7 @@ import org.jsfml.system.Vector2f;
 
 public class Depth extends RectangleShape {
     private static final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
-    private static final Texture depth = assets.get("texture.deep_water1.1");
+    private static final Texture depth = assets.get("texture.depth_ver3");
     private final Window window = GameContext.getInstance().getWindow();
     private int barrelCounter = 0;
 
@@ -29,6 +30,10 @@ public class Depth extends RectangleShape {
         float x = MathUtils.randomFloat(margin, window.getSize().x - margin);
         float y = MathUtils.randomFloat(margin, window.getSize().y - margin);
         return new Vector2f(x, y);
+    }
+
+    public void addBarrel(DroppedBarrel barrel){
+        
     }
 
 }
