@@ -52,9 +52,13 @@ public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
         animationProgress += 0.25f * deltaTime.asSeconds();
         if (animationProgress <= 1) {
-            water.setFillColor(Colors.opacity(Colors.WHITE, animationProgress));
-            water.setScale(animationProgress, animationProgress);
+            water.setFillColor(Colors.opacity(Colors.WHITE, Math.max(0, animationProgress * 2 - 1f)));
+            water.setScale(Math.max(0, animationProgress * 2 - 1f), Math.max(0, animationProgress * 2 - 1f));
             barrel.setFillColor(Colors.opacity(Colors.WHITE, 1 - animationProgress));
         }
+    }
+
+    public float getToxicRadius() {
+        return water.getGlobalBounds().width / 2;
     }
 }

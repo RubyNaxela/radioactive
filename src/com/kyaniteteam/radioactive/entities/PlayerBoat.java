@@ -82,7 +82,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     @Override
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
         if (((GameScene) window.getScene()).getBarrels().stream().anyMatch(b -> MathUtils.isInsideCircle(
-                getPosition(), b.getPosition(), b.getGlobalBounds().width / 2))) baseVelocity = 40;
+                getPosition(), b.getPosition(), b.getToxicRadius()))) baseVelocity = 40;
         else baseVelocity = 80;
         if (Keyboard.isKeyPressed(Keyboard.Key.A)) rotate(-100 * deltaTime.asSeconds());
         if (Keyboard.isKeyPressed(Keyboard.Key.D)) rotate(100 * deltaTime.asSeconds());
