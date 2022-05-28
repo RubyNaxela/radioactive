@@ -42,7 +42,7 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
 
     public PatrolBoat(@NotNull GameScene scene, float lightLength, float lightSpread) {
         this.scene = scene;
-        boat = new RectangleShape(Vec2.f(120, 120));
+        boat = new RectangleShape(Vec2.f(40, 106));
         lightRay = new FieldOfView(lightLength, lightSpread);
 
         assets.<Texture>get("texture.patrol_boat").apply(boat);
@@ -123,6 +123,7 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
                     chaseTime = 0;
                 } else {
                     chaseTime += deltaTime.asSeconds();
+                    //TODO fill color
                     if (chaseTime >= deAggroTime/* || MathUtils.distance(getPosition(), destination) < 20*/) {
                         chasing = false;
                         patrolling = true;
@@ -136,6 +137,7 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
         } else {
             if (scene.getPlayer().isVisibleBy(this)/*player boat is in the field of view*/) {//TODO
                 chaseTime += deltaTime.asSeconds();
+                //TODO fill color
                 if (chaseTime >= aggroTime) {
                     patrolling = false;
                     investigating = false;
@@ -155,10 +157,12 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
                     destination = patrolPath.get(targetIndex);
                 }
             } else {
-                if (lightRay.containsPoint(destination)) {
-                    patrolling = true;
-                    investigating = false;
-                    destination = patrolPath.get(targetIndex);
+                if (investigating) {
+                    if (lightRay.containsPoint(destination)) {
+                        patrolling = true;
+                        investigating = false;
+                        destination = patrolPath.get(targetIndex);
+                    }
                 }
             }
         }
@@ -166,9 +170,6 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
         if (Keyboard.isKeyPressed(Keyboard.Key.P)) {
             System.out.println("HI");
         }
-
-        if (scene.getPlayer().isVisibleBy(this))
-            System.out.println("I SEE YOU.");
 
         move(currentSpeed * (float) Math.sin(Math.toRadians(getRotation())) * deltaTime.asSeconds(),
                 -currentSpeed * (float) Math.cos(Math.toRadians(getRotation())) * deltaTime.asSeconds());
