@@ -32,8 +32,8 @@ public class BarrelCounter extends CompoundEntity {
         final FloatRect labelBounds = label.getGlobalBounds();
         for (int i = 0; i < 6; i++) {
             final RectangleShape barrel = barrelTexture.createRectangleShape();
-            barrel.setSize(Vec2.f(characterSize * 1.5f, characterSize * 1.5f));
-            barrel.setPosition(i * characterSize + labelBounds.width, 0);
+            barrel.setSize(Vec2.f(characterSize * 3.0f, characterSize * 3.0f));
+            barrel.setPosition(i * characterSize * 2, characterSize * 2);
             add(barrel);
             barrels.add(barrel);
         }
