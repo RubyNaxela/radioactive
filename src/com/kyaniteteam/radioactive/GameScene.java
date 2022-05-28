@@ -25,16 +25,13 @@ public class GameScene extends Scene {
 //    private final Background background = new Background();
     private final PlayerBoat player = new PlayerBoat(this);
 
-//    private final PatrolBoat patrolBoat = new PatrolBoat(this, 150, 30);
-//    private final PoliceBoat policeBoat = new PoliceBoat(this, 150, 30);
-
     private final Depth depth1 = new Depth(this);
     private final Depth depth2 = new Depth(this);
     private final Depth depth3 = new Depth(this);
 
     public GameScene(@NotNull SceneLoader.SceneData data) {
         add(data.enemies.stream().map(e -> e.createEnemyBoat(this)).toList());
-        setBackgroundColor(new Color());
+        setBackgroundColor(new Color(83, 85, 158));
     }
 
     public PlayerBoat getPlayer() {
@@ -58,19 +55,6 @@ public class GameScene extends Scene {
 
     @Override
     protected void init() {
-//        patrolBoat.setPosition(Vec2.subtract(window.getSize(),
-//                Vec2.f(200, 200)));
-//        patrolBoat.setPatrolPath(Vec2.f(200, 200),
-//                Vec2.f(window.getSize().x - 200, 200),
-//                Vec2.f(window.getSize().x - 200, window.getSize().y - 100),
-//                Vec2.f(300, window.getSize().y - 100));
-//        policeBoat.setPosition(Vec2.subtract(window.getSize(),
-//                Vec2.f(400, 400)));
-//        policeBoat.setPatrolPath(Vec2.f(window.getSize().x / 2, 200),
-//                Vec2.f(window.getSize().x - 200, window.getSize().y / 2),
-//                Vec2.f(window.getSize().x / 2, window.getSize().y - 200),
-//                Vec2.f(200, window.getSize().y / 2));
-        add(background);
         add(depth1, depth2, depth3);
         add(player);
         audioHandler.playSound("sound.astronomia", "music", 100, 1, true);
