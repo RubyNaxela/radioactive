@@ -4,6 +4,7 @@ import com.kyaniteteam.radioactive.GameScene;
 import com.kyaniteteam.radioactive.GameState;
 import com.kyaniteteam.radioactive.ui.GameHUD;
 import com.rubynaxela.kyanite.game.GameContext;
+import com.rubynaxela.kyanite.game.assets.AnimatedTexture;
 import com.rubynaxela.kyanite.game.assets.AssetsBundle;
 import com.rubynaxela.kyanite.game.assets.Texture;
 import com.rubynaxela.kyanite.game.entities.AnimatedEntity;
@@ -30,6 +31,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     private static final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
     private static final Texture
             hullTexture = assets.get("texture.player_boat"),
+            hullTexture1 = assets.get("texture.player_boat1"),
             barrelTexture = assets.get("texture.barrel_top");
 
     private final Window window = GameContext.getInstance().getWindow();
@@ -53,6 +55,8 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         this.gameState = GameContext.getInstance().getResource("data.game_state");
         GameContext.getInstance().putResource("data.game_state", gameState.withBarrels(5).withFuel(100));
 
+        AnimatedTexture animatedTexture = new AnimatedTexture(new Texture[]{hullTexture, hullTexture1}, 0.2f);
+        animatedTexture.apply(hull);
         hull.setSize(Vec2.f(50, 87));
         hull.setPosition(Vec2.divideFloat(hull.getSize(), -2));
         add(hull);
