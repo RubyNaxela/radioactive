@@ -1,7 +1,7 @@
 {
   "button.pause": "Pause",
   "button.resume": "Resume",
-  "label.barrels": "Barrels: %d",
+  "label.barrels": "Barrels left:",
   "label.day": "Day %d",
   "label.money": "Money: %d",
   "label.time": "Time: %d"

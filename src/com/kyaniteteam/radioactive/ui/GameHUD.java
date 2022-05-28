@@ -13,11 +13,13 @@ import com.rubynaxela.kyanite.window.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jsfml.window.event.MouseButtonEvent;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class GameHUD extends HUD {
 
     private final DataAsset lang = getContext().getAssetsBundle().get("lang.en_us");
-    private final Label day = new Label(), barrels = new Label(),
-            money = new Label(), time = new Label(), pauseText = new Label();
+    private final Label day = new Label(), money = new Label(), time = new Label(), pauseText = new Label();
+    private final int fontSize = 24, margin = 16;
+    private final BarrelCounter barrels = new BarrelCounter(fontSize);
     private final RectangleButton pause = new RectangleButton(Vec2.f(75, 40)) {
         @Override
         public void mouseButtonPressed(@NotNull MouseButtonEvent event) {
@@ -34,7 +36,6 @@ public class GameHUD extends HUD {
 
     @Override
     protected void init() {
-        final int fontSize = 24, margin = 16;
         final Window window = getContext().getWindow();
 
         time.setText(String.format(lang.getString("label.time"), 0));
@@ -50,7 +51,6 @@ public class GameHUD extends HUD {
         add(money);
 
         barrels.setText(String.format(lang.getString("label.barrels"), 0));
-        barrels.setCharacterSize(fontSize);
         barrels.setPosition(margin, margin + 2 * fontSize);
         barrels.setColor(Colors.WHITE);
         add(barrels);
@@ -77,7 +77,7 @@ public class GameHUD extends HUD {
 
     public void update(@NotNull GameState state) {
         day.setText(String.format(lang.getString("label.day"), state.day));
-        barrels.setText(String.format(lang.getString("label.barrels"), state.barrels));
+        barrels.setBarrelsCount(state.barrels);
         money.setText(String.format(lang.getString("label.money"), state.money));
         time.setText(String.format(lang.getString("label.time"), state.time));
     }
