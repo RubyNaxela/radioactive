@@ -18,6 +18,8 @@ public class GameScene extends Scene {
     private final PlayerBoat player = new PlayerBoat(this);
     private final PatrolBoat patrolBoat = new PatrolBoat(this, 150, 30);
 
+    private final Depth depth = new Depth(this);
+
     public PlayerBoat getPlayer() {
         return player;
     }
@@ -31,6 +33,8 @@ public class GameScene extends Scene {
         return drawables.stream().filter(p -> p instanceof PatrolBoat)
                         .map(p -> (PatrolBoat) p).collect(Collectors.toList());
     }
+
+    public List<Depth>  `
 
     @Override
     protected void init() {
