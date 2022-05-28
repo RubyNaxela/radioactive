@@ -1,5 +1,6 @@
 package com.kyaniteteam.radioactive.entities;
 
+import com.kyaniteteam.radioactive.GameScene;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.assets.AssetsBundle;
 import com.rubynaxela.kyanite.game.assets.Texture;
@@ -22,7 +23,7 @@ import java.util.Arrays;
 
 public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
 
-    private final float minMoveSpeed = 40, maxMoveSpeed = 160, maxRotationSpeed = 40;
+    private final float minMoveSpeed = 20, maxMoveSpeed = 60, maxRotationSpeed = 40;
     private final RectangleShape boat, lightRay;
     private final ArrayList<Vector2f> patrolPath = new ArrayList<>();
     private final Window window = GameContext.getInstance().getWindow();
@@ -57,13 +58,6 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
         lightRay.setPosition(0, -50);
 
         add(lightRay, boat);
-
-        setPatrolPath(Vec2.f(200, 200),
-                Vec2.f(window.getSize().x - 200, 200),
-                Vec2.f(window.getSize().x - 200, window.getSize().y - 200),
-                Vec2.f(100, window.getSize().y - 200));
-//        setScale(0.2f, 0.2f);
-//        setRotation(110);
     }
 
     public void setFogColor(Color color) {
@@ -88,80 +82,11 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
 
     @Override
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
-//        Vector2f centerOfLight = Vec2.f(getPosition().x + (50 + lightRay.getSize().y / 2f) * Math.sin(getRotation()),
-//        getPosition().y - (50 + lightRay.getSize().y / 2f) * Math.cos(getRotation()));
-//        desiredRotation = calculateRotation(centerOfLight, destination);//MathUtils.direction(centerOfLight, destination);
-//        float deltaRot = desiredRotation - getRotation();
-//        if (deltaRot < -180)
-//            deltaRot += 360;
-//        if (deltaRot > 180)
-//            deltaRot -= 360;
-//        if (Math.abs(deltaRot) > maxRotateSpeed) {
-//            int factor = 1;
-//            if (deltaRot < 0) {
-//                factor = -1;
-//            }
-//            deltaRot = maxRotateSpeed * factor;
-//        }
-//        currentSpeed = minMoveSpeed + (maxMoveSpeed - minMoveSpeed) * (1 - Math.abs(deltaRot) / maxRotateSpeed);
-//        rotate(deltaRot * deltaTime.asSeconds());
-//
-//
-//        if (!reachedDestination && lightRay.getGlobalBounds().contains(destination)) {
-//            reachedDestination = true;
-//        }
-//        if (!investigating) {
-//            if (reachedDestination) {
-//                int index = -1;
-//                boolean found = false;
-//                boolean last = true;
-//                for (int i = 0; i < patrolPath.size() - 1; i++) {
-//                    if (destination == patrolPath.get(i)) {
-//                        index = i;
-//                        if (found) {
-//                            last = false;
-//                        }
-//                        found = true;
-//                    }
-//                }
-//                if (last) {
-//                    destination = patrolPath.get(0);
-//                } else {
-//                    destination = patrolPath.get(index + 1);
-//                }
-//                reachedDestination = false;
-//            }
-//
-//        }
-//
-//        if (Keyboard.isKeyPressed(Keyboard.Key.F)) {
-//            if (!msg) {
-//                System.out.println("Position: " + getPosition());
-//                System.out.println("Light center position: " + centerOfLight);
-//                System.out.println("Destination: " + destination);
-//                System.out.println("Desired rotation: " + desiredRotation);
-////                System.out.println("Vector from desired rotation: " + Vec2.f(Math.sin(desiredRotation), -Math.cos
-// (desiredRotation)));
-//                System.out.println("Vector from desired rotation: " + Vec2.multiply(MathUtils.direction(getPosition(),
-//                destination),MathUtils.distance(getPosition(), destination)));
-//                System.out.println("Delta distance: " + Vec2.subtract(destination, centerOfLight));
-//                System.out.println("Delta rotation: " + deltaRot);
-////                System.out.println("Distance: " + distance);
-//                System.out.println("--------------------------------------");
-//                msg = true;
-//            }
-//        } else msg = false;
-//
-//        move(currentSpeed * (float) Math.sin(Math.toRadians(getRotation())) * deltaTime.asSeconds(),
-//                -currentSpeed * (float) Math.cos(Math.toRadians(getRotation())) * deltaTime.asSeconds());
-
         if (getRotation() >= 360)
             setRotation(getRotation() - 360);
         if (getRotation() <= -360)
             setRotation(getRotation() + 360);
-        float deltaRot = calculateRotation(destination, /*Vec2.f(
-                    getPosition().x + beakOffset.x * Math.cos(Math.toRadians(getRotation())),
-                    getPosition().y + beakOffset.x * Math.sin(Math.toRadians(getRotation())))*/getPosition()) - getRotation();
+        float deltaRot = calculateRotation(getPosition(), destination) - getRotation();
 
         if (deltaRot > 180)
             deltaRot -= 360;
@@ -177,6 +102,8 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
         rotate(deltaRot * deltaTime.asSeconds());
 
         currentSpeed = minMoveSpeed + (maxMoveSpeed - minMoveSpeed) * (1 - Math.abs(deltaRot) / maxRotationSpeed);
+        if (((GameScene) window.getScene()).getBarrels().stream().anyMatch(b -> MathUtils.isInsideCircle(
+                getPosition(), b.getPosition(), b.getGlobalBounds().width / 2))) currentSpeed *= 0.5f;//TODO here
 
         if (patrolling) {
             if (getGlobalBounds().contains(destination)) {
