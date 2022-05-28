@@ -1,0 +1,37 @@
+{
+  "barrels": 3,
+  "salary": 100,
+  "enemies": [
+    {
+      "type": "police",
+      "initialPosition": {
+        "x": 400,
+        "y": 400
+      },
+      "points": [
+        {
+          "x": 100,
+          "y": 100
+        },
+        {
+          "x": 1180,
+          "y": 100
+        },
+        {
+          "x": 1180,
+          "y": 620
+        },
+        {
+          "x": 100,
+          "y": 620
+        }
+      ]
+    },
+    {
+      "type": "patrol",
+      "initialPosition": {
+        "x": 
+      }
+    }
+  ]
+}
