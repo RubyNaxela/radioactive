@@ -2,7 +2,10 @@ package com.kyaniteteam.radioactive;
 
 public class GameState {
 
-    public int day, barrels, money, time;
+    public int day;
+    public int barrels;
+    public int money;
+    public int time;
 
     public GameState withDay(int day) {
         this.day = day;
