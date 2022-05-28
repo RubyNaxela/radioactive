@@ -4,6 +4,7 @@ import com.kyaniteteam.radioactive.GameScene;
 import com.kyaniteteam.radioactive.GameState;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.HUD;
+import com.rubynaxela.kyanite.game.assets.AudioHandler;
 import com.rubynaxela.kyanite.game.assets.DataAsset;
 import com.rubynaxela.kyanite.game.assets.Texture;
 import com.rubynaxela.kyanite.game.entities.GlobalRect;
@@ -21,6 +22,7 @@ import org.jsfml.window.event.MouseButtonEvent;
 public class GameHUD extends HUD {
 
     private final DataAsset lang = getContext().getAssetsBundle().get("lang.en_us");
+    private final AudioHandler audioHandler = getContext().getAudioHandler();
     private final GameState state = GameContext.getInstance().getResource("data.game_state");
     private final int fontSize = 24, margin = 16;
     private final ProgressBar fuel = new ProgressBar(lang.getString("label.fuel"), fontSize);
@@ -101,11 +103,13 @@ public class GameHUD extends HUD {
             pauseText.setText(lang.getString("button.resume"));
             overlay.setFillColor(Colors.opacity(Colors.BLACK, 0.5f));
             pausedLabel.setColor(Colors.WHITE);
+            audioHandler.pauseAllPlayingSounds();
         } else {
             scene.resume();
             pauseText.setText(lang.getString("button.pause"));
             overlay.setFillColor(Colors.TRANSPARENT);
             pausedLabel.setColor(Colors.TRANSPARENT);
+            audioHandler.resumeAllPausedSounds();
         }
     }
     public void showDialog(){
