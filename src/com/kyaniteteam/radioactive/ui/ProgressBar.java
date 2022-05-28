@@ -20,12 +20,14 @@ public class ProgressBar extends CompoundEntity {
 
         final GlobalRect labelBounds = GlobalRect.from(label.getGlobalBounds());
         indicator.setSize(Vec2.f(100, characterSize));
-        indicator.setPosition(labelBounds.right, labelBounds.top);
+        indicator.setPosition(labelBounds.right + 4, labelBounds.top - 2);
+        setBarColor(new Color(220, 200, 20));
         add(indicator);
     }
 
     public void setPercentage(float percentage) {
         indicator.setSize(Vec2.f(percentage, indicator.getSize().y));
+        setBarColor(new Color((int)(200 + (Math.max(0.0f, percentage - 20.0f) * 50.0f)/100.0f), (int)(5 + (Math.max(0.0f, percentage - 20.0f) * 200.0f)/100.0f), 20));
     }
 
     public void setLabelColor(@NotNull Color color) {
