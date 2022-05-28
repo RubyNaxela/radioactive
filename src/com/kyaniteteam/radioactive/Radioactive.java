@@ -56,7 +56,7 @@ public class Radioactive extends Game {
         final GameHUD hud = new GameHUD();
         getContext().setupWindow(1280, 720, "Radioactive")
                     .setHUD(hud)
-                    .setScene(new GameScene(assets.<DataAsset>get("data.level.3").convertTo(SceneLoader.SceneData.class)))
+                    .setScene(new GameScene(assets.<DataAsset>get("data.level.1").convertTo(SceneLoader.SceneData.class)))
                     .addKeyListener(new KeyListener() {
                         @Override
                         public void keyPressed(KeyEvent e) {
