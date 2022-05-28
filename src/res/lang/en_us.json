@@ -3,7 +3,8 @@
   "button.resume": "Resume",
   "label.barrels": "Barrels left:",
   "label.day": "Day %d",
-  "label.fuel": "Fuel: %f",
+  "label.fuel": "Fuel:",
   "label.money": "Money: %d",
-  "label.paused": "Paused"
+  "label.paused": "Paused",
+  "label.time": "Dropping time"
 }

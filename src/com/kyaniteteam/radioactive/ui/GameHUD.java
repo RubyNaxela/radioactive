@@ -20,10 +20,11 @@ import org.jsfml.window.event.MouseButtonEvent;
 public class GameHUD extends HUD {
 
     private final DataAsset lang = getContext().getAssetsBundle().get("lang.en_us");
+    private final GameState state = GameContext.getInstance().getResource("data.game_state");
     private final int fontSize = 24, margin = 16;
+    private final ProgressBar fuel = new ProgressBar(lang.getString("label.fuel"), fontSize);
     private final BarrelCounter barrels = new BarrelCounter(fontSize);
-    private final Label day = new Label(), money = new Label(), fuel = new Label(),
-            pauseText = new Label(), pausedLabel = new Label(false);
+    private final Label day = new Label(), money = new Label(), pauseText = new Label(), pausedLabel = new Label(false);
     private final RectangleShape overlay = new RectangleShape();
     private final RectangleButton pause = new RectangleButton(Vec2.f(80, 40)) {
         @Override
@@ -36,10 +37,8 @@ public class GameHUD extends HUD {
     protected void init() {
         final Window window = getContext().getWindow();
 
-        fuel.setText(String.format(lang.getString("label.fuel"), 0f));
-        fuel.setCharacterSize(fontSize);
+        fuel.setLabelColor(Colors.WHITE);
         fuel.setPosition(margin, margin);
-        fuel.setColor(Colors.WHITE);
         add(fuel);
 
         money.setText(String.format(lang.getString("label.money"), 0));
@@ -85,11 +84,10 @@ public class GameHUD extends HUD {
     }
 
     public void update() {
-        final GameState state = GameContext.getInstance().getResource("data.game_state");
         day.setText(String.format(lang.getString("label.day"), state.day));
         barrels.setBarrelsCount(state.barrels);
         money.setText(String.format(lang.getString("label.money"), state.money));
-        fuel.setText(String.format(lang.getString("label.fuel"), state.fuel));
+        fuel.setPercentage(state.fuel);
     }
 
     public void togglePause() {
