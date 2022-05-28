@@ -21,6 +21,7 @@ public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
     private static final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
     private static final Texture
             barrelTexture = assets.get("texture.barrel_top"),
+            toxicBarrelTexture = assets.get("texture.barrel_top_leak"),
             toxicTexture = assets.get("texture.toxic_water");
     private RectangleShape water;
     private final CircleShape barrel;
@@ -42,7 +43,8 @@ public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
 
         barrel = new CircleShape(15);
         barrel.setOrigin(15, 15);
-        barrelTexture.apply(barrel);
+        if(safelyDropped) barrelTexture.apply(barrel);
+        if(!safelyDropped) toxicBarrelTexture.apply(barrel);
         barrel.setRotation(MathUtils.randomFloat(0, 360));
         if (MathUtils.probability(0.5f)) barrel.scale(-1, 1);
         if (MathUtils.probability(0.5f)) barrel.scale(1, -1);

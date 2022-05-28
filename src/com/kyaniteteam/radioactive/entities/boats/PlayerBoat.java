@@ -47,6 +47,8 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     private float baseVelocity = 80;
     private float lastBarrelDroppedTime = -1;
 
+    private boolean lastFailed = false;
+
     private boolean currentlyDropping = false, movingTexture = false;
     private float barrelDropOrderTime;
 
@@ -95,7 +97,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         scene.schedule(s -> ((GameScene) s).getEnemyBoats().forEach(s::bringToTop));
         scene.schedule(s -> s.bringToTop(this));
         if (gameState.barrels-- > 0) barrelSlots.get(gameState.barrels).setFillColor(Colors.TRANSPARENT);
-        gameState.time = 0;
+        gameState.dropProgress = 0.0f;
         hud.update();
         lastBarrelDroppedTime = clock.getTime().asSeconds();
     }
@@ -123,14 +125,14 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         }
 
         if (currentlyDropping) {
-            gameState.time = (int) (Math.max(0.0f, (elapsedTime.asSeconds() - barrelDropOrderTime) * 1000));
+            gameState.dropProgress = Math.min(100.0f, (elapsedTime.asSeconds() - barrelDropOrderTime) / 2 * 100);
             hud.update();
             if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
+                currentlyDropping = false;
                 dropBarrel(false);
-                currentlyDropping = false;
             } else if ((elapsedTime.asSeconds() - barrelDropOrderTime) >= 2) {
-                dropBarrel(true);
                 currentlyDropping = false;
+                dropBarrel(true);
             }
         }
 
@@ -154,5 +156,17 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
 
     @Override
     public void setVelocity(@NotNull Vector2f velocity) {
+    }
+
+    public boolean isCurrentlyDropping() {
+        return currentlyDropping;
+    }
+
+    public float getLastBarrelDroppedTime() {
+        return lastBarrelDroppedTime;
+    }
+
+    public boolean isLastFailed() {
+        return lastFailed;
     }
 }
