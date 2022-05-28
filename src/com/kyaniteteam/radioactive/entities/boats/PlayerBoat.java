@@ -3,6 +3,7 @@ package com.kyaniteteam.radioactive.entities.boats;
 import com.kyaniteteam.radioactive.GameScene;
 import com.kyaniteteam.radioactive.GameState;
 import com.kyaniteteam.radioactive.entities.DroppedBarrel;
+import com.kyaniteteam.radioactive.terrain.Depth;
 import com.kyaniteteam.radioactive.ui.GameHUD;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.assets.AnimatedTexture;
@@ -116,8 +117,8 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
             rotate(100 * deltaTime.asSeconds());
             rotating = true;
         }
-        if (Keyboard.isKeyPressed(Keyboard.Key.SPACE) &&
-            gameState.barrels > 0 && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
+        if (Keyboard.isKeyPressed(Keyboard.Key.SPACE) && scene.getDepths().stream().anyMatch(Depth::isPlayerInside) &&
+                gameState.barrels > 0 && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
             if (!currentlyDropping) {
                 currentlyDropping = true;
                 barrelDropOrderTime = elapsedTime.asSeconds();

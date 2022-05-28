@@ -17,6 +17,7 @@ public class Radioactive extends Game {
 
     @Override
     protected void preInit() {
+        assets.register("data.level.1", new DataAsset("src/res/levels/level1.json"));
         assets.register("font.dpcomic", new FontFace("src/res/fonts/dpcomic.ttf"));
         assets.register("lang.en_us", new DataAsset("src/res/lang/en_us.json"));
         assets.register("icon.barrel", new Icon("src/res/textures/barrels/barrel_clean.png"));
@@ -24,6 +25,8 @@ public class Radioactive extends Game {
         assets.register("sound.police", new Sound("src/res/sounds/police.ogg"));
         assets.register("texture.background", new Texture("src/res/textures/terrain/background.png"));
         assets.register("texture.barrel", new Texture("src/res/textures/barrels/barrel_clean.png"));
+        assets.register("texture.barrel_leaked", new Texture("src/res/textures/barrels/barrel_leak.png"));
+        assets.register("texture.barrel_check", new Texture("src/res/textures/barrels/x_for_barrel.png"));
         assets.register("texture.barrel_top", new Texture("src/res/textures/barrels/barrel_top.png"));
         assets.register("texture.barrel_top_leak", new Texture("src/res/textures/barrels/barrel_top_leak.png"));
         assets.register("texture.patrol_boat", new Texture("src/res/textures/boats/boat_control_v1.png"));
@@ -32,7 +35,9 @@ public class Radioactive extends Game {
         assets.register("texture.police.idle", new Texture("src/res/textures/boats/police_kalm.png"));
         assets.register("texture.police.angry1", new Texture("src/res/textures/boats/police_angry_1.png"));
         assets.register("texture.police.angry2", new Texture("src/res/textures/boats/police_angry_2.png"));
-        assets.register("texture.toxic_water", new Texture("src/res/textures/terrain/toxic_waters.png"));
+        assets.register("texture.toxic_water.1", new Texture("src/res/textures/terrain/toxic_water_1.png"));
+        assets.register("texture.toxic_water.2", new Texture("src/res/textures/terrain/toxic_water_2.png"));
+        assets.register("texture.toxic_water.3", new Texture("src/res/textures/terrain/toxic_water_3.png"));
         assets.register("texture.water_circles", new TextureAtlas("src/res/textures/particles/water_circles.png"));
         assets.register("texture.squirrel_basic", new Texture("src/res/textures/squirrel_basic.png"));
         assets.register("texture.dialogBox_narrow", new Texture("src/res/textures/speech_boxes/narratoru_boxu.png"));
@@ -49,7 +54,7 @@ public class Radioactive extends Game {
         final GameHUD hud = new GameHUD();
         getContext().setupWindow(1280, 720, "Radioactive")
                     .setHUD(hud)
-                    .setScene(new GameScene())
+                    .setScene(new GameScene(assets.<DataAsset>get("data.level.1").convertTo(SceneLoader.SceneData.class)))
                     .addKeyListener(new KeyListener() {
                         @Override
                         public void keyPressed(KeyEvent e) {

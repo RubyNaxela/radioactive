@@ -19,23 +19,32 @@ public class BarrelCounter extends CompoundEntity {
 
     private static final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
     private static final Texture barrelTexture = assets.get("texture.barrel");
+    private static final Texture barrelLeakedTexture = assets.get("texture.barrel_leaked");
+    private static final Texture checkTexture = assets.get("texture.barrel_check");
 
     private final Label label = new Label();
     private final List<RectangleShape> barrels = new ArrayList<>(6);
+    private final List<RectangleShape> checks = new ArrayList<>(6);
 
     public BarrelCounter(int characterSize) {
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 5; i++) {
             final RectangleShape barrel = barrelTexture.createRectangleShape();
             barrel.setSize(Vec2.f(characterSize * 3.0f, characterSize * 3.0f));
             barrel.setPosition(i * characterSize * 2, characterSize);
             add(barrel);
             barrels.add(barrel);
+            final RectangleShape check = checkTexture.createRectangleShape();
+            check.setSize(Vec2.f(characterSize * 3.0f, characterSize * 3.0f));
+            check.setPosition(i * characterSize * 2, characterSize);
+            add(check);
+            checks.add(check);
         }
     }
 
     public void setBarrelsCount(int barrelsCount) {
-        for (int i = 0; i < 6; i++) barrels.get(i).setFillColor(i < barrelsCount ? Colors.WHITE : Colors.TRANSPARENT);
+        //for (int i = 0; i < 5; i++) barrels.get(i).setFillColor(i < barrelsCount ? Colors.WHITE : Colors.TRANSPARENT);
+        for (int i = 0; i < 5; i++) checks.get(i).setFillColor(i < barrelsCount ? Colors.TRANSPARENT : Colors.WHITE);
     }
 
     public void setText(@NotNull String text) {
