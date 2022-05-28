@@ -17,7 +17,7 @@ public class Radioactive extends Game {
         assets.register("lang.en_us", new DataAsset("src/res/lang/en_us.json"));
         assets.register("texture.background", new Texture("src/res/textures/terrain/background.png"));
         assets.register("texture.barrel", new Texture("src/res/textures/barrels/barrel_clean.png"));
-        assets.register("texture.barrel_top", new Texture("src/res/textures/barrels/barrel_top.png"));
+        assets.register("texture.barrel_top", new Texture("src/res/textures/barrels/barrel_top_leak.png"));
         assets.register("texture.patrol_boat", new Texture("src/res/textures/boats/boat_control_v1.png"));
         assets.register("texture.player_boat", new Texture("src/res/textures/boats/barrel_boat.png"));
         assets.register("texture.toxic_water", new Texture("src/res/textures/terrain/toxic_waters.png"));
