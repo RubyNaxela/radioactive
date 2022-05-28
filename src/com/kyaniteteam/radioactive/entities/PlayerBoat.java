@@ -48,7 +48,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         this.scene = scene;
         this.hud = window.getHUD();
         this.gameState = GameContext.getInstance().getResource("data.game_state");
-        GameContext.getInstance().putResource("data.game_state", gameState.withBarrels(5));
+        GameContext.getInstance().putResource("data.game_state", gameState.withBarrels(5).withFuel(100));
 
         hull.setSize(Vec2.f(100, 100));
         hull.setPosition(Vec2.divideFloat(hull.getSize(), -2));

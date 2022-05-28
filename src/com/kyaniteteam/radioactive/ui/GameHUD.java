@@ -22,7 +22,7 @@ public class GameHUD extends HUD {
     private final DataAsset lang = getContext().getAssetsBundle().get("lang.en_us");
     private final int fontSize = 24, margin = 16;
     private final BarrelCounter barrels = new BarrelCounter(fontSize);
-    private final Label day = new Label(), money = new Label(), time = new Label(),
+    private final Label day = new Label(), money = new Label(), fuel = new Label(),
             pauseText = new Label(), pausedLabel = new Label(false);
     private final RectangleShape overlay = new RectangleShape();
     private final RectangleButton pause = new RectangleButton(Vec2.f(80, 40)) {
@@ -36,11 +36,11 @@ public class GameHUD extends HUD {
     protected void init() {
         final Window window = getContext().getWindow();
 
-        time.setText(String.format(lang.getString("label.time"), 0));
-        time.setCharacterSize(fontSize);
-        time.setPosition(margin, margin);
-        time.setColor(Colors.WHITE);
-        add(time);
+        fuel.setText(String.format(lang.getString("label.fuel"), 0f));
+        fuel.setCharacterSize(fontSize);
+        fuel.setPosition(margin, margin);
+        fuel.setColor(Colors.WHITE);
+        add(fuel);
 
         money.setText(String.format(lang.getString("label.money"), 0));
         money.setCharacterSize(fontSize);
@@ -89,7 +89,7 @@ public class GameHUD extends HUD {
         day.setText(String.format(lang.getString("label.day"), state.day));
         barrels.setBarrelsCount(state.barrels);
         money.setText(String.format(lang.getString("label.money"), state.money));
-        time.setText(String.format(lang.getString("label.time"), state.time));
+        fuel.setText(String.format(lang.getString("label.fuel"), state.fuel));
     }
 
     public void togglePause() {
