@@ -32,7 +32,9 @@ public class Radioactive extends Game {
         assets.register("texture.police.idle", new Texture("src/res/textures/boats/police_kalm.png"));
         assets.register("texture.police.angry1", new Texture("src/res/textures/boats/police_angry_1.png"));
         assets.register("texture.police.angry2", new Texture("src/res/textures/boats/police_angry_2.png"));
-        assets.register("texture.toxic_water", new Texture("src/res/textures/terrain/toxic_waters.png"));
+        assets.register("texture.toxic_water.1", new Texture("src/res/textures/terrain/toxic_water_1.png"));
+        assets.register("texture.toxic_water.2", new Texture("src/res/textures/terrain/toxic_water_2.png"));
+        assets.register("texture.toxic_water.3", new Texture("src/res/textures/terrain/toxic_water_3.png"));
         assets.register("texture.water_circles", new TextureAtlas("src/res/textures/particles/water_circles.png"));
         assets.register("texture.depth_ver3", new Texture("src/res/textures/terrain/depth_ver3.png"));
         assets.register("texture.shallow_water_1", new Texture("src/res/textures/terrain/shallow_water_1.png"));
