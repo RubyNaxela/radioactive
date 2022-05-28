@@ -30,6 +30,7 @@ public class Radioactive extends Game {
         assets.register("texture.toxic_water", new Texture("src/res/textures/terrain/toxic_waters.png"));
         assets.register("texture.water_circles", new TextureAtlas("src/res/textures/particles/water_circles.png"));
         assets.register("texture.squirrel_basic", new Texture("src/res/textures/squirrel_basic.png"));
+        assets.register("texture.dialogBox_narrow", new Texture("src/res/speech_boxes/narratoru_boxu.png"));
     }
 
     @Override
@@ -43,6 +44,7 @@ public class Radioactive extends Game {
                         @Override
                         public void keyPressed(KeyEvent e) {
                             if (e.key == Keyboard.Key.ESCAPE) hud.togglePause();
+                            if(e.key == Keyboard.Key.L) hud.showDialog();
                         }
                     });
         getContext().getWindow().setIcon(assets.<Icon>get("icon.barrel"));

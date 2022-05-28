@@ -5,6 +5,7 @@
         import com.rubynaxela.kyanite.game.assets.FontFace;
         import com.rubynaxela.kyanite.game.assets.Texture;
         import com.rubynaxela.kyanite.game.entities.CompoundEntity;
+        import com.rubynaxela.kyanite.game.entities.GlobalRect;
         import com.rubynaxela.kyanite.util.Colors;
         import org.jsfml.graphics.Color;
         import org.jsfml.graphics.ConstTexture;
@@ -15,6 +16,8 @@
 
 public class DialogBox extends CompoundEntity {
     private final Texture SquirrelBasicTexture = GameContext.getInstance().getAssetsBundle().get("texture.squirrel_basic");
+
+    private static Texture talkingBox = GameContext.getInstance().getAssetsBundle().get("texture.squirrel_basic");
     private final RectangleShape textBox;
     private final RectangleShape talkingDude;
     private final Label label;
@@ -22,29 +25,33 @@ public class DialogBox extends CompoundEntity {
 
     public DialogBox(){
         textBox = new RectangleShape(new Vector2f(1240, 240));
-        textBox.setPosition(20, 480);
+        textBox.setPosition(40, 480);
         textBox.setFillColor(Color.WHITE);
+        //textBox.setOrigin(new Vector2f(margin, 0));
         add(textBox);
 
         label = new Label(true);
         label.setPosition(40, 480);
         label.setCharacterSize(fontSize);
         label.setColor(Color.WHITE);
+        label.setOrigin(new Vector2f(-margin, 0));
         add(label);
 
-        talkingDude = new RectangleShape(new Vector2f(200,200));
-        talkingDude.setPosition(1080, 440);
+        talkingDude = new RectangleShape();
+        talkingDude.setPosition(40, 480);
         talkingDude.setFillColor(Color.WHITE);
         add(talkingDude);
     }
     public void setText(String text) {
         label.setText(text);
+        textBox.setSize(new Vector2f(label.getGlobalBounds().width + 2 * margin, label.getGlobalBounds().height + 2 * margin));
+        //GlobalRect.from(label.getGlobalBounds());
+
     }
     /*
     public void setTexture(Texture inTexture){
         dudeTexture = inTexture;
     }
-
      */
 
 
