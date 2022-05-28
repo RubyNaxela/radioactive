@@ -9,13 +9,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jsfml.graphics.*;
 import org.jsfml.system.Vector2f;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FieldOfView implements Drawable, Transformable {
 
-    private static final Color color = Colors.opacity(Colors.WHITE, 0.15f);
-    private final float distance, angle;
+    private final float opacity = 0.15f, distance, angle;
     private final VertexArray vertices;
     private final RectangleShape transformHolder = new RectangleShape(Vector2f.ZERO);
 
@@ -25,6 +25,7 @@ public class FieldOfView implements Drawable, Transformable {
         this.vertices = new VertexArray(PrimitiveType.TRIANGLE_FAN);
         final Window window = GameContext.getInstance().getWindow();
         final Vector2f mid = Vec2.f(0, 0);
+        final Color color = Colors.opacity(Colors.WHITE, opacity);
         vertices.add(new Vertex(mid, color));
         for (final Vector2f v : getCirclePoints(distance, MathUtils.degToRad(angle)))
             vertices.add(new Vertex(Vec2.add(mid, v), color));
@@ -53,13 +54,26 @@ public class FieldOfView implements Drawable, Transformable {
     }
 
     public boolean containsPoint(@NotNull Vector2f point) {
-        float alpha = normalizeAngle(MathUtils.radToDeg((float) Math.atan2(point.x - getPosition().x, getPosition().y - point.y)));
-        boolean heck;
+        float alpha = normalizeAngle(MathUtils.radToDeg((float) Math.atan2(point.x - getPosition().x,
+                getPosition().y - point.y)));
+        boolean range;
         if (normalizeAngle(getRotation() - angle / 2f) < normalizeAngle(getRotation() + angle / 2f))
-            heck = alpha >= normalizeAngle(getRotation() - angle / 2f) && alpha <= normalizeAngle(getRotation() + angle / 2f);
+            range = alpha >= normalizeAngle(getRotation() - angle / 2f) && alpha <= normalizeAngle(getRotation() + angle / 2f);
         else
-            heck = alpha <= normalizeAngle(getRotation() - angle / 2f) || alpha >= normalizeAngle(getRotation() + angle / 2f);
-        return MathUtils.distance(getPosition(), point) <= distance && heck;
+            range = alpha <= normalizeAngle(getRotation() - angle / 2f) || alpha >= normalizeAngle(getRotation() + angle / 2f);
+        return MathUtils.distance(getPosition(), point) <= distance && range;
+    }
+
+    public void setFillColor(@NotNull Color color) {
+        vertices.forEach(v -> {
+            try {
+                final Field colorField = Vertex.class.getField("color");
+                colorField.setAccessible(true);
+                colorField.set(v, Colors.opacity(color, opacity));
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public FloatRect getGlobalBounds() {

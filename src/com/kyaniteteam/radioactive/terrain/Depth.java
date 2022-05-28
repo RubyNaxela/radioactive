@@ -33,7 +33,7 @@ public class Depth extends RectangleShape {
     }
 
     public void addBarrel(DroppedBarrel barrel){
-        
+
     }
 
 }
