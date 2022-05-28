@@ -1,0 +1,142 @@
+package com.kyaniteteam.radioactive.entities;
+
+import com.rubynaxela.kyanite.game.GameContext;
+import com.rubynaxela.kyanite.util.Colors;
+import com.rubynaxela.kyanite.util.MathUtils;
+import com.rubynaxela.kyanite.util.Vec2;
+import com.rubynaxela.kyanite.window.Window;
+import org.jetbrains.annotations.NotNull;
+import org.jsfml.graphics.*;
+import org.jsfml.system.Vector2f;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class FieldOfView implements Drawable, Transformable {
+
+    private static final Color color = Colors.opacity(Colors.WHITE, 0.15f);
+    private final VertexArray vertices;
+    private final RectangleShape transformHolder = new RectangleShape(Vector2f.ZERO);
+
+    public FieldOfView(float distance, float angle) {
+        vertices = new VertexArray(PrimitiveType.TRIANGLE_FAN);
+        final Window window = GameContext.getInstance().getWindow();
+        final Vector2f mid = Vec2.f(0, 0);
+        vertices.add(new Vertex(mid, color));
+        for (final Vector2f v : getCirclePoints(distance, MathUtils.degToRad(angle)))
+            vertices.add(new Vertex(Vec2.add(mid, v), color));
+        vertices.add(new Vertex(mid, color));
+    }
+
+    private static float angle(@NotNull Vector2f v) {
+        return (float) Math.atan2(v.y, v.x);
+    }
+
+    private static List<Vector2f> getCirclePoints(float distance, float angle) {
+        List<Vector2f> ret = new ArrayList<>();
+        final int maxpts = 10;
+        for (int i = 0; i < maxpts; i++) {
+            float a = (-angle / 2.f) + (i * angle) / (maxpts - 1);
+            ret.add(Vec2.multiply(Vec2.f(Math.cos(a), Math.sin(a)), distance));
+        }
+        return ret;
+    }
+
+    @Override
+    public void draw(@NotNull RenderTarget target, @NotNull RenderStates states) {
+        final RenderStates renderStates = new RenderStates(states.blendMode,
+                                                           Transform.combine(states.transform, getTransform()),
+                                                           states.texture, states.shader);
+        target.draw(vertices, renderStates);
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        transformHolder.setPosition(x, y);
+    }
+
+    @Override
+    public void setPosition(Vector2f v) {
+        transformHolder.setPosition(v);
+    }
+
+    @Override
+    public void setRotation(float angle) {
+        transformHolder.setRotation(angle);
+    }
+
+    @Override
+    public void setScale(float x, float y) {
+        transformHolder.setScale(x, y);
+    }
+
+    @Override
+    public void setScale(Vector2f factors) {
+        transformHolder.setScale(factors);
+    }
+
+    @Override
+    public void setOrigin(float x, float y) {
+
+    }
+
+    @Override
+    public void setOrigin(Vector2f v) {
+        transformHolder.setOrigin(v);
+    }
+
+    @Override
+    public Vector2f getPosition() {
+        return transformHolder.getPosition();
+    }
+
+    @Override
+    public float getRotation() {
+        return transformHolder.getRotation();
+    }
+
+    @Override
+    public Vector2f getScale() {
+        return transformHolder.getScale();
+    }
+
+    @Override
+    public Vector2f getOrigin() {
+        return transformHolder.getOrigin();
+    }
+
+    @Override
+    public void move(float x, float y) {
+        transformHolder.move(x, y);
+    }
+
+    @Override
+    public void move(Vector2f v) {
+        transformHolder.move(v);
+    }
+
+    @Override
+    public void rotate(float angle) {
+        transformHolder.rotate(angle);
+    }
+
+    @Override
+    public void scale(float x, float y) {
+        transformHolder.scale(x, y);
+    }
+
+    @Override
+    public void scale(Vector2f factors) {
+        transformHolder.scale(factors);
+    }
+
+    @Override
+    public Transform getTransform() {
+        return transformHolder.getTransform();
+    }
+
+    @Override
+    public Transform getInverseTransform() {
+        return transformHolder.getInverseTransform();
+    }
+}
