@@ -1,6 +1,6 @@
 Epic README
 
-Art purpouse:
+Art purpose:
 
 barrel_boat - Player's boat
 
