@@ -31,7 +31,7 @@ public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
     public DroppedBarrel(@NotNull GameScene scene, @NotNull Vector2f position, boolean safe) {
 
         safelyDropped = safe;
-        if(!safe){
+        if (!safe) {
             water = new RectangleShape(Vec2.f(128, 128));
             water.setOrigin(64, 64);
             toxicTexture.apply(water);
@@ -43,8 +43,8 @@ public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
 
         barrel = new CircleShape(15);
         barrel.setOrigin(15, 15);
-        if(safelyDropped) barrelTexture.apply(barrel);
-        if(!safelyDropped) toxicBarrelTexture.apply(barrel);
+        if (safelyDropped) barrelTexture.apply(barrel);
+        if (!safelyDropped) toxicBarrelTexture.apply(barrel);
         barrel.setRotation(MathUtils.randomFloat(0, 360));
         if (MathUtils.probability(0.5f)) barrel.scale(-1, 1);
         if (MathUtils.probability(0.5f)) barrel.scale(1, -1);
@@ -58,7 +58,7 @@ public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
         animationProgress += 0.25f * deltaTime.asSeconds();
         if (animationProgress <= 1) {
-            if(!safelyDropped){
+            if (!safelyDropped) {
                 water.setFillColor(Colors.opacity(Colors.WHITE, Math.max(0, animationProgress * 2 - 1f)));
                 water.setScale(Math.max(0, animationProgress * 2 - 1f), Math.max(0, animationProgress * 2 - 1f));
             }
@@ -67,7 +67,7 @@ public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
     }
 
     public float getToxicRadius() {
-        if(safelyDropped) return 0;
+        if (safelyDropped) return 0;
         else return water.getGlobalBounds().width / 2;
     }
 }

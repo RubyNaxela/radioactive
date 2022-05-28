@@ -15,9 +15,11 @@ public class Depth extends RectangleShape {
     private static final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
     private static final Texture depth = assets.get("texture.depth_ver3");
     private final Window window = GameContext.getInstance().getWindow();
+    private final GameScene scene;
     private int barrelCounter = 0;
 
     public Depth(GameScene scene) {
+        this.scene = scene;
         setPosition(randomSpawnPlace());
         float x = MathUtils.randomFloat(0.5f, 1);
         setSize(Vec2.f(256 * x, 256 * x));
@@ -32,8 +34,12 @@ public class Depth extends RectangleShape {
         return new Vector2f(x, y);
     }
 
-    public void addBarrel(DroppedBarrel barrel){
+    public void addBarrel(DroppedBarrel barrel) {
 
+    }
+
+    public boolean isPlayerInside() {
+        return MathUtils.isInsideCircle(scene.getPlayer().getPosition(), getPosition(), getSize().x / 2);
     }
 
 }
