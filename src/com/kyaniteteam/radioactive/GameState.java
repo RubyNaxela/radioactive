@@ -5,7 +5,7 @@ public class GameState {
     public int day, barrels, money, time;
     public float fuel;
 
-    public GameState sethDay(int day) {
+    public GameState setDay(int day) {
         this.day = day;
         return this;
     }

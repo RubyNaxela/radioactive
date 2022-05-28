@@ -28,8 +28,9 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
     private final ArrayList<Vector2f> patrolPath = new ArrayList<>();
     private final Window window = GameContext.getInstance().getWindow();
     private final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
+    private final GameScene scene;
     private int targetIndex = 0;
-    private final float minMoveSpeed = 20, maxMoveSpeed = 60, maxRotationSpeed = 40, aggroTime = 1.5f, deAggroTime = 5;
+    private final float minMoveSpeed = 20, maxMoveSpeed = 60, maxRotationSpeed = 40, aggroTime = 0.5f, deAggroTime = 2.5f;
     private float currentSpeed = 50, chaseTime = 0;
     private boolean patrolling = true, investigating = false, chasing = false;
     private Vector2f destination;
@@ -40,6 +41,7 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
     }
 
     public PatrolBoat(@NotNull GameScene scene, float lightLength, float lightSpread) {
+        this.scene = scene;
         boat = new RectangleShape(Vec2.f(120, 120));
         lightRay = new FieldOfView(lightLength, lightSpread);
 
@@ -116,21 +118,23 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
 
         if (chasing) {
             if (chaseTarget != null) {
-                destination = chaseTarget.getPosition();
-                if (false/*player boat is not in the field of view*/) {//TODO
+                if (scene.getPlayer().isVisibleBy(this)/*player boat is not in the field of view*/) {//TODO
+                    destination = chaseTarget.getPosition();
+                    chaseTime = 0;
+                } else {
                     chaseTime += deltaTime.asSeconds();
-                    if (chaseTime >= deAggroTime) {
+                    if (chaseTime >= deAggroTime/* || MathUtils.distance(getPosition(), destination) < 20*/) {
                         chasing = false;
                         patrolling = true;
                         chaseTarget = null;
                     }
-                } else chaseTime = 0;
+                }
             } else {
                 patrolling = true;
                 chasing = false;
             }
         } else {
-            if (false/*player boat is in the field of view*/) {//TODO
+            if (scene.getPlayer().isVisibleBy(this)/*player boat is in the field of view*/) {//TODO
                 chaseTime += deltaTime.asSeconds();
                 if (chaseTime >= aggroTime) {
                     patrolling = false;
@@ -146,7 +150,6 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
                     if (targetIndex != patrolPath.size() - 1)
                         targetIndex++;
                     else{
-                        System.out.println("BLERGH");
                         targetIndex = 0;
                     }
                     destination = patrolPath.get(targetIndex);
@@ -164,7 +167,7 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
             System.out.println("HI");
         }
 
-        if (lightRay.containsPoint(Vec2.subtract(destination, getPosition())))
+        if (scene.getPlayer().isVisibleBy(this))
             System.out.println("I SEE YOU.");
 
         move(currentSpeed * (float) Math.sin(Math.toRadians(getRotation())) * deltaTime.asSeconds(),

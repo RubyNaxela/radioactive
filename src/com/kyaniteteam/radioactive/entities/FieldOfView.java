@@ -49,8 +49,6 @@ public class FieldOfView implements Drawable, Transformable {
         int fullRotations = (int) (angle / 360f);
         angle -= 360 * fullRotations;
         if (angle < 0) angle += 360;
-//        if (angle > 360) return positiveAngle(angle - 360);
-//        if (angle < 0) return positiveAngle(angle + 360);
         return angle;
     }
 

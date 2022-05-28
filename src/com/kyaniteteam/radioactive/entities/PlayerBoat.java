@@ -53,7 +53,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         this.gameState = GameContext.getInstance().getResource("data.game_state");
         gameState.setBarrels(5).setFuel(100);
 
-        hull.setSize(Vec2.f(100, 100));
+        hull.setSize(Vec2.f(50, 87));
         hull.setPosition(Vec2.divideFloat(hull.getSize(), -2));
         add(hull);
 
@@ -71,16 +71,19 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     }
 
     public boolean isVisibleBy(@NotNull PatrolBoat boat) {
-        for (int i = 0; i < 4; i++) if (boat.isPointWithinFOV(hull.getPoint(i))) return true;
+        for (int i = 0; i < 4; i++)
+            if (boat.isPointWithinFOV(getTransform().transformPoint(hull.getPoint(i)))) return true;
         for (int i = 0; i < 4; i++) {
-            final Vector2f point1 = hull.getPoint(i), point2 = hull.getPoint(i % 4);
-            if (boat.isPointWithinFOV(Vec2.f((point1.x + point2.x) / 2f, (point1.y + point2.y) / 2f))) return true;
+            final Vector2f point1 = hull.getPoint(i), point2 = hull.getPoint(i % 4),
+                    middlePoint = Vec2.f((point1.x + point2.x) / 2f, (point1.y + point2.y) / 2f);
+            if (boat.isPointWithinFOV(getTransform().transformPoint(middlePoint))) return true;
         }
         return false;
     }
 
     @Override
     public void keyPressed(KeyEvent event) {
+
     }
 
     private void dropBarrel(boolean safe) {
