@@ -9,15 +9,17 @@ import org.jsfml.window.event.KeyEvent;
 
 public class Radioactive extends Game {
 
+    final AssetsBundle assets = getContext().getAssetsBundle();
+
     public static void main(String[] args) {
         Game.run(Radioactive.class, args);
     }
 
     @Override
     protected void preInit() {
-        final AssetsBundle assets = getContext().getAssetsBundle();
         assets.register("font.dpcomic", new FontFace("src/res/fonts/dpcomic.ttf"));
         assets.register("lang.en_us", new DataAsset("src/res/lang/en_us.json"));
+        assets.register("icon.barrel", new Icon("src/res/textures/barrels/barrel_clean.png"));
         assets.register("texture.background", new Texture("src/res/textures/terrain/background.png"));
         assets.register("texture.barrel", new Texture("src/res/textures/barrels/barrel_clean.png"));
         assets.register("texture.barrel_top", new Texture("src/res/textures/barrels/barrel_top_leak.png"));
@@ -40,5 +42,6 @@ public class Radioactive extends Game {
                             if (e.key == Keyboard.Key.ESCAPE) hud.togglePause();
                         }
                     });
+        getContext().getWindow().setIcon(assets.<Icon>get("icon.barrel"));
     }
 }
