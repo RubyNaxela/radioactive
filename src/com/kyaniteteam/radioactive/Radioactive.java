@@ -18,6 +18,8 @@ public class Radioactive extends Game {
     @Override
     protected void preInit() {
         assets.register("data.level.1", new DataAsset("src/res/levels/level1.json"));
+        assets.register("data.level.2", new DataAsset("src/res/levels/level2.json"));
+        assets.register("data.level.3", new DataAsset("src/res/levels/level3.json"));
         assets.register("font.dpcomic", new FontFace("src/res/fonts/dpcomic.ttf"));
         assets.register("lang.en_us", new DataAsset("src/res/lang/en_us.json"));
         assets.register("icon.barrel", new Icon("src/res/textures/barrels/barrel_clean.png"));
@@ -54,7 +56,7 @@ public class Radioactive extends Game {
         final GameHUD hud = new GameHUD();
         getContext().setupWindow(1280, 720, "Radioactive")
                     .setHUD(hud)
-                    .setScene(new GameScene(assets.<DataAsset>get("data.level.1").convertTo(SceneLoader.SceneData.class)))
+                    .setScene(new GameScene(assets.<DataAsset>get("data.level.3").convertTo(SceneLoader.SceneData.class)))
                     .addKeyListener(new KeyListener() {
                         @Override
                         public void keyPressed(KeyEvent e) {
