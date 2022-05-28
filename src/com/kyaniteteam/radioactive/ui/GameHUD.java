@@ -49,7 +49,7 @@ public class GameHUD extends HUD {
         add(money);
 
         barrels.setText(String.format(lang.getString("label.barrels"), 0));
-        barrels.setPosition(margin, margin + 2 * fontSize);
+        barrels.setPosition(0, 2 * fontSize);
         barrels.setColor(Colors.WHITE);
         add(barrels);
 

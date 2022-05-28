@@ -16,7 +16,7 @@ public class GameScene extends Scene {
 
     private final Background background = new Background();
     private final PlayerBoat player = new PlayerBoat(this);
-    private final PatrolBoat patrolBoat = new PatrolBoat(300, 300);
+    private final PatrolBoat patrolBoat = new PatrolBoat(this, 150, 30);
 
     public PlayerBoat getPlayer() {
         return player;
@@ -38,8 +38,8 @@ public class GameScene extends Scene {
                 Vec2.f(200, 200)));
         patrolBoat.setPatrolPath(Vec2.f(200, 200),
                                  Vec2.f(window.getSize().x - 200, 200),
-                                 Vec2.f(window.getSize().x - 200, window.getSize().y - 200),
-                                 Vec2.f(100, window.getSize().y - 200));
+                                 Vec2.f(window.getSize().x - 200, window.getSize().y - 100),
+                                 Vec2.f(300, window.getSize().y - 100));
         add(background);
         add(player);
         add(patrolBoat);

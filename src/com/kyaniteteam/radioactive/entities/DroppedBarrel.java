@@ -22,19 +22,23 @@ public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
     private static final Texture
             barrelTexture = assets.get("texture.barrel_top"),
             toxicTexture = assets.get("texture.toxic_water");
-    private final RectangleShape water;
+    private RectangleShape water;
     private final CircleShape barrel;
+    public boolean safelyDropped;
     float animationProgress = 0;
 
-    public DroppedBarrel(@NotNull GameScene scene, @NotNull Vector2f position) {
+    public DroppedBarrel(@NotNull GameScene scene, @NotNull Vector2f position, boolean safe) {
 
-        water = new RectangleShape(Vec2.f(128, 128));
-        water.setOrigin(64, 64);
-        toxicTexture.apply(water);
-        water.setRotation(MathUtils.randomFloat(0, 360));
-        if (MathUtils.probability(0.5f)) water.scale(-1, 1);
-        if (MathUtils.probability(0.5f)) water.scale(1, -1);
-        add(water);
+        safelyDropped = safe;
+        if(!safe){
+            water = new RectangleShape(Vec2.f(128, 128));
+            water.setOrigin(64, 64);
+            toxicTexture.apply(water);
+            water.setRotation(MathUtils.randomFloat(0, 360));
+            if (MathUtils.probability(0.5f)) water.scale(-1, 1);
+            if (MathUtils.probability(0.5f)) water.scale(1, -1);
+            add(water);
+        }
 
         barrel = new CircleShape(15);
         barrel.setOrigin(15, 15);
@@ -52,13 +56,16 @@ public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
         animationProgress += 0.25f * deltaTime.asSeconds();
         if (animationProgress <= 1) {
-            water.setFillColor(Colors.opacity(Colors.WHITE, Math.max(0, animationProgress * 2 - 1f)));
-            water.setScale(Math.max(0, animationProgress * 2 - 1f), Math.max(0, animationProgress * 2 - 1f));
+            if(!safelyDropped){
+                water.setFillColor(Colors.opacity(Colors.WHITE, Math.max(0, animationProgress * 2 - 1f)));
+                water.setScale(Math.max(0, animationProgress * 2 - 1f), Math.max(0, animationProgress * 2 - 1f));
+            }
             barrel.setFillColor(Colors.opacity(Colors.WHITE, 1 - animationProgress));
         }
     }
 
     public float getToxicRadius() {
-        return water.getGlobalBounds().width / 2;
+        if(safelyDropped) return 0;
+        else return water.getGlobalBounds().width / 2;
     }
 }
