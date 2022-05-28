@@ -34,8 +34,8 @@ public class Radioactive extends Game {
         assets.register("texture.police.angry2", new Texture("src/res/textures/boats/police_angry_2.png"));
         assets.register("texture.toxic_water", new Texture("src/res/textures/terrain/toxic_waters.png"));
         assets.register("texture.water_circles", new TextureAtlas("src/res/textures/particles/water_circles.png"));
-        assets.register("texture.deep_water1.1", new TextureAtlas("src/res/textures/particles/deep_water1.1.png"));
-        assets.register("texture.shallow_water_1", new TextureAtlas("src/res/textures/particles/shallow_water_1.png"));
+        assets.register("texture.deep_water1.1", new Texture("src/res/textures/terrain/deep_water1.1.png"));
+        assets.register("texture.shallow_water_1", new Texture("src/res/textures/terrain/shallow_water_1.png"));
     }
 
     @Override
