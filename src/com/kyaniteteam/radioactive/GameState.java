@@ -2,7 +2,7 @@ package com.kyaniteteam.radioactive;
 
 public class GameState {
 
-    public int day, barrels, money;
+    public int day, barrels, money, time;
     public float fuel;
 
     public GameState withDay(int day) {
@@ -12,6 +12,11 @@ public class GameState {
 
     public GameState withBarrels(int barrels) {
         this.barrels = barrels;
+        return this;
+    }
+
+    public GameState withTime(int time) {
+        this.time = time;
         return this;
     }
 
