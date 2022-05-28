@@ -33,6 +33,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
             hullTexture = assets.get("texture.player_boat"),
             hullTexture1 = assets.get("texture.player_boat1"),
             barrelTexture = assets.get("texture.barrel_top");
+    private static final AnimatedTexture animatedTexture = new AnimatedTexture(new Texture[]{hullTexture, hullTexture1}, 0.2f);
 
     private final Window window = GameContext.getInstance().getWindow();
     private final Clock clock = GameContext.getInstance().getClock();
@@ -45,7 +46,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     private float baseVelocity = 80;
     private float lastBarrelDroppedTime = -1;
 
-    private boolean currentlyDropping = false;
+    private boolean currentlyDropping = false, movingTexture = false;
     private float barrelDropOrderTime;
 
     public PlayerBoat(@NotNull GameScene scene) {
@@ -55,8 +56,6 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         this.gameState = GameContext.getInstance().getResource("data.game_state");
         gameState.setBarrels(5).setFuel(100);
 
-        AnimatedTexture animatedTexture = new AnimatedTexture(new Texture[]{hullTexture, hullTexture1}, 0.2f);
-        animatedTexture.apply(hull);
         hull.setSize(Vec2.f(50, 87));
         hull.setPosition(Vec2.divideFloat(hull.getSize(), -2));
         add(hull);
@@ -102,15 +101,18 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
 
     @Override
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
-        if (!getVelocity().equals(Vector2f.ZERO)) {
-            gameState.fuel -= deltaTime.asSeconds();
-            hud.update();
-        }
+        boolean rotating = false;
         if (((GameScene) window.getScene()).getBarrels().stream().anyMatch(b -> MathUtils.isInsideCircle(
                 getPosition(), b.getPosition(), b.getToxicRadius()))) baseVelocity = 40;
         else baseVelocity = 80;
-        if (Keyboard.isKeyPressed(Keyboard.Key.A)) rotate(-100 * deltaTime.asSeconds());
-        if (Keyboard.isKeyPressed(Keyboard.Key.D)) rotate(100 * deltaTime.asSeconds());
+        if (Keyboard.isKeyPressed(Keyboard.Key.A) && gameState.fuel > 0) {
+            rotate(-100 * deltaTime.asSeconds());
+            rotating = true;
+        }
+        if (Keyboard.isKeyPressed(Keyboard.Key.D) && gameState.fuel > 0) {
+            rotate(100 * deltaTime.asSeconds());
+            rotating = true;
+        }
         if (Keyboard.isKeyPressed(Keyboard.Key.H) &&
             gameState.barrels > 0 && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
             if (!currentlyDropping) {
@@ -118,6 +120,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
                 barrelDropOrderTime = elapsedTime.asSeconds();
             }
         }
+
         if (currentlyDropping) {
             gameState.time = (int) (Math.max(0.0f, (elapsedTime.asSeconds() - barrelDropOrderTime) * 1000));
             hud.update();
@@ -129,11 +132,21 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
                 currentlyDropping = false;
             }
         }
+
+        if (!getVelocity().equals(Vector2f.ZERO) || rotating) {
+            if (!movingTexture) animatedTexture.apply(hull);
+            gameState.fuel -= deltaTime.asSeconds();
+            hud.update();
+            movingTexture = true;
+        } else {
+            if (movingTexture) animatedTexture.remove(hull);
+            movingTexture = false;
+        }
     }
 
     @Override
     public @NotNull Vector2f getVelocity() {
-        if (Keyboard.isKeyPressed(Keyboard.Key.W))
+        if (Keyboard.isKeyPressed(Keyboard.Key.W) && gameState.fuel > 0)
             return Vec2.multiply(MathUtils.direction(getRotation()), baseVelocity);
         else return Vector2f.ZERO;
     }
