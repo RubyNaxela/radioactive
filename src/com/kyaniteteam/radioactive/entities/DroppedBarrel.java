@@ -1,5 +1,6 @@
-package com.kyaniteteam.radioactive;
+package com.kyaniteteam.radioactive.entities;
 
+import com.kyaniteteam.radioactive.particles.WaterCircle;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.assets.AssetsBundle;
 import com.rubynaxela.kyanite.game.assets.Texture;
@@ -15,18 +16,15 @@ import org.jsfml.graphics.RectangleShape;
 import org.jsfml.system.Time;
 import org.jsfml.system.Vector2f;
 
-import static java.awt.SystemColor.window;
-
 public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
 
     private static final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
     private static final Texture
             barrelTexture = assets.get("texture.barrel"),
             toxicTexture = assets.get("texture.toxic_water");
-    float opacity = 0;
-
     private final RectangleShape water;
     private final CircleShape barrel;
+    float animationProgress = 0;
 
     public DroppedBarrel(Vector2f position) {
 
@@ -48,13 +46,13 @@ public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
         window.getScene().scheduleToAdd(new WaterCircle(getPosition()));
     }
 
-
     @Override
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
-        opacity += 0.25f * deltaTime.asSeconds();
-        if (opacity <= 1) {
-            water.setFillColor(Colors.opacity(Colors.WHITE, opacity));
-            barrel.setFillColor(Colors.opacity(Colors.WHITE, 1 - opacity));
+        animationProgress += 0.25f * deltaTime.asSeconds();
+        if (animationProgress <= 1) {
+            water.setFillColor(Colors.opacity(Colors.WHITE, animationProgress));
+            water.setScale(animationProgress, animationProgress);
+            barrel.setFillColor(Colors.opacity(Colors.WHITE, 1 - animationProgress));
         }
     }
 }

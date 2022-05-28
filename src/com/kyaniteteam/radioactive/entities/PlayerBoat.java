@@ -1,5 +1,8 @@
-package com.kyaniteteam.radioactive;
+package com.kyaniteteam.radioactive.entities;
 
+import com.kyaniteteam.radioactive.GameScene;
+import com.kyaniteteam.radioactive.GameState;
+import com.kyaniteteam.radioactive.ui.GameHUD;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.Scene;
 import com.rubynaxela.kyanite.game.assets.AssetsBundle;
@@ -18,15 +21,13 @@ import org.jsfml.window.event.KeyEvent;
 
 public class PlayerBoat extends RectangleShape implements AnimatedEntity, KeyListener {
 
-    private static AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
-    private static Texture tex = assets.get("texture.player_boat");
-    private Window window = GameContext.getInstance().getWindow();
+    private static final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
+    private static final Texture tex = assets.get("texture.player_boat");
+    private final Window window = GameContext.getInstance().getWindow();
     private final Clock clock = GameContext.getInstance().getClock();
     private final GameHUD hud = window.getHUD();
-    float lastBarrelDroppedTime = -1;
-
     private final GameState gameState;
-
+    private float lastBarrelDroppedTime = -1;
 
     public PlayerBoat(GameState state) {
         super(Vec2.f(100, 100));
@@ -43,7 +44,7 @@ public class PlayerBoat extends RectangleShape implements AnimatedEntity, KeyLis
     public void keyPressed(KeyEvent event) {
         Scene scene = window.getScene();
         if (event.key.equals(Keyboard.Key.H) && gameState.barrels > 0
-                && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
+            && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
             scene.scheduleToAdd(new DroppedBarrel(getPosition()));
             scene.schedule(s -> s.bringToTop(this));
             gameState.barrels--;
@@ -54,8 +55,10 @@ public class PlayerBoat extends RectangleShape implements AnimatedEntity, KeyLis
 
     @Override
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
-        float baseVelocity = 80;
-        //if()
+        final float baseVelocity;
+        if (((GameScene) window.getScene()).getBarrels().stream().anyMatch(b -> MathUtils.isInsideCircle(
+                getPosition(), b.getPosition(), b.getGlobalBounds().width / 2))) baseVelocity = 40;
+        else baseVelocity = 80;
         if (Keyboard.isKeyPressed(Keyboard.Key.A)) rotate(-100 * deltaTime.asSeconds());
         if (Keyboard.isKeyPressed(Keyboard.Key.D)) rotate(100 * deltaTime.asSeconds());
         final float rotation = getRotation();

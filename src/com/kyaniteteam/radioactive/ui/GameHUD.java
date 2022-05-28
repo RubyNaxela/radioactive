@@ -1,10 +1,10 @@
-package com.kyaniteteam.radioactive;
+package com.kyaniteteam.radioactive.ui;
 
+import com.kyaniteteam.radioactive.GameScene;
+import com.kyaniteteam.radioactive.GameState;
 import com.rubynaxela.kyanite.game.HUD;
 import com.rubynaxela.kyanite.game.assets.DataAsset;
-import com.rubynaxela.kyanite.game.assets.FontFace;
 import com.rubynaxela.kyanite.game.entities.GlobalRect;
-import com.rubynaxela.kyanite.game.gui.Font;
 import com.rubynaxela.kyanite.game.gui.RectangleButton;
 import com.rubynaxela.kyanite.game.gui.Text;
 import com.rubynaxela.kyanite.util.Colors;
@@ -16,7 +16,8 @@ import org.jsfml.window.event.MouseButtonEvent;
 public class GameHUD extends HUD {
 
     private final DataAsset lang = getContext().getAssetsBundle().get("lang.en_us");
-    private final Text day = new Text(), barrels = new Text(), money = new Text(), time = new Text(), pauseText = new Text();
+    private final Label day = new Label(), barrels = new Label(),
+            money = new Label(), time = new Label(), pauseText = new Label();
     private final RectangleButton pause = new RectangleButton(Vec2.f(75, 40)) {
         @Override
         public void mouseButtonPressed(@NotNull MouseButtonEvent event) {
@@ -33,32 +34,31 @@ public class GameHUD extends HUD {
 
     @Override
     protected void init() {
-        final int fontSize = 16, margin = 16;
+        final int fontSize = 24, margin = 16;
         final Window window = getContext().getWindow();
-        final Font font = new Font(FontFace.JETBRAINS_MONO, fontSize);
 
         time.setText(String.format(lang.getString("label.time"), 0));
-        time.setFont(font);
+        time.setCharacterSize(fontSize);
         time.setPosition(margin, margin);
         time.setColor(Colors.WHITE);
         add(time);
 
         money.setText(String.format(lang.getString("label.money"), 0));
-        money.setFont(font);
+        money.setCharacterSize(fontSize);
         money.setPosition(margin, margin + fontSize);
         money.setColor(Colors.WHITE);
         add(money);
 
         barrels.setText(String.format(lang.getString("label.barrels"), 0));
-        barrels.setFont(font);
+        barrels.setCharacterSize(fontSize);
         barrels.setPosition(margin, margin + 2 * fontSize);
         barrels.setColor(Colors.WHITE);
         add(barrels);
 
         day.setText(String.format(lang.getString("label.day"), 0));
-        day.setFont(font);
+        day.setCharacterSize(fontSize);
         day.setAlignment(Text.Alignment.BOTTOM_LEFT);
-        day.setPosition(margin, window.getSize().y - margin);
+        day.setPosition(margin, window.getSize().y - fontSize / 2f - margin);
         day.setColor(Colors.WHITE);
         add(day);
 
@@ -68,7 +68,7 @@ public class GameHUD extends HUD {
         add(pause);
 
         pauseText.setText(lang.getString("button.pause"));
-        pauseText.setFont(font);
+        pauseText.setCharacterSize(fontSize);
         pauseText.setAlignment(Text.Alignment.CENTER);
         pauseText.setColor(Colors.WHITE);
         pauseText.setPosition(Vec2.subtract(GlobalRect.from(pause.getGlobalBounds()).getCenter(), Vec2.f(0, fontSize / 3f)));

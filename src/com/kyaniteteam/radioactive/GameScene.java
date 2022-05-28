@@ -1,5 +1,8 @@
 package com.kyaniteteam.radioactive;
 
+import com.kyaniteteam.radioactive.entities.DroppedBarrel;
+import com.kyaniteteam.radioactive.entities.PatrolBoat;
+import com.kyaniteteam.radioactive.entities.PlayerBoat;
 import com.rubynaxela.kyanite.game.Scene;
 
 import java.util.List;

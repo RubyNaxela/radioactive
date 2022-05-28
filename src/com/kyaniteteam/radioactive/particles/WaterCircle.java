@@ -1,4 +1,4 @@
-package com.kyaniteteam.radioactive;
+package com.kyaniteteam.radioactive.particles;
 
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.assets.AnimatedTexture;

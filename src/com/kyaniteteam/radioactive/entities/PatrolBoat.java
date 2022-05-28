@@ -1,4 +1,4 @@
-package com.kyaniteteam.radioactive;
+package com.kyaniteteam.radioactive.entities;
 
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.assets.AssetsBundle;

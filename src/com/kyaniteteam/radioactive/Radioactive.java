@@ -1,10 +1,8 @@
 package com.kyaniteteam.radioactive;
 
+import com.kyaniteteam.radioactive.ui.GameHUD;
 import com.rubynaxela.kyanite.game.Game;
-import com.rubynaxela.kyanite.game.assets.AssetsBundle;
-import com.rubynaxela.kyanite.game.assets.DataAsset;
-import com.rubynaxela.kyanite.game.assets.Texture;
-import com.rubynaxela.kyanite.game.assets.TextureAtlas;
+import com.rubynaxela.kyanite.game.assets.*;
 
 public class Radioactive extends Game {
 
@@ -15,14 +13,15 @@ public class Radioactive extends Game {
     @Override
     protected void preInit() {
         final AssetsBundle assets = getContext().getAssetsBundle();
-        assets.register("lang.en_us", new DataAsset("src/res/en_us.json"));
-        assets.register("texture.background", new Texture("src/res/textures/background.png"));
-        assets.register("texture.barrel", new Texture("src/res/textures/barrel_clean.png"));
-        assets.register("texture.barrel_top", new Texture("src/res/textures/barrel_top.png"));
-        assets.register("texture.patrol_boat", new Texture("src/res/textures/boat_control_v1.png"));
-        assets.register("texture.player_boat", new Texture("src/res/textures/barrel_boat.png"));
-        assets.register("texture.toxic_water", new Texture("src/res/textures/toxic_waters.png"));
-        assets.register("texture.water_circles", new TextureAtlas("src/res/textures/water_circles.png"));
+        assets.register("font.dpcomic", new FontFace("src/res/fonts/dpcomic.ttf"));
+        assets.register("lang.en_us", new DataAsset("src/res/lang/en_us.json"));
+        assets.register("texture.background", new Texture("src/res/textures/terrain/background.png"));
+        assets.register("texture.barrel", new Texture("src/res/textures/barrels/barrel_clean.png"));
+        assets.register("texture.barrel_top", new Texture("src/res/textures/barrels/barrel_top.png"));
+        assets.register("texture.patrol_boat", new Texture("src/res/textures/boats/boat_control_v1.png"));
+        assets.register("texture.player_boat", new Texture("src/res/textures/boats/barrel_boat.png"));
+        assets.register("texture.toxic_water", new Texture("src/res/textures/terrain/toxic_waters.png"));
+        assets.register("texture.water_circles", new TextureAtlas("src/res/textures/particles/water_circles.png"));
     }
 
     @Override
