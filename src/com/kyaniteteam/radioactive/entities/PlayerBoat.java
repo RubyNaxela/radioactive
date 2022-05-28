@@ -71,7 +71,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     public void keyPressed(KeyEvent event) {
         if (event.key.equals(Keyboard.Key.H) && gameState.barrels > 0
             && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
-            scene.scheduleToAdd(new DroppedBarrel(getPosition()));
+            scene.scheduleToAdd(new DroppedBarrel(scene, getPosition()));
             scene.schedule(s -> s.bringToTop(this));
             if (gameState.barrels-- > 0) barrelSlots.get(gameState.barrels).setFillColor(Colors.TRANSPARENT);
             hud.update();

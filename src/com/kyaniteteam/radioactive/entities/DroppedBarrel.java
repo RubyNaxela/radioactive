@@ -1,5 +1,6 @@
 package com.kyaniteteam.radioactive.entities;
 
+import com.kyaniteteam.radioactive.GameScene;
 import com.kyaniteteam.radioactive.particles.WaterCircle;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.assets.AssetsBundle;
@@ -9,7 +10,6 @@ import com.rubynaxela.kyanite.game.entities.CompoundEntity;
 import com.rubynaxela.kyanite.util.Colors;
 import com.rubynaxela.kyanite.util.MathUtils;
 import com.rubynaxela.kyanite.util.Vec2;
-import com.rubynaxela.kyanite.window.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jsfml.graphics.CircleShape;
 import org.jsfml.graphics.RectangleShape;
@@ -26,7 +26,7 @@ public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
     private final CircleShape barrel;
     float animationProgress = 0;
 
-    public DroppedBarrel(Vector2f position) {
+    public DroppedBarrel(@NotNull GameScene scene, @NotNull Vector2f position) {
 
         water = new RectangleShape(Vec2.f(128, 128));
         water.setOrigin(64, 64);
@@ -45,8 +45,7 @@ public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
         add(barrel);
 
         setPosition(position);
-        final Window window = GameContext.getInstance().getWindow();
-        window.getScene().scheduleToAdd(new WaterCircle(getPosition()));
+        scene.scheduleToAdd(new WaterCircle(scene, getPosition()));
     }
 
     @Override

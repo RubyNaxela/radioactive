@@ -21,7 +21,6 @@ public class GameScene extends Scene {
 
     @Override
     protected void init() {
-        //setBackgroundColor(Colors.DARK_BLUE);
         add(background);
         add(player);
         add(patrolBoat);
