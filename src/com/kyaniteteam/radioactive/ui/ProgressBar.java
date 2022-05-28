@@ -11,6 +11,9 @@ public class ProgressBar extends CompoundEntity {
 
     private final Label label = new Label();
     private final RectangleShape indicator = new RectangleShape();
+    public Color startingColor = new Color(237, 215, 3);
+    public Color endingColor = new Color(237, 3, 3);
+    public float startingWidth;
 
     public ProgressBar(@NotNull String text, int characterSize) {
 
@@ -20,14 +23,17 @@ public class ProgressBar extends CompoundEntity {
 
         final GlobalRect labelBounds = GlobalRect.from(label.getGlobalBounds());
         indicator.setSize(Vec2.f(100, characterSize));
+        startingWidth = 100;
         indicator.setPosition(labelBounds.right + 4, labelBounds.top - 2);
-        setBarColor(new Color(220, 200, 20));
         add(indicator);
     }
 
     public void setPercentage(float percentage) {
-        indicator.setSize(Vec2.f(percentage, indicator.getSize().y));
-        setBarColor(new Color((int)(200 + (Math.max(0.0f, percentage - 20.0f) * 50.0f)/100.0f), (int)(5 + (Math.max(0.0f, percentage - 20.0f) * 200.0f)/100.0f), 20));
+        indicator.setSize(Vec2.f(percentage * startingWidth / 100.0f, indicator.getSize().y));
+        setBarColor(new Color((int)(endingColor.r - (endingColor.r - startingColor.r) * percentage / 100.0f),
+                            (int)(endingColor.g - (endingColor.g - startingColor.g) * percentage / 100.0f),
+                            (int)(endingColor.b - (endingColor.b - startingColor.b) * percentage / 100.0f)));
+
     }
 
     public void setLabelColor(@NotNull Color color) {
@@ -36,5 +42,13 @@ public class ProgressBar extends CompoundEntity {
 
     public void setBarColor(@NotNull Color color) {
         indicator.setFillColor(color);
+    }
+
+    public void setHeight(@NotNull float height) {
+        indicator.setSize(Vec2.f(indicator.getSize().x, height));
+    }
+
+    public void setStartingWidth(@NotNull float width) {
+        startingWidth = width;
     }
 }

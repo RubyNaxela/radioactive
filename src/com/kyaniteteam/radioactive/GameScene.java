@@ -5,6 +5,7 @@ import com.kyaniteteam.radioactive.entities.boats.EnemyBoat;
 import com.kyaniteteam.radioactive.entities.boats.PatrolBoat;
 import com.kyaniteteam.radioactive.entities.boats.PlayerBoat;
 import com.kyaniteteam.radioactive.entities.boats.PoliceBoat;
+import com.kyaniteteam.radioactive.terrain.Depth;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.Scene;
 import com.rubynaxela.kyanite.game.assets.AudioHandler;
@@ -23,18 +24,27 @@ public class GameScene extends Scene {
     private final PatrolBoat patrolBoat = new PatrolBoat(this, 150, 30);
     private final PoliceBoat policeBoat = new PoliceBoat(this, 150, 30);
 
+    private final Depth depth1 = new Depth(this);
+    private final Depth depth2 = new Depth(this);
+    private final Depth depth3 = new Depth(this);
+
     public PlayerBoat getPlayer() {
         return player;
     }
 
     public List<DroppedBarrel> getBarrels() {
-        return drawables.stream().filter(d -> d instanceof DroppedBarrel)
-                        .map(d -> (DroppedBarrel) d).collect(Collectors.toList());
+        return drawables.stream().filter(b -> b instanceof DroppedBarrel)
+                        .map(b -> (DroppedBarrel) b).collect(Collectors.toList());
     }
 
     public List<EnemyBoat> getEnemyBoats() {
-        return drawables.stream().filter(p -> p instanceof EnemyBoat)
-                        .map(p -> (EnemyBoat) p).collect(Collectors.toList());
+        return drawables.stream().filter(b -> b instanceof EnemyBoat)
+                        .map(b -> (EnemyBoat) b).collect(Collectors.toList());
+    }
+
+    public List<Depth> getDepths(){
+        return drawables.stream().filter(d -> d instanceof Depth)
+                .map(d -> (Depth) d).collect(Collectors.toList());
     }
 
     @Override
@@ -52,6 +62,7 @@ public class GameScene extends Scene {
                                  Vec2.f(window.getSize().x / 2, window.getSize().y - 200),
                                  Vec2.f(200, window.getSize().y / 2));
         add(background);
+        add(depth1,depth2,depth3);
         add(player);
         add(patrolBoat);
         add(policeBoat);

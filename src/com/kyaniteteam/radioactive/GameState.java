@@ -3,6 +3,7 @@ package com.kyaniteteam.radioactive;
 public class GameState {
 
     public int day, barrels, money, time;
+    public float dropProgress;
     public float fuel;
 
     public GameState setDay(int day) {
@@ -22,6 +23,11 @@ public class GameState {
 
     public GameState setTime(int time) {
         this.time = time;
+        return this;
+    }
+
+    public GameState setDropProgress(int dropProgress) {
+        this.dropProgress = dropProgress;
         return this;
     }
 

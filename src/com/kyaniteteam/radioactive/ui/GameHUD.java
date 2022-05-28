@@ -14,6 +14,8 @@ import com.rubynaxela.kyanite.util.Colors;
 import com.rubynaxela.kyanite.util.Vec2;
 import com.rubynaxela.kyanite.window.Window;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jsfml.graphics.Color;
 import org.jsfml.graphics.RectangleShape;
 import org.jsfml.system.Vector2f;
 import org.jsfml.window.Mouse;
@@ -27,6 +29,7 @@ public class GameHUD extends HUD {
     private final GameState state = GameContext.getInstance().getResource("data.game_state");
     private final int fontSize = 24, margin = 16;
     private final ProgressBar fuel = new ProgressBar(lang.getString("label.fuel"), fontSize);
+    private final ProgressBar barrelBar = new ProgressBar("", fontSize);
     private final BarrelCounter barrels = new BarrelCounter(fontSize);
     private final Label day = new Label(), money = new Label(), pauseText = new Label(), pausedLabel = new Label(false);
     private final RectangleShape overlay = new RectangleShape();
@@ -47,6 +50,14 @@ public class GameHUD extends HUD {
         fuel.setLabelColor(Colors.WHITE);
         fuel.setPosition(margin, margin);
         add(fuel);
+
+        barrelBar.setLabelColor(Colors.WHITE);
+        barrelBar.startingColor = new Color(27, 25, 37);
+        barrelBar.endingColor = new Color(27, 25, 37);
+        barrelBar.setHeight(fontSize * 2);
+        barrelBar.setStartingWidth(300.0f);
+        barrelBar.setPosition(500, margin);
+        add(barrelBar);
 
         money.setText(String.format(lang.getString("label.money"), 0));
         money.setCharacterSize(fontSize);
@@ -95,6 +106,13 @@ public class GameHUD extends HUD {
         barrels.setBarrelsCount(state.barrels);
         money.setText(String.format(lang.getString("label.money"), state.money));
         fuel.setPercentage(state.fuel);
+        barrelBar.setBarColor(new Color(0, 0, 0, 0));
+        if(getContext().getWindow().getScene() instanceof final GameScene scene ) {
+            barrelBar.setPercentage(100.0f - state.dropProgress);
+            if (!scene.getPlayer().isCurrentlyDropping()) {
+                barrelBar.setBarColor(new Color(0, 0, 0, 0));
+            }
+        }
     }
 
     public void togglePause() {
