@@ -15,11 +15,14 @@ import java.util.List;
 public class FieldOfView implements Drawable, Transformable {
 
     private static final Color color = Colors.opacity(Colors.WHITE, 0.15f);
+    private final float distance, angle;
     private final VertexArray vertices;
     private final RectangleShape transformHolder = new RectangleShape(Vector2f.ZERO);
 
     public FieldOfView(float distance, float angle) {
-        vertices = new VertexArray(PrimitiveType.TRIANGLE_FAN);
+        this.distance = distance;
+        this.angle = angle;
+        this.vertices = new VertexArray(PrimitiveType.TRIANGLE_FAN);
         final Window window = GameContext.getInstance().getWindow();
         final Vector2f mid = Vec2.f(0, 0);
         vertices.add(new Vertex(mid, color));
@@ -40,6 +43,12 @@ public class FieldOfView implements Drawable, Transformable {
             ret.add(Vec2.multiply(Vec2.f(Math.cos(alpha), Math.sin(alpha)), distance));
         }
         return ret;
+    }
+
+    public boolean containsPoint(@NotNull Vector2f point) {
+        float alpha = MathUtils.radToDeg((float) Math.atan2(point.x - getPosition().x, getPosition().y - point.y));
+        return MathUtils.distance(getPosition(), point) <= distance &&
+               alpha >= getRotation() - angle / 2 && alpha <= getRotation() + angle / 2;
     }
 
     public FloatRect getGlobalBounds() {
