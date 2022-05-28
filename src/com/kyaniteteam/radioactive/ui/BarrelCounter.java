@@ -18,7 +18,7 @@ import java.util.List;
 public class BarrelCounter extends CompoundEntity {
 
     private static final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
-    private static final Texture barrelTexture = assets.get("texture.barrel_top");
+    private static final Texture barrelTexture = assets.get("texture.barrel");
 
     private final Label label = new Label();
     private final List<RectangleShape> barrels = new ArrayList<>(6);
