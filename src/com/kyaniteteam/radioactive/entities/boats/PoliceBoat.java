@@ -36,6 +36,7 @@ public class PoliceBoat extends EnemyBoat {
                 animatedTexture.apply(boat);
                 chasingMode = true;
                 sound = audioHandler.playSound("sound.police", "boats", 100, 1, true);
+
             }
         } else {
             if (chasingMode) {
