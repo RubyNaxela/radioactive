@@ -26,7 +26,7 @@ public class GameScene extends Scene {
 
     public GameScene(@NotNull SceneLoader.SceneData data) {
         add(data.enemies.stream().map(e -> e.createEnemyBoat(this)).toList());
-        setBackgroundColor(new Color(25, 25, 50));
+        setBackgroundColor(new Color(40, 40, 80));
     }
 
     public PlayerBoat getPlayer() {
