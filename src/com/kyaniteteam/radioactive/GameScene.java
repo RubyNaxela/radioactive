@@ -35,7 +35,7 @@ public class GameScene extends Scene {
     @Override
     protected void init() {
         patrolBoat.setPosition(Vec2.subtract(window.getSize(),
-                Vec2.f(200, 200)));
+                                             Vec2.f(200, 200)));
         patrolBoat.setPatrolPath(Vec2.f(200, 200),
                                  Vec2.f(window.getSize().x - 200, 200),
                                  Vec2.f(window.getSize().x - 200, window.getSize().y - 100),

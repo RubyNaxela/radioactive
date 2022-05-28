@@ -53,7 +53,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         this.scene = scene;
         this.hud = window.getHUD();
         this.gameState = GameContext.getInstance().getResource("data.game_state");
-        GameContext.getInstance().putResource("data.game_state", gameState.withBarrels(5).withFuel(100));
+        gameState.setBarrels(5).setFuel(100);
 
         AnimatedTexture animatedTexture = new AnimatedTexture(new Texture[]{hullTexture, hullTexture1}, 0.2f);
         animatedTexture.apply(hull);
@@ -90,7 +90,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
 
     }
 
-    private void dropBarrel(boolean safe){
+    private void dropBarrel(boolean safe) {
         scene.scheduleToAdd(new DroppedBarrel(scene, getPosition(), safe));
         scene.schedule(s -> ((GameScene) s).getPatrolBoats().forEach(s::bringToTop));
         scene.schedule(s -> s.bringToTop(this));
@@ -102,27 +102,29 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
 
     @Override
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
+        if (!getVelocity().equals(Vector2f.ZERO)) {
+            gameState.fuel -= deltaTime.asSeconds();
+            hud.update();
+        }
         if (((GameScene) window.getScene()).getBarrels().stream().anyMatch(b -> MathUtils.isInsideCircle(
                 getPosition(), b.getPosition(), b.getToxicRadius()))) baseVelocity = 40;
         else baseVelocity = 80;
         if (Keyboard.isKeyPressed(Keyboard.Key.A)) rotate(-100 * deltaTime.asSeconds());
         if (Keyboard.isKeyPressed(Keyboard.Key.D)) rotate(100 * deltaTime.asSeconds());
         if (Keyboard.isKeyPressed(Keyboard.Key.H) &&
-                gameState.barrels > 0 && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2){
-            if(!currentlyDropping){
+            gameState.barrels > 0 && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
+            if (!currentlyDropping) {
                 currentlyDropping = true;
                 barrelDropOrderTime = elapsedTime.asSeconds();
             }
         }
         if (currentlyDropping) {
-            gameState.time = (int)(Math.max(0.0f, (elapsedTime.asSeconds() - barrelDropOrderTime)*1000));
+            gameState.time = (int) (Math.max(0.0f, (elapsedTime.asSeconds() - barrelDropOrderTime) * 1000));
             hud.update();
-            if(Keyboard.isKeyPressed(Keyboard.Key.W)){
+            if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
                 dropBarrel(false);
                 currentlyDropping = false;
-            }
-
-            else if((elapsedTime.asSeconds() - barrelDropOrderTime) >= 2){
+            } else if ((elapsedTime.asSeconds() - barrelDropOrderTime) >= 2) {
                 dropBarrel(true);
                 currentlyDropping = false;
             }
