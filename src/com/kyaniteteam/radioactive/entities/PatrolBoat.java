@@ -24,36 +24,29 @@ import java.util.Arrays;
 public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
 
     private PlayerBoat chaseTarget = null;
-    private final RectangleShape boat, lightRay;
+    private final RectangleShape boat;
+    private final FieldOfView lightRay;
     private final ArrayList<Vector2f> patrolPath = new ArrayList<>();
     private final Window window = GameContext.getInstance().getWindow();
     private final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
-    private final Texture boatTexture = assets.get("texture.patrol_boat");
     private int targetIndex = 0;
     private final float minMoveSpeed = 20, maxMoveSpeed = 60, maxRotationSpeed = 40, aggroTime = 1.5f, deAggroTime = 5;
     private float currentSpeed = 50, chaseTime = 0;
     private boolean patrolling = true, investigating = false, chasing = false;
     private Vector2f destination;
 
-    public PatrolBoat(Color fogColor) {
-        this();
+    public PatrolBoat(float lightLength, float lightSpread, Color fogColor) {
+        this(lightLength, lightSpread);
         setFogColor(fogColor);
     }
 
-    public PatrolBoat() {
-//        Texture texture_ray = GameContext.getInstance().getAssetsBundle().get("texture_light_ray");
-
+    public PatrolBoat(float lightLength, float lightSpread) {
         boat = new RectangleShape(Vec2.f(120, 120));
-        lightRay = new RectangleShape(Vec2.f(60, 100));
+        lightRay = new FieldOfView(lightLength, lightSpread);
 
-        boatTexture.apply(boat);
-//        texture_ray.apply(lightRay);
-
-//        boat.setFillColor(Colors.SANDY_BROWN);
-        lightRay.setFillColor(Colors.NAVAJO_WHITE);
+        assets.<Texture>get("texture.patrol_boat").apply(boat);
 
         boat.setOrigin(Vec2.divideFloat(boat.getSize(), 2));
-        lightRay.setOrigin(lightRay.getSize().x / 2f, lightRay.getSize().y);
         setOrigin(boat.getOrigin());
 
         lightRay.setPosition(0, -50);
@@ -63,6 +56,12 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
 
     public void setFogColor(Color color) {
         boat.setFillColor(Colors.opacity(color, 0.2f));
+    }
+
+    public void setBoatSize(Vector2f size) {
+        boat.setSize(size);
+        boat.setOrigin(Vec2.divideFloat(boat.getSize(), 2));
+        lightRay.setPosition(0, -boat.getSize().y / 2.4f);
     }
 
     public void investigate(Vector2f place) {
@@ -79,7 +78,7 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
     private float calculateRotation(Vector2f currentPosition, Vector2f desiredPosition) {
         float distX = desiredPosition.x - currentPosition.x;
         float distY = desiredPosition.y - currentPosition.y;
-        return (float) Math.toDegrees(Math.atan2(distX, -distY));
+        return (float)Math.toDegrees(Math.atan2(distX, -distY));
     }
 
     private void motionLogic(float loopDuration) {
@@ -116,7 +115,7 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
                 destination = chaseTarget.getPosition();
                 if (false/*player boat is not in the field of view*/) {//TODO
                     chaseTime += deltaTime.asSeconds();
-                    if (chaseTime > deAggroTime) {
+                    if (chaseTime >= deAggroTime) {
                         chasing = false;
                         patrolling = true;
                         chaseTarget = null;
@@ -129,8 +128,9 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
         } else {
             if (false/*player boat is in the field of view*/) {//TODO
                 chaseTime += deltaTime.asSeconds();
-                if (chaseTime > aggroTime) {
+                if (chaseTime >= aggroTime) {
                     patrolling = false;
+                    investigating = false;
                     chasing = true;
                     chaseTarget = ((GameScene) GameContext.getInstance().getWindow().getScene()).getPlayer();
                 }
@@ -138,7 +138,7 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
 
 
             if (patrolling) {
-                if (getGlobalBounds().contains(destination)) {
+                if (false) {//TODO change to fov containing the point
                     if (targetIndex != patrolPath.size() - 1)
                         targetIndex++;
                     else
@@ -146,7 +146,7 @@ public class PatrolBoat extends CompoundEntity implements AnimatedEntity {
                     destination = patrolPath.get(targetIndex);
                 }
             } else {
-                if (getGlobalBounds().contains(destination)) {
+                if (false) {//TODO change to fov containing the point
                     patrolling = true;
                     investigating = false;
                     destination = patrolPath.get(targetIndex);
