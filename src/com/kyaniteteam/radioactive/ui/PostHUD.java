@@ -41,7 +41,7 @@ public class PostHUD extends HUD {
             else if (gameState.barrelStates.get(i).equals("leakyDropped")) barrel = barrelLeakedTexture.createRectangleShape();
             else break;
             barrel.setSize(Vec2.f(characterSize * 3.0f, characterSize * 3.0f));
-            barrel.setPosition(i * characterSize * 2, characterSize);
+            barrel.setPosition(i * characterSize * 2, characterSize); //TODO center the barrels, show money earned
             add(barrel);
             allBarrels.add(barrel);
         }
