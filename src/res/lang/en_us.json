@@ -2,6 +2,8 @@
   "button.next_level": "Next level",
   "button.pause": "Pause",
   "button.resume": "Resume",
+  "button.play_again": "Play again",
+  "button.quit": "Quit game",
   "label.barrels": "Barrels left:",
   "label.day": "Day %d",
   "label.fuel": "Fuel:",
@@ -9,5 +11,6 @@
   "label.paused": "Paused",
   "label.time": "Dropping time",
   "label.summary": "Level score: %d   Full score: %d",
-  "dialogue.intro": "hey, you ar finally\n\n awake"
+  "dialogue.intro": "hey, you are finally\n\n awake",
+  "dialogue.outro": "Thank you for playing!"
 }
