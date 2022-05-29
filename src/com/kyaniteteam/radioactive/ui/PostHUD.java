@@ -69,7 +69,7 @@ public class PostHUD extends HUD implements KeyListener {
         final Label summaryLabel = new Label();
         summaryLabel.setPosition(640, 560);
         summaryLabel.setCharacterSize(60);
-        summaryLabel.setText(String.format(lang.getString("label.summary"), levelScore, gameState.fullScore)); //TODO show money earned
+        summaryLabel.setText(String.format(lang.getString("label.summary"), levelScore, gameState.fullScore));
         summaryLabel.setAlignment(Text.Alignment.CENTER);
         add(summaryLabel);
 
