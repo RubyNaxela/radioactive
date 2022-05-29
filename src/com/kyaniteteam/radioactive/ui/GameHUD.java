@@ -6,6 +6,7 @@ import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.HUD;
 import com.rubynaxela.kyanite.game.assets.AudioHandler;
 import com.rubynaxela.kyanite.game.assets.DataAsset;
+import com.rubynaxela.kyanite.game.assets.Texture;
 import com.rubynaxela.kyanite.game.entities.GlobalRect;
 import com.rubynaxela.kyanite.game.gui.RectangleButton;
 import com.rubynaxela.kyanite.game.gui.Text;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.RectangleShape;
+import org.jsfml.system.Vector2f;
 import org.jsfml.window.Mouse;
 import org.jsfml.window.event.MouseButtonEvent;
 
@@ -37,6 +39,9 @@ public class GameHUD extends HUD {
             if (event.button == Mouse.Button.LEFT) togglePause();
         }
     };
+
+    private final Texture SquirrelBasicTexture = GameContext.getInstance().getAssetsBundle().get("texture.squirrel_basic");
+    DialogBox dialogueBox = new DialogBox();
 
     @Override
     protected void init() {
@@ -98,7 +103,7 @@ public class GameHUD extends HUD {
 
     public void update() {
         day.setText(String.format(lang.getString("label.day"), state.day));
-        barrels.setBarrelsCount(state.barrels);
+        barrels.setBarrelsCount(state.barrels, state.barrelStates);
         money.setText(String.format(lang.getString("label.money"), state.money));
         fuel.setPercentage(state.fuel);
         barrelBar.setBarColor(new Color(0, 0, 0, 0));
@@ -124,6 +129,19 @@ public class GameHUD extends HUD {
             overlay.setFillColor(Colors.TRANSPARENT);
             pausedLabel.setColor(Colors.TRANSPARENT);
             audioHandler.resumeAllPausedSounds();
+        }
+    }
+    public void showDialog(){
+        final GameScene scene = getContext().getWindow().getScene();
+        if(!scene.isSuspended()){
+            scene.suspend();
+            dialogueBox.setText(lang.getString("dialogue.intro"));
+            dialogueBox.setLocation(new Vector2f(1080,480));
+            dialogueBox.show();
+            add(dialogueBox);
+        }else{
+            scene.resume();
+            dialogueBox.hide();
         }
     }
 }

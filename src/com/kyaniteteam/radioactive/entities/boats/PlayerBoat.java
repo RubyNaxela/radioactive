@@ -62,6 +62,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         this.hud = window.getHUD();
         this.gameState = GameContext.getInstance().getResource("data.game_state");
         gameState.setBarrels(5).setFuel(100);
+        gameState.prepBarrels(5);
 
         hull.setSize(Vec2.f(50, 87));
         hull.setPosition(Vec2.divideFloat(hull.getSize(), -2));
@@ -100,7 +101,14 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         scene.scheduleToAdd(new DroppedBarrel(scene, getPosition(), safe));
         scene.schedule(s -> ((GameScene) s).getEnemyBoats().forEach(s::bringToTop));
         scene.schedule(s -> s.bringToTop(this));
-        if (gameState.barrels-- > 0) barrelSlots.get(gameState.barrels).setFillColor(Colors.TRANSPARENT);
+        gameState.barrels--;
+        if (gameState.barrels >= 0) barrelSlots.get(gameState.barrels).setFillColor(Colors.TRANSPARENT);
+        if(safe){
+            gameState.barrelStates.set(gameState.barrels, "safelyDropped");
+        }
+        else{
+            gameState.barrelStates.set(gameState.barrels, "leakyDropped");
+        }
         gameState.dropProgress = 0.0f;
         hud.update();
         lastBarrelDroppedTime = clock.getTime().asSeconds();

@@ -69,7 +69,7 @@ public class FieldOfView implements Drawable, Transformable {
             try {
                 final Field colorField = Vertex.class.getField("color");
                 colorField.setAccessible(true);
-                colorField.set(v, Colors.opacity(color, opacity));
+                colorField.set(v, color);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             }

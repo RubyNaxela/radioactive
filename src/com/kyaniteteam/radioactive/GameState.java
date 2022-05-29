@@ -1,10 +1,13 @@
 package com.kyaniteteam.radioactive;
 
+import java.util.ArrayList;
+
 public class GameState {
 
-    public int day, barrels, money, time, salary;
+    public int day, barrels, startingBarrelsCount, money, time, salary;
     public float dropProgress;
     public float fuel;
+    public ArrayList<String> barrelStates;
 
     public GameState setDay(int day) {
         this.day = day;
@@ -34,5 +37,16 @@ public class GameState {
     public GameState setFuel(int fuel) {
         this.fuel = fuel;
         return this;
+    }
+
+    public void prepBarrels(int count){
+        barrelStates = new ArrayList<String>(count);
+        startingBarrelsCount = count;
+        for(int i = 0; i < startingBarrelsCount; i++){
+            barrelStates.add("ready");
+        }
+        for(int i = startingBarrelsCount; i < 5; i++){
+            barrelStates.add("nonexistent");
+        }
     }
 }

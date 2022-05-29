@@ -1,0 +1,57 @@
+{
+  "barrels": 4,
+  "salary": 100,
+  "enemies": [
+    {
+      "type": "patrol",
+      "initialPosition": {
+        "x": 1000,
+        "y": 700
+      },
+      "points": [
+        {
+          "x": 1000,
+          "y": 100
+        },
+        {
+          "x": 1000,
+          "y": 700
+        }
+      ]
+    },
+    {
+      "type": "patrol",
+      "initialPosition": {
+        "x": 640,
+        "y": 100
+      },
+      "points": [
+        {
+          "x": 640,
+          "y": 700
+        },
+        {
+          "x": 640,
+          "y": 100
+        }
+      ]
+    },
+    {
+      "type": "patrol",
+      "initialPosition":{
+        "x": 100,
+        "y": 700
+      },
+      "points": [
+        {
+          "x": 100,
+          "y": 100
+        },
+        {
+          "x": 100,
+          "y": 700
+        }
+      ]
+    }
+  ]
+}
