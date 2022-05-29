@@ -30,6 +30,7 @@ public class GameHUD extends HUD {
     private final int fontSize = 24, margin = 16;
     private final ProgressBar fuel = new ProgressBar(lang.getString("label.fuel"), fontSize);
     private final ProgressBar barrelBar = new ProgressBar("", fontSize);
+    private final FadingBar fadingBar = new FadingBar();
     private final BarrelCounter barrels = new BarrelCounter(fontSize);
     private final Label day = new Label(), money = new Label(), pauseText = new Label(), pausedLabel = new Label(false);
     private final RectangleShape overlay = new RectangleShape();
@@ -58,6 +59,8 @@ public class GameHUD extends HUD {
         barrelBar.setStartingWidth(300.0f);
         barrelBar.setPosition(500, margin);
         add(barrelBar);
+
+        add(fadingBar);
 
         money.setText(String.format(lang.getString("label.money"), 0));
         money.setCharacterSize(fontSize);
