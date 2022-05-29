@@ -51,20 +51,19 @@ public class BarrelCounter extends CompoundEntity {
         }
     }
 
-    public void setBarrelsCount(int barrelsCount, ArrayList<String> barrelStates) {
-        for (int i = 0; i < gameState.barrels; i++) {
-            barrels.get(i).setFillColor(barrelStates.get(i).equals("leakyDropped")
-                                        ? Colors.TRANSPARENT : Colors.WHITE);
+    public void setBarrelsCount(ArrayList<String> barrelStates) {
+        for (int i = 0; i < 6; i++) {
+            barrels.get(i).setFillColor(barrelStates.get(i).equals("safelyDropped") ||
+                    barrelStates.get(i).equals("ready")
+                                        ? Colors.WHITE : Colors.TRANSPARENT);
             leakedBarrels.get(i).setFillColor(barrelStates.get(i).equals("leakyDropped")
-                                              ? Colors.WHITE : Colors.TRANSPARENT);
-            checks.get(i).setFillColor(i < barrelsCount ? Colors.TRANSPARENT : Colors.WHITE);
+                                        ? Colors.WHITE : Colors.TRANSPARENT);
+            checks.get(i).setFillColor(barrelStates.get(i).equals("leakyDropped") ||
+                                        barrelStates.get(i).equals("safelyDropped")
+                                        ? Colors.WHITE : Colors.TRANSPARENT);
         }
-        for (int i = 0; i < 6; i++)
-            if (barrelStates.get(i).equals("nonexistent")) {
-                barrels.get(i).setFillColor(Colors.TRANSPARENT);
-                leakedBarrels.get(i).setFillColor(Colors.TRANSPARENT);
-                checks.get(i).setFillColor(Colors.TRANSPARENT);
-            }
+        //for (int i = 0; i < 6; i++)
+        //    System.out.println(barrelStates.get(i));
     }
 
     public void setText(@NotNull String text) {

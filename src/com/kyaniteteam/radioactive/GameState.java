@@ -16,6 +16,7 @@ public class GameState {
 
     public GameState setBarrels(int barrels) {
         this.barrels = barrels;
+        prepBarrels();
         return this;
     }
 
@@ -39,9 +40,9 @@ public class GameState {
         return this;
     }
 
-    public void prepBarrels(int count) {
-        barrelStates = new ArrayList<>(count);
-        startingBarrelsCount = count;
+    public void prepBarrels() {
+        barrelStates = new ArrayList<>(6);
+        startingBarrelsCount = barrels;
         for (int i = 0; i < startingBarrelsCount; i++) {
             barrelStates.add("ready");
         }

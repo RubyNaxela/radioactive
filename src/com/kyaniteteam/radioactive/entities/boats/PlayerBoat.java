@@ -60,7 +60,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         super(Vec2.f(600, 600));
         this.scene = scene;
         this.hud = window.getHUD();
-        gameState.prepBarrels(6);
+        //gameState.prepBarrels(); //TODO pass starting number of barrels in current level
 
         hull.setSize(Vec2.f(50, 87));
         hull.setPosition(Vec2.divideFloat(hull.getSize(), -2));
