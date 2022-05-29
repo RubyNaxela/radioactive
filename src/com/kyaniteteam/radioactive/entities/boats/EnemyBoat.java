@@ -67,8 +67,8 @@ public class EnemyBoat extends RectangleShape implements AnimatedEntity, MovingE
         if (deltaAlpha > 180) deltaAlpha -= 360;
         else if (deltaAlpha < -180) deltaAlpha += 360;
 
-        if (Math.abs(deltaAlpha) > baseSpeed * 2) deltaAlpha = baseSpeed * 2 * (deltaAlpha < 0 ? -1 : 1);
-        rotate(deltaAlpha * deltaTime.asSeconds());
+        if (Math.abs(deltaAlpha) > baseSpeed) deltaAlpha = baseSpeed * (deltaAlpha < 0 ? -1 : 1);
+        rotate(deltaAlpha*1.5f * deltaTime.asSeconds());
 
         if (targetReached() && !chase) target = patrolPath.get(++patrolPathPoint % patrolPath.size());
         if (scene.getPlayer().isVisibleBy(this)) {
