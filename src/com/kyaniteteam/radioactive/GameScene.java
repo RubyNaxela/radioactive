@@ -3,10 +3,12 @@ package com.kyaniteteam.radioactive;
 import com.kyaniteteam.radioactive.entities.DroppedBarrel;
 import com.kyaniteteam.radioactive.entities.boats.EnemyBoat;
 import com.kyaniteteam.radioactive.entities.boats.PlayerBoat;
+import com.kyaniteteam.radioactive.entities.decor.Shark;
 import com.kyaniteteam.radioactive.terrain.Depth;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.Scene;
 import com.rubynaxela.kyanite.game.assets.AudioHandler;
+import com.rubynaxela.kyanite.util.MathUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jsfml.graphics.Color;
 
@@ -22,6 +24,8 @@ public class GameScene extends Scene {
     private final Depth depth3 = new Depth(this, 0.25f, 1);
     private final Depth depth1 = new Depth(this, 0.5f, 2);
     private final Depth depth2 = new Depth(this, 1, 10);
+
+    private float latestShark = Float.NEGATIVE_INFINITY, nextShark = 8f;
 
     public GameScene(@NotNull SceneLoader.SceneData data) {
         data.enemies.stream().map(e -> e.createEnemyBoat(this)).forEach(EnemyBoat::addToScene);
@@ -57,6 +61,11 @@ public class GameScene extends Scene {
 
     @Override
     protected void loop() {
-
+        final float elapsedTime = getContext().getClock().getTime().asSeconds();
+        if (elapsedTime >= latestShark + nextShark) {
+            nextShark = MathUtils.randomFloat(8, 16);
+            scheduleToAdd(new Shark(this));
+            latestShark = elapsedTime;
+        }
     }
 }
