@@ -51,7 +51,7 @@ public class BarrelCounter extends CompoundEntity {
         }
     }
 
-    public void setBarrelsCount(ArrayList<String> barrelStates) {
+    public void setBarrelsCount(@NotNull ArrayList<String> barrelStates) {
         for (int i = 0; i < 6; i++) {
             barrels.get(i).setFillColor(barrelStates.get(i).equals("safelyDropped") ||
                     barrelStates.get(i).equals("ready")

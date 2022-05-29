@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 public class LastHUD extends HUD implements KeyListener {
     private static final Window window = GameContext.getInstance().getWindow();
-    private static final GameState gameState = GameContext.getInstance().getResource("data.game_state");
     private static final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
     private static final DataAsset lang = assets.get("lang.en_us");
     private static final Texture
@@ -53,7 +52,7 @@ public class LastHUD extends HUD implements KeyListener {
         final RectangleButton quitButton = new RectangleButton(Vec2.f(200, 100)) {
             @Override
             public void mouseButtonPressed(@NotNull MouseButtonEvent event) {
-                endGame(true);
+                endGame(false);
             }
         };
 

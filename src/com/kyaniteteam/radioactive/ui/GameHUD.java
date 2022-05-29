@@ -24,6 +24,7 @@ import org.jsfml.window.event.MouseButtonEvent;
 @SuppressWarnings("FieldCanBeLocal")
 public class GameHUD extends HUD {
 
+    private static final GameState gameState = GameContext.getInstance().getResource("data.game_state");
     private final DataAsset lang = getContext().getAssetsBundle().get("lang.en_us");
     private final AudioHandler audioHandler = getContext().getAudioHandler();
     private final GameState state = GameContext.getInstance().getResource("data.game_state");
@@ -73,7 +74,7 @@ public class GameHUD extends HUD {
         barrels.setColor(Colors.WHITE);
         add(barrels);
 
-        day.setText(String.format(lang.getString("label.day"), 0));
+        day.setText(String.format(lang.getString("label.day"), gameState.currentLevel));
         day.setCharacterSize(fontSize);
         day.setAlignment(Text.Alignment.BOTTOM_LEFT);
         day.setPosition(margin, window.getSize().y - fontSize / 2f - margin);

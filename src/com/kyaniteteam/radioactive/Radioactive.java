@@ -10,7 +10,7 @@ import org.jsfml.window.event.KeyEvent;
 public class Radioactive extends Game {
 
     private final AssetsBundle assets = getContext().getAssetsBundle();
-    private final GameState gameState = new GameState();
+    private GameState gameState;
 
     public static void main(String[] args) {
         Game.run(Radioactive.class, args);
@@ -59,6 +59,7 @@ public class Radioactive extends Game {
 
     @Override
     protected void init() {
+        gameState = new GameState();
         getContext().putResource("data.game_state", gameState);
         getContext().putResource("function.next_level", (Runnable) this::loadNextLevel);
         getContext().getAudioHandler().createChannel("boats");
