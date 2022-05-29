@@ -1,6 +1,7 @@
 package com.kyaniteteam.radioactive.ui;
 
 import com.kyaniteteam.radioactive.GameState;
+import com.kyaniteteam.radioactive.Radioactive;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.HUD;
 import com.rubynaxela.kyanite.game.assets.AssetsBundle;
@@ -43,7 +44,7 @@ public class PostHUD extends HUD implements KeyListener {
         int levelScore = gameState.money;
         gameState.fullScore += levelScore;
 
-        setBackgroundColor(new Color(40, 40, 80));
+        setBackgroundColor(Radioactive.HUD_COLOR);
 
         final RectangleShape priceTag = plateTexture.createRectangleShape();
         priceTag.setSize(Vec2.f(484, 306));

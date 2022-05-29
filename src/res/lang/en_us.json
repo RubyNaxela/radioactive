@@ -8,6 +8,8 @@
   "label.money": "Salary: %d",
   "label.paused": "Paused",
   "label.time": "Dropping time",
+  "label.game_over": "Game Over",
+  "label.press_space": "Press SPACE to continue",
   "label.summary": "Level score: %d   Full score: %d",
   "dialogue.intro": "hey, you ar finally\n\n awake"
 }

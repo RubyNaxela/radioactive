@@ -8,10 +8,8 @@ import com.kyaniteteam.radioactive.terrain.Depth;
 import com.kyaniteteam.radioactive.ui.PostHUD;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.Scene;
-import com.rubynaxela.kyanite.game.assets.AudioHandler;
 import com.rubynaxela.kyanite.util.MathUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jsfml.graphics.Color;
 import org.jsfml.system.Time;
 
 import java.util.List;
@@ -29,7 +27,7 @@ public class GameScene extends Scene {
         gameState.setMoney(data.salary).setBarrels(data.barrels).setFuel(100);
         data.enemies.stream().map(e -> e.createEnemyBoat(this)).forEach(EnemyBoat::addToScene);
         data.depths.stream().map(d -> d.createDepth(this)).forEach(this::add);
-        setBackgroundColor(new Color(40, 40, 80));
+        setBackgroundColor(Radioactive.HUD_COLOR);
         player = new PlayerBoat(this);
     }
 
@@ -66,11 +64,9 @@ public class GameScene extends Scene {
         if (gameState.barrels == 0) {
             if (lastDropTime == null) lastDropTime = getContext().getClock().getTime();
         }
-        if (lastDropTime != null) {
-            if (getContext().getClock().getTime().asSeconds() - lastDropTime.asSeconds() >= 1.69f) {
-                getContext().getWindow().setHUD(new PostHUD());
-                suspend();
-            }
+        if (lastDropTime != null && getContext().getClock().getTime().asSeconds() - lastDropTime.asSeconds() >= 2f) {
+            getContext().getWindow().setHUD(new PostHUD());
+            suspend();
         }
     }
 }

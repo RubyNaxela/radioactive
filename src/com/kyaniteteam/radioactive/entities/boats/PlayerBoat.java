@@ -6,6 +6,7 @@ import com.kyaniteteam.radioactive.entities.DroppedBarrel;
 import com.kyaniteteam.radioactive.particles.WavesAfterBoats;
 import com.kyaniteteam.radioactive.terrain.Depth;
 import com.kyaniteteam.radioactive.ui.GameHUD;
+import com.kyaniteteam.radioactive.ui.GameOverHUD;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.assets.AnimatedTexture;
 import com.rubynaxela.kyanite.game.assets.AssetsBundle;
@@ -16,6 +17,7 @@ import com.rubynaxela.kyanite.game.entities.MovingEntity;
 import com.rubynaxela.kyanite.system.Clock;
 import com.rubynaxela.kyanite.util.Colors;
 import com.rubynaxela.kyanite.util.MathUtils;
+import com.rubynaxela.kyanite.util.Pointer;
 import com.rubynaxela.kyanite.util.Vec2;
 import com.rubynaxela.kyanite.window.Window;
 import com.rubynaxela.kyanite.window.event.KeyListener;
@@ -79,6 +81,33 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         hud.update();
     }
 
+//    public static boolean lineSegmentsIntersect(@NotNull Vector2f p0, @NotNull Vector2f p1, @NotNull Vector2f p2,
+//                                                @NotNull Vector2f p3) {
+//        final float s1x = p1.x - p0.x,
+//                s1y = p1.y - p0.y,
+//                s2x = p3.x - p2.x,
+//                s2y = p3.y - p2.y,
+//                v = -s2x * s1y + s1x * s2y,
+//                s = (-s1y * (p0.x - p2.x) + s1x * (p0.y - p2.y)) / v,
+//                t = (s2x * (p0.y - p2.y) - s2y * (p0.x - p2.x)) / v;
+//        return s >= 0 && s <= 1 && t >= 0 && t <= 1;
+//    }
+//
+//    public static boolean rectanglesIntersect(@NotNull RectangleShape rect1, @NotNull RectangleShape rect2) {
+//        final Pointer<Boolean> intersection = new Pointer<>(false);
+//        Vec2iIterable.square(4).forEach((corner1, corner2) -> {
+//            final Vector2f
+//                    p = rect1.getTransform().transformPoint(rect1.getPoint(corner1)),
+//                    q = rect1.getTransform().transformPoint(rect1.getPoint((corner1 + 1) % 4)),
+//                    r = rect2.getTransform().transformPoint(rect2.getPoint(corner2)),
+//                    s = rect2.getTransform().transformPoint(rect2.getPoint((corner2 + 1) % 4));
+//            if (lineSegmentsIntersect(p, q, r, s)) {
+//                intersection.value = true;
+//            }
+//        });
+//        return intersection.value;
+//    }
+
     public boolean isVisibleBy(@NotNull EnemyBoat boat) {
         for (int i = 0; i < 4; i++)
             if (boat.isPointWithinFOV(getTransform().transformPoint(hull.getPoint(i)))) return true;
@@ -88,6 +117,15 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
             if (boat.isPointWithinFOV(getTransform().transformPoint(middlePoint))) return true;
         }
         return false;
+    }
+
+    public boolean touchingAnyBoat() {
+        final Pointer<Boolean> intersection = new Pointer<>(false);
+        scene.getEnemyBoats().forEach(b -> {
+            if (MathUtils.isInsideCircle(getPosition(), b.getPosition(), b.getSize().x / 2 + hull.getSize().x / 2))
+                intersection.value = true;
+        });
+        return intersection.value;
     }
 
     @Override
@@ -104,7 +142,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         if (safe) {
             gameState.barrelStates.set(gameState.barrels, "safelyDropped");
         } else {
-            gameState.money = Math.max(0, (int)(gameState.startingMoney * 0.5f));
+            gameState.money = Math.max(0, (int) (gameState.startingMoney * 0.5f));
             gameState.barrelStates.set(gameState.barrels, "leakyDropped");
         }
         gameState.dropProgress = 0.0f;
@@ -113,22 +151,15 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     }
 
     private void checkForDefeat() {
-        boolean caughtDefeat = false, depthDefeat = false;
-        for (var b : scene.getEnemyBoats()) {
-            if (b.getGlobalBounds().intersection(getGlobalBounds()) != null) {//TODO improve this method
-                caughtDefeat = true;
-            }
-        }
+        boolean caughtDefeat = touchingAnyBoat(), depthDefeat = false;
         if (gameState.barrels > 0 && gameState.fuel <= 0) {
-            for (var d : scene.getDepths()) {
-                if ((d.isPlayerInside() && d.ifFull()) || !d.isPlayerInside())
-                    depthDefeat = true;
-            }
+            for (final var d : scene.getDepths())
+                if ((d.isPlayerInside() && d.ifFull()) || !d.isPlayerInside()) depthDefeat = true;
         }
         if (caughtDefeat || depthDefeat) {
-            System.out.println("Game over!");
             scene.suspend();
-        } //TODO game over screen
+            scene.getContext().getWindow().setHUD(new GameOverHUD());
+        }
     }
 
     @Override
@@ -200,15 +231,15 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     public void setVelocity(@NotNull Vector2f velocity) {
     }
 
+//    public float getLastBarrelDroppedTime() {
+//        return lastBarrelDroppedTime;
+//    }
+//
+//    public boolean isLastFailed() {
+//        return lastFailed;
+//    }
+
     public boolean isCurrentlyDropping() {
         return currentlyDropping;
-    }
-
-    public float getLastBarrelDroppedTime() {
-        return lastBarrelDroppedTime;
-    }
-
-    public boolean isLastFailed() {
-        return lastFailed;
     }
 }
