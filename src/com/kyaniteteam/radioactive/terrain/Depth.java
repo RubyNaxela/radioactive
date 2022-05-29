@@ -57,10 +57,8 @@ public class Depth extends RectangleShape {
     public void addBarrel() {
         if (getBarrelCounter() < getCapacity()) {
             barrelCounter++;
-            System.out.println("adding barrel to depth");
             if (getBarrelCounter() == getCapacity()) {
                 isFull = true;
-                System.out.println("this hole is full now");
             }
         }
     }
