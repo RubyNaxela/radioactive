@@ -33,6 +33,10 @@ public class PostHUD extends HUD {
     @Override
     protected void init() {
 
+        int leakedBarrels = 0;
+        for (int i = 0; i < 6; i++) if(gameState.barrelStates.get(i).equals("leakyDropped")) leakedBarrels++;
+        int levelScore = (int)(gameState.money * Math.max(0.0f, 1.0f - (leakedBarrels * 0.5f)));
+
         setBackgroundColor(new Color(40, 40, 80));
 
         final RectangleShape priceTag = assets.<Texture>get("texture.price_tag").createRectangleShape();
@@ -40,6 +44,7 @@ public class PostHUD extends HUD {
         priceTag.setOrigin(242, 153);
         priceTag.setPosition(Vec2.divideFloat(getContext().getWindow().getSize(), 2f));
         add(priceTag);
+
 
         for (int i = 0; i < 6; i++) {
             RectangleShape barrel;
@@ -51,6 +56,13 @@ public class PostHUD extends HUD {
             add(barrel);
             allBarrels.add(barrel);
         }
+
+        final Label label = new Label();
+        label.setCharacterSize(characterSize);
+        label.setText("Level score: " + String.valueOf(levelScore));
+        label.setPosition(1260 * 0.25f, 560);
+        label.setCharacterSize(60);
+        add(label);
 
         final RectangleButton nextLevelButton = new RectangleButton(Vec2.f(200, 100)) {
             @Override

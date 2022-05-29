@@ -13,6 +13,8 @@ public class Radioactive extends Game {
     private final AssetsBundle assets = getContext().getAssetsBundle();
     private final GameState gameState = new GameState();
 
+    public int score = 0;
+
     public static void main(String[] args) {
         Game.run(Radioactive.class, args);
     }
