@@ -112,9 +112,29 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         lastBarrelDroppedTime = clock.getTime().asSeconds();
     }
 
+    private void checkForDefeat() {
+        boolean caughtDefeat = false, depthDefeat = false;
+        for (var b : scene.getEnemyBoats()) {
+            if (b.getGlobalBounds().intersection(getGlobalBounds()) != null) {//TODO improve this method
+                caughtDefeat = true;
+            }
+        }
+        if (gameState.barrels > 0 && gameState.fuel <= 0) {
+            for (var d : scene.getDepths()) {
+                if ((d.isPlayerInside() && d.ifFull()) || !d.isPlayerInside())
+                    depthDefeat = true;
+            }
+        }
+        if (caughtDefeat || depthDefeat) {
+            System.out.println("Game over!");
+            scene.suspend();
+        } //TODO game over screen
+    }
+
     @Override
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
         boolean rotating = false;
+        checkForDefeat();
         if (((GameScene) window.getScene()).getBarrels().stream().anyMatch(b -> MathUtils.isInsideCircle(
                 getPosition(), b.getPosition(), b.getToxicRadius()))) baseVelocity = 40;
         else baseVelocity = 80;
