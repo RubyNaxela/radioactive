@@ -1,4 +1,5 @@
 {
+  "button.next_level": "Next level",
   "button.pause": "Pause",
   "button.resume": "Resume",
   "label.barrels": "Barrels left:",
@@ -7,5 +8,6 @@
   "label.money": "Salary: %d",
   "label.paused": "Paused",
   "label.time": "Dropping time",
+  "label.summary": "Level score: %d   Full score: %d",
   "dialogue.intro": "hey, you ar finally\n\n awake"
 }

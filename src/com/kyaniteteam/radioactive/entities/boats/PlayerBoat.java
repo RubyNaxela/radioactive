@@ -43,7 +43,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     private final GameScene scene;
     private final GameHUD hud;
     private final GameState gameState = GameContext.getInstance().getResource("data.game_state");
-    ;
+
     private final RectangleShape hull = hullTexture.createRectangleShape(false);
     private final List<RectangleShape> barrelSlots = new ArrayList<>(6);
     public float lastBrokenFocusLength = 0.0f;

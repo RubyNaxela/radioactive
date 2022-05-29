@@ -2,7 +2,6 @@ package com.kyaniteteam.radioactive;
 
 import com.kyaniteteam.radioactive.ui.GameHUD;
 import com.rubynaxela.kyanite.game.Game;
-import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.assets.*;
 import com.rubynaxela.kyanite.window.event.KeyListener;
 import org.jsfml.window.Keyboard;
