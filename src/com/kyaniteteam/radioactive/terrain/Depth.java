@@ -1,7 +1,6 @@
 package com.kyaniteteam.radioactive.terrain;
 
 import com.kyaniteteam.radioactive.GameScene;
-import com.kyaniteteam.radioactive.entities.DroppedBarrel;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.assets.AssetsBundle;
 import com.rubynaxela.kyanite.game.assets.Texture;
@@ -18,11 +17,16 @@ public class Depth extends RectangleShape {
     private final GameScene scene;
     private int barrelCounter = 0;
 
-    public Depth(GameScene scene) {
+    private boolean isFull = false;
+
+    private int holeSize;
+
+    public Depth(GameScene scene, float size, int Holesize) {
         this.scene = scene;
+        this.holeSize = Holesize;
         setPosition(randomSpawnPlace());
-        float x = MathUtils.randomFloat(0.5f, 1);
-        setSize(Vec2.f(256 * x, 256 * x));
+        //float x = MathUtils.randomFloat(0.5f, 1);
+        setSize(Vec2.f(256 * size, 256 * size));
         setOrigin(Vec2.divideFloat(getSize(), 2));
         depth.apply(this);
     }
@@ -34,7 +38,26 @@ public class Depth extends RectangleShape {
         return new Vector2f(x, y);
     }
 
-    public void addBarrel(DroppedBarrel barrel) {
+    public int getBarrelCounter(){
+        return barrelCounter;
+    }
+
+    public int getHoleSize(){
+        return holeSize;
+    }
+    public boolean ifFull(){
+        return isFull;
+    }
+
+    public void addBarrel(){
+        if(getBarrelCounter()<getHoleSize()){
+            barrelCounter++;
+            System.out.println("adding barrel to depth");
+            if(getBarrelCounter()==getHoleSize()){
+                isFull = true;
+                System.out.println("this hole is full now");
+            }
+        }
 
     }
 

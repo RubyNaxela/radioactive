@@ -3,6 +3,7 @@ package com.kyaniteteam.radioactive.entities.boats;
 import com.kyaniteteam.radioactive.GameScene;
 import com.kyaniteteam.radioactive.GameState;
 import com.kyaniteteam.radioactive.entities.DroppedBarrel;
+import com.kyaniteteam.radioactive.particles.WavesAfterBoats;
 import com.kyaniteteam.radioactive.terrain.Depth;
 import com.kyaniteteam.radioactive.ui.GameHUD;
 import com.rubynaxela.kyanite.game.GameContext;
@@ -43,6 +44,8 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     private final GameHUD hud;
     private final GameState gameState;
 
+    private int waveCycle = 0;
+
     private final RectangleShape hull = hullTexture.createRectangleShape(false);
     private final List<RectangleShape> barrelSlots = new ArrayList<>(6);
     private float baseVelocity = 80;
@@ -59,6 +62,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         this.hud = window.getHUD();
         this.gameState = GameContext.getInstance().getResource("data.game_state");
         gameState.setBarrels(5).setFuel(100);
+        gameState.prepBarrels(5);
 
         hull.setSize(Vec2.f(50, 87));
         hull.setPosition(Vec2.divideFloat(hull.getSize(), -2));
@@ -97,7 +101,14 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         scene.scheduleToAdd(new DroppedBarrel(scene, getPosition(), safe));
         scene.schedule(s -> ((GameScene) s).getEnemyBoats().forEach(s::bringToTop));
         scene.schedule(s -> s.bringToTop(this));
-        if (gameState.barrels-- > 0) barrelSlots.get(gameState.barrels).setFillColor(Colors.TRANSPARENT);
+        gameState.barrels--;
+        if (gameState.barrels >= 0) barrelSlots.get(gameState.barrels).setFillColor(Colors.TRANSPARENT);
+        if(safe){
+            gameState.barrelStates.set(gameState.barrels, "safelyDropped");
+        }
+        else{
+            gameState.barrelStates.set(gameState.barrels, "leakyDropped");
+        }
         gameState.dropProgress = 0.0f;
         hud.update();
         lastBarrelDroppedTime = clock.getTime().asSeconds();
@@ -117,13 +128,16 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
             rotate(100 * deltaTime.asSeconds());
             rotating = true;
         }
-        if (Keyboard.isKeyPressed(Keyboard.Key.SPACE) && scene.getDepths().stream().anyMatch(Depth::isPlayerInside) &&
-            gameState.barrels > 0 && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
+        final Depth playerDepth = scene.getDepths().stream().filter(Depth::isPlayerInside).findFirst().orElse(null);
+        if (Keyboard.isKeyPressed(Keyboard.Key.SPACE) && playerDepth != null && !playerDepth.ifFull() &&
+                gameState.barrels > 0 && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
             if (!currentlyDropping) {
+                playerDepth.addBarrel();
                 currentlyDropping = true;
                 barrelDropOrderTime = elapsedTime.asSeconds();
             }
         }
+
 
         if (currentlyDropping) {
             gameState.dropProgress = Math.min(100.0f, (elapsedTime.asSeconds() - barrelDropOrderTime) / 2 * 100);
@@ -139,6 +153,14 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
 
         if (!getVelocity().equals(Vector2f.ZERO) || rotating) {
             if (!movingTexture) animatedTexture.apply(hull);
+            if (waveCycle++ == 10) {
+                waveCycle = 0;
+                WavesAfterBoats waves = new WavesAfterBoats(scene, Vec2.add(getPosition(),
+                        Vec2.multiply(MathUtils.direction(getRotation()), -40)));
+                waves.setRotation(getRotation());
+                scene.scheduleToAdd(waves);
+                scene.schedule(s -> s.bringToTop(this));
+            }
             gameState.fuel -= deltaTime.asSeconds();
             hud.update();
             movingTexture = true;

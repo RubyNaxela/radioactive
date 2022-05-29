@@ -6,5 +6,6 @@
   "label.fuel": "Fuel:",
   "label.money": "Money: %d",
   "label.paused": "Paused",
-  "label.time": "Dropping time"
+  "label.time": "Dropping time",
+  "dialogue.intro": "hey, you ar finally\n\n awake"
 }

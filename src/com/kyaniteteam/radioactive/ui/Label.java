@@ -51,4 +51,8 @@ public class Label extends CompoundEntity {
         foregroundText.setAlignment(alignment);
         shadowText.setAlignment(alignment);
     }
+    public void remove(){
+        foregroundText.setColor(Color.TRANSPARENT);
+        shadowText.setColor(Color.TRANSPARENT);
+    }
 }
