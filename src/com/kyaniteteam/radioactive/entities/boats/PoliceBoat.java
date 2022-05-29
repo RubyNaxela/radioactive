@@ -25,23 +25,23 @@ public class PoliceBoat extends EnemyBoat {
 
     public PoliceBoat(@NotNull GameScene scene, float lightLength, float lightSpread) {
         super(scene, Vec2.f(55, 97), lightLength, lightSpread);
-        setTexture(idleTexture);
+        idleTexture.apply(this);
     }
 
     @Override
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
         super.animate(deltaTime, elapsedTime);
-        if (chasing) {
+        if (chase) {
             if (!chasingMode) {
-                animatedTexture.apply(boat);
+                animatedTexture.apply(this);
                 chasingMode = true;
                 sound = audioHandler.playSound("sound.police", "boats", 100, 1, true);
 
             }
         } else {
             if (chasingMode) {
-                animatedTexture.remove(boat);
-                idleTexture.apply(boat);
+                animatedTexture.remove(this);
+                idleTexture.apply(this);
                 chasingMode = false;
                 sound.stop();
             }

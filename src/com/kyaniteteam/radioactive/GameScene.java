@@ -7,7 +7,6 @@ import com.kyaniteteam.radioactive.terrain.Depth;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.Scene;
 import com.rubynaxela.kyanite.game.assets.AudioHandler;
-import com.rubynaxela.kyanite.window.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jsfml.graphics.Color;
 
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 public class GameScene extends Scene {
 
     private static final AudioHandler audioHandler = GameContext.getInstance().getAudioHandler();
-        private final Background backgroundShader = new Background();
+    private final Background backgroundShader = new Background();
     private final PlayerBoat player = new PlayerBoat(this);
 
     private final Depth depth1 = new Depth(this);
@@ -25,7 +24,7 @@ public class GameScene extends Scene {
     private final Depth depth3 = new Depth(this);
 
     public GameScene(@NotNull SceneLoader.SceneData data) {
-        add(data.enemies.stream().map(e -> e.createEnemyBoat(this)).toList());
+        data.enemies.stream().map(e -> e.createEnemyBoat(this)).forEach(EnemyBoat::addToScene);
         setBackgroundColor(new Color(40, 40, 80));
     }
 

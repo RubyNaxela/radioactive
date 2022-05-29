@@ -47,21 +47,15 @@ public class FieldOfView implements Drawable, Transformable {
     }
 
     private static float normalizeAngle(float angle) {
-        int fullRotations = (int) (angle / 360f);
-        angle -= 360 * fullRotations;
-        if (angle < 0) angle += 360;
-        return angle;
+        final int fullRotations = (int) (angle / 360f);
+        return 360 + angle - 360 * fullRotations;
     }
 
     public boolean containsPoint(@NotNull Vector2f point) {
         float alpha = normalizeAngle(MathUtils.radToDeg((float) Math.atan2(point.x - getPosition().x,
-                getPosition().y - point.y)));
-        boolean range;
-        if (normalizeAngle(getRotation() - angle / 2f) < normalizeAngle(getRotation() + angle / 2f))
-            range = alpha >= normalizeAngle(getRotation() - angle / 2f) && alpha <= normalizeAngle(getRotation() + angle / 2f);
-        else
-            range = alpha <= normalizeAngle(getRotation() - angle / 2f) || alpha >= normalizeAngle(getRotation() + angle / 2f);
-        return MathUtils.distance(getPosition(), point) <= distance && range;
+                                                                           getPosition().y - point.y)));
+        float leftBound = normalizeAngle(getRotation() - angle / 2f), rightBound = normalizeAngle(getRotation() + angle / 2f);
+        return MathUtils.distance(getPosition(), point) <= distance && alpha >= leftBound && alpha <= rightBound;
     }
 
     public void setFillColor(@NotNull Color color) {
@@ -83,8 +77,8 @@ public class FieldOfView implements Drawable, Transformable {
     @Override
     public void draw(@NotNull RenderTarget target, @NotNull RenderStates states) {
         final RenderStates renderStates = new RenderStates(states.blendMode,
-                Transform.combine(states.transform, getTransform()),
-                states.texture, states.shader);
+                                                           Transform.combine(states.transform, getTransform()),
+                                                           states.texture, states.shader);
         target.draw(vertices, renderStates);
     }
 

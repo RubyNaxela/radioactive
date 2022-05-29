@@ -10,7 +10,7 @@ public class PatrolBoat extends EnemyBoat {
 
     public PatrolBoat(@NotNull GameScene scene, float lightLength, float lightSpread) {
         super(scene, Vec2.f(40, 106), lightLength, lightSpread);
-        setTexture(GameContext.getInstance().getAssetsBundle().<Texture>get("texture.patrol_boat"));
+        GameContext.getInstance().getAssetsBundle().<Texture>get("texture.patrol_boat").apply(this);
     }
 }
 
