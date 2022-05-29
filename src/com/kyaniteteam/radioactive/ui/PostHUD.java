@@ -57,17 +57,21 @@ public class PostHUD extends HUD implements KeyListener {
             else if (gameState.barrelStates.get(i).equals("leakyDropped")) barrel = barrelLeakedTexture.createRectangleShape();
             else break;
             barrel.setSize(Vec2.f(characterSize * 3.0f, characterSize * 3.0f));
-            barrel.setPosition(420 + i * characterSize * 2, 300 + characterSize); //TODO center the barrels, show money earned
-            add(barrel);
+            barrel.setOrigin(Vec2.divideFloat(barrel.getSize(), 2));
             allBarrels.add(barrel);
         }
+        final int howManyBarrels = allBarrels.size();
+        for (int i = 0; i < howManyBarrels; i++) {
+            allBarrels.get(i).setPosition(getContext().getWindow().getSize().x / 2f + (i - (howManyBarrels - 1) / 2f) * characterSize * 2, 320 + characterSize);
+            add(allBarrels.get(i));
+        }
 
-        final Label summryLabel = new Label();
-        summryLabel.setPosition(640, 560);
-        summryLabel.setCharacterSize(60);
-        summryLabel.setText(String.format(lang.getString("label.summary"), levelScore, gameState.fullScore));
-        summryLabel.setAlignment(Text.Alignment.CENTER);
-        add(summryLabel);
+        final Label summaryLabel = new Label();
+        summaryLabel.setPosition(640, 560);
+        summaryLabel.setCharacterSize(60);
+        summaryLabel.setText(String.format(lang.getString("label.summary"), levelScore, gameState.fullScore)); //TODO show money earned
+        summaryLabel.setAlignment(Text.Alignment.CENTER);
+        add(summaryLabel);
 
         getContext().getWindow().addKeyListener(this);
         final RectangleButton nextLevelButton = new RectangleButton(Vec2.f(200, 100)) {
