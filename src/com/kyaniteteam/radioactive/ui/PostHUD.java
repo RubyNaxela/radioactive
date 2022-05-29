@@ -63,7 +63,7 @@ public class PostHUD extends HUD {
         final Label label = new Label();
         label.setCharacterSize(characterSize);
         label.setText("Level score: " + String.valueOf(levelScore) + "   Full score: " + String.valueOf(gameState.fullScore));
-        label.setPosition(240, 560);
+        label.setPosition(280, 560);
         label.setCharacterSize(60);
         add(label);
 
