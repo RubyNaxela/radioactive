@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class GameState {
 
-    public int day, barrels, startingBarrelsCount, money, time, salary;
+    public int currentLevel = 1, day, barrels, startingBarrelsCount, money, time, salary;
     public float dropProgress;
     public float fuel;
     public ArrayList<String> barrelStates;
@@ -34,18 +34,18 @@ public class GameState {
         return this;
     }
 
-    public GameState setFuel(int fuel) {
+    public GameState setFuel(float fuel) {
         this.fuel = fuel;
         return this;
     }
 
-    public void prepBarrels(int count){
-        barrelStates = new ArrayList<String>(count);
+    public void prepBarrels(int count) {
+        barrelStates = new ArrayList<>(count);
         startingBarrelsCount = count;
-        for(int i = 0; i < startingBarrelsCount; i++){
+        for (int i = 0; i < startingBarrelsCount; i++) {
             barrelStates.add("ready");
         }
-        for(int i = startingBarrelsCount; i < 5; i++){
+        for (int i = startingBarrelsCount; i < 6; i++) {
             barrelStates.add("nonexistent");
         }
     }

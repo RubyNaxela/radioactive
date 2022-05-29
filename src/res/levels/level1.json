@@ -27,5 +27,26 @@
         }
       ]
     }
+  ],
+  "depths": [
+    {
+      "type": "large",
+      "position": {
+        "x": 300,
+        "y": 300
+      }
+    }, {
+      "type": "medium",
+      "position": {
+        "x": 1200,
+        "y": 150
+      }
+    }, {
+      "type": "small",
+      "position": {
+        "x": 500,
+        "y": 600
+      }
+    }
   ]
 }
