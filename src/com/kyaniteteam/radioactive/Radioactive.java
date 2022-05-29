@@ -4,13 +4,15 @@ import com.kyaniteteam.radioactive.ui.GameHUD;
 import com.rubynaxela.kyanite.game.Game;
 import com.rubynaxela.kyanite.game.assets.*;
 import com.rubynaxela.kyanite.window.event.KeyListener;
+import org.jsfml.graphics.Color;
 import org.jsfml.window.Keyboard;
 import org.jsfml.window.event.KeyEvent;
 
 public class Radioactive extends Game {
 
+    public static final Color HUD_COLOR = new Color(40, 40, 80);
     private final AssetsBundle assets = getContext().getAssetsBundle();
-    private final GameState gameState = new GameState();
+    private GameState gameState;
 
     public static void main(String[] args) {
         Game.run(Radioactive.class, args);
@@ -59,6 +61,8 @@ public class Radioactive extends Game {
 
     @Override
     protected void init() {
+        gameState = new GameState();
+        getContext().getAudioHandler().stopAllSounds();
         getContext().putResource("data.game_state", gameState);
         getContext().putResource("function.next_level", (Runnable) this::loadNextLevel);
         getContext().getAudioHandler().createChannel("boats");
