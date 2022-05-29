@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class GameState {
 
-    public int currentLevel = 1, day, barrels, startingBarrelsCount, money, time;
+    public int currentLevel = 1, day, barrels, startingBarrelsCount, money, startingMoney, time, fullScore = 0;
     public float dropProgress;
     public float fuel;
     public ArrayList<String> barrelStates;
@@ -22,6 +22,7 @@ public class GameState {
 
     public GameState setMoney(int money) {
         this.money = money;
+        this.startingMoney = money;
         return this;
     }
 

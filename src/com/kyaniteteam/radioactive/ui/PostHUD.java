@@ -35,7 +35,10 @@ public class PostHUD extends HUD {
 
         int leakedBarrels = 0;
         for (int i = 0; i < 6; i++) if(gameState.barrelStates.get(i).equals("leakyDropped")) leakedBarrels++;
-        int levelScore = (int)(gameState.money * Math.max(0.0f, 1.0f - (leakedBarrels * 0.5f)));
+        gameState.money = (int)Math.max(0.0f, gameState.startingMoney * (1.0f - 0.5f * leakedBarrels));
+
+        int levelScore = gameState.money;
+        gameState.fullScore += levelScore;
 
         setBackgroundColor(new Color(40, 40, 80));
 
@@ -59,8 +62,8 @@ public class PostHUD extends HUD {
 
         final Label label = new Label();
         label.setCharacterSize(characterSize);
-        label.setText("Level score: " + String.valueOf(levelScore));
-        label.setPosition(1260 * 0.25f, 560);
+        label.setText("Level score: " + String.valueOf(levelScore) + "   Full score: " + String.valueOf(gameState.fullScore));
+        label.setPosition(240, 560);
         label.setCharacterSize(60);
         add(label);
 

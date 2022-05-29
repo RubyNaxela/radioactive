@@ -24,7 +24,7 @@ public class GameScene extends Scene {
     private float latestShark = Float.NEGATIVE_INFINITY, nextShark = 8f;
 
     public GameScene(@NotNull SceneLoader.SceneData data) {
-        gameState.setBarrels(data.barrels).setFuel(100);
+        gameState.setMoney(data.salary).setBarrels(data.barrels).setFuel(100);
         data.enemies.stream().map(e -> e.createEnemyBoat(this)).forEach(EnemyBoat::addToScene);
         data.depths.stream().map(d -> d.createDepth(this)).forEach(this::add);
         setBackgroundColor(new Color(40, 40, 80));

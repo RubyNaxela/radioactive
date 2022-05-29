@@ -4,7 +4,7 @@
   "label.barrels": "Barrels left:",
   "label.day": "Day %d",
   "label.fuel": "Fuel:",
-  "label.money": "Money: %d",
+  "label.money": "Salary: %d",
   "label.paused": "Paused",
   "label.time": "Dropping time",
   "dialogue.intro": "hey, you ar finally\n\n awake"

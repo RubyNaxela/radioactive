@@ -1,6 +1,6 @@
 {
   "barrels": 4,
-  "salary": 100,
+  "salary": 200,
   "enemies": [
     {
       "type": "patrol",
