@@ -35,22 +35,22 @@ public class PostHUD extends HUD {
 
         setBackgroundColor(new Color(40, 40, 80));
 
-        for (int i = 0; i < 5; i++) {
-            RectangleShape barrel;
-            if (gameState.barrelStates.get(i).equals("safelyDropped")) barrel = barrelTexture.createRectangleShape();
-            else if (gameState.barrelStates.get(i).equals("leakyDropped")) barrel = barrelLeakedTexture.createRectangleShape();
-            else break;
-            barrel.setSize(Vec2.f(characterSize * 3.0f, characterSize * 3.0f));
-            barrel.setPosition(i * characterSize * 2, characterSize); //TODO center the barrels, show money earned
-            add(barrel);
-            allBarrels.add(barrel);
-        }
-
         final RectangleShape priceTag = assets.<Texture>get("texture.price_tag").createRectangleShape();
         priceTag.setSize(Vec2.f(484, 306));
         priceTag.setOrigin(242, 153);
         priceTag.setPosition(Vec2.divideFloat(getContext().getWindow().getSize(), 2f));
         add(priceTag);
+
+        for (int i = 0; i < 6; i++) {
+            RectangleShape barrel;
+            if (gameState.barrelStates.get(i).equals("safelyDropped")) barrel = barrelTexture.createRectangleShape();
+            else if (gameState.barrelStates.get(i).equals("leakyDropped")) barrel = barrelLeakedTexture.createRectangleShape();
+            else break;
+            barrel.setSize(Vec2.f(characterSize * 3.0f, characterSize * 3.0f));
+            barrel.setPosition(420+i * characterSize * 2, 300+characterSize); //TODO center the barrels, show money earned
+            add(barrel);
+            allBarrels.add(barrel);
+        }
 
         final RectangleButton nextLevelButton = new RectangleButton(Vec2.f(200, 100)) {
             @Override
