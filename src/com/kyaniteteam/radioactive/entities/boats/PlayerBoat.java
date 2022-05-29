@@ -3,6 +3,7 @@ package com.kyaniteteam.radioactive.entities.boats;
 import com.kyaniteteam.radioactive.GameScene;
 import com.kyaniteteam.radioactive.GameState;
 import com.kyaniteteam.radioactive.entities.DroppedBarrel;
+import com.kyaniteteam.radioactive.particles.WavesAfterBoats;
 import com.kyaniteteam.radioactive.terrain.Depth;
 import com.kyaniteteam.radioactive.ui.GameHUD;
 import com.rubynaxela.kyanite.game.GameContext;
@@ -42,6 +43,8 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     private final GameScene scene;
     private final GameHUD hud;
     private final GameState gameState;
+
+    private int waveCycle = 0;
 
     private final RectangleShape hull = hullTexture.createRectangleShape(false);
     private final List<RectangleShape> barrelSlots = new ArrayList<>(6);
@@ -117,13 +120,16 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
             rotate(100 * deltaTime.asSeconds());
             rotating = true;
         }
-        if (Keyboard.isKeyPressed(Keyboard.Key.SPACE) && scene.getDepths().stream().anyMatch(Depth::isPlayerInside) &&
-            gameState.barrels > 0 && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
+        final Depth playerDepth = scene.getDepths().stream().filter(Depth::isPlayerInside).findFirst().orElse(null);
+        if (Keyboard.isKeyPressed(Keyboard.Key.SPACE) && playerDepth != null && !playerDepth.ifFull() &&
+                gameState.barrels > 0 && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
             if (!currentlyDropping) {
+                playerDepth.addBarrel();
                 currentlyDropping = true;
                 barrelDropOrderTime = elapsedTime.asSeconds();
             }
         }
+
 
         if (currentlyDropping) {
             gameState.dropProgress = Math.min(100.0f, (elapsedTime.asSeconds() - barrelDropOrderTime) / 2 * 100);
@@ -139,6 +145,14 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
 
         if (!getVelocity().equals(Vector2f.ZERO) || rotating) {
             if (!movingTexture) animatedTexture.apply(hull);
+            if (waveCycle++ == 10) {
+                waveCycle = 0;
+                WavesAfterBoats waves = new WavesAfterBoats(scene, Vec2.add(getPosition(),
+                        Vec2.multiply(MathUtils.direction(getRotation()), -40)));
+                waves.setRotation(getRotation());
+                scene.scheduleToAdd(waves);
+                scene.schedule(s -> s.bringToTop(this));
+            }
             gameState.fuel -= deltaTime.asSeconds();
             hud.update();
             movingTexture = true;

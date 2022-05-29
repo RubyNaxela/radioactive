@@ -50,14 +50,14 @@ public class Radioactive extends Game {
         getContext().getAudioHandler().createChannel("music");
         final GameHUD hud = new GameHUD();
         getContext().setupWindow(1280, 720, "Radioactive")
-                    .setHUD(hud)
-                    .setScene(new GameScene(assets.<DataAsset>get("data.level.1").convertTo(SceneLoader.SceneData.class)))
-                    .addKeyListener(new KeyListener() {
-                        @Override
-                        public void keyPressed(KeyEvent e) {
-                            if (e.key == Keyboard.Key.ESCAPE) hud.togglePause();
-                        }
-                    });
+                .setHUD(hud)
+                .setScene(new GameScene(assets.<DataAsset>get("data.level.1").convertTo(SceneLoader.SceneData.class)))
+                .addKeyListener(new KeyListener() {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        if (e.key == Keyboard.Key.ESCAPE) hud.togglePause();
+                    }
+                });
         getContext().getWindow().setIcon(assets.<Icon>get("icon.barrel"));
     }
 }

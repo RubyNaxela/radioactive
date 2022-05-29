@@ -20,9 +20,9 @@ public class GameScene extends Scene {
         private final Background backgroundShader = new Background();
     private final PlayerBoat player = new PlayerBoat(this);
 
-    private final Depth depth1 = new Depth(this);
-    private final Depth depth2 = new Depth(this);
-    private final Depth depth3 = new Depth(this);
+    private final Depth depth3 = new Depth(this, 0.25f, 1);
+    private final Depth depth1 = new Depth(this, 0.5f, 2);
+    private final Depth depth2 = new Depth(this, 1, 10);
 
     public GameScene(@NotNull SceneLoader.SceneData data) {
         add(data.enemies.stream().map(e -> e.createEnemyBoat(this)).toList());
@@ -50,8 +50,8 @@ public class GameScene extends Scene {
 
     @Override
     protected void init() {
-        add(depth1, depth2, depth3);
         add(backgroundShader);
+        add(depth1, depth2, depth3);
         add(player);
         audioHandler.playSound("sound.astronomia", "music", 100, 1, true);
     }
