@@ -5,6 +5,7 @@ import com.kyaniteteam.radioactive.entities.boats.EnemyBoat;
 import com.kyaniteteam.radioactive.entities.boats.PlayerBoat;
 import com.kyaniteteam.radioactive.entities.decor.Shark;
 import com.kyaniteteam.radioactive.terrain.Depth;
+import com.kyaniteteam.radioactive.ui.LastHUD;
 import com.kyaniteteam.radioactive.ui.PostHUD;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.Scene;
@@ -64,8 +65,9 @@ public class GameScene extends Scene {
         if (gameState.barrels == 0) {
             if (lastDropTime == null) lastDropTime = getContext().getClock().getTime();
         }
-        if (lastDropTime != null && getContext().getClock().getTime().asSeconds() - lastDropTime.asSeconds() >= 2f) {
-            getContext().getWindow().setHUD(new PostHUD());
+        if (lastDropTime != null && getContext().getClock().getTime().asSeconds() - lastDropTime.asSeconds() >= 4f) {
+            if (gameState.currentLevel >= 4) getContext().getWindow().setHUD(new LastHUD());
+            else getContext().getWindow().setHUD(new PostHUD());
             suspend();
         }
     }

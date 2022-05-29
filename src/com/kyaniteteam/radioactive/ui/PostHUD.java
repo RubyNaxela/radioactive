@@ -63,7 +63,7 @@ public class PostHUD extends HUD implements KeyListener {
         }
         final int howManyBarrels = allBarrels.size();
         for (int i = 0; i < howManyBarrels; i++) {
-            allBarrels.get(i).setPosition(getContext().getWindow().getSize().x / 2f + (i - (howManyBarrels - 1) / 2f) * characterSize * 2, 320 + characterSize);
+            allBarrels.get(i).setPosition(getContext().getWindow().getSize().x / 2f + (2 * i - howManyBarrels + 1) * characterSize, 320 + characterSize);
             add(allBarrels.get(i));
         }
 
