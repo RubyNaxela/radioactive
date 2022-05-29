@@ -25,7 +25,7 @@ public class FieldOfView implements Drawable, Transformable {
         this.vertices = new VertexArray(PrimitiveType.TRIANGLE_FAN);
         final Window window = GameContext.getInstance().getWindow();
         final Vector2f mid = Vec2.f(0, 0);
-        final Color color = Colors.opacity(Colors.WHITE, opacity);
+        final Color color = Colors.opacity(Colors.opacity(new Color(89, 221, 117), 0.2f), opacity);
         vertices.add(new Vertex(mid, color));
         for (final Vector2f v : getCirclePoints(distance, MathUtils.degToRad(angle)))
             vertices.add(new Vertex(Vec2.add(mid, v), color));

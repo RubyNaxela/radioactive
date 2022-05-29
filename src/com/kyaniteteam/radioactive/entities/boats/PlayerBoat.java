@@ -45,6 +45,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     private final GameState gameState;
 
     private int waveCycle = 0;
+    public float lastBrokenFocusLength = 0.0f;
 
     private final RectangleShape hull = hullTexture.createRectangleShape(false);
     private final List<RectangleShape> barrelSlots = new ArrayList<>(6);
@@ -143,6 +144,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
             gameState.dropProgress = Math.min(100.0f, (elapsedTime.asSeconds() - barrelDropOrderTime) / 2 * 100);
             hud.update();
             if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
+                lastBrokenFocusLength = (elapsedTime.asSeconds() - barrelDropOrderTime) / 2 * 100;
                 currentlyDropping = false;
                 dropBarrel(false);
             } else if ((elapsedTime.asSeconds() - barrelDropOrderTime) >= 2) {
