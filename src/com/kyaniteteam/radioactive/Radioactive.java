@@ -46,6 +46,7 @@ public class Radioactive extends Game {
         assets.register("texture.dialogBox_talking", new Texture("src/res/textures/speech_boxes/talking_boxu.png"));
         assets.register("texture.depth_ver3", new Texture("src/res/textures/terrain/depth_ver3.png"));
         assets.register("texture.shallow_water_1", new Texture("src/res/textures/terrain/shallow_water_1.png"));
+        assets.register("texture.molo", new Texture("src/res/textures/molo.png"));
     }
 
     @Override
