@@ -1,5 +1,6 @@
 package com.kyaniteteam.radioactive.ui;
 
+import com.kyaniteteam.radioactive.GameState;
 import com.kyaniteteam.radioactive.Radioactive;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.HUD;
@@ -20,6 +21,7 @@ public class GameOverHUD extends HUD implements KeyListener {
     private static final Texture
             barrelLeakedTexture = assets.get("texture.barrel_leaked"),
             plateTexture = assets.get("texture.price_tag");
+    private static GameState gameState = GameContext.getInstance().getResource("data.game_state");
 
     @Override
     protected void init() {
@@ -48,6 +50,9 @@ public class GameOverHUD extends HUD implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.key == Keyboard.Key.SPACE) GameContext.getInstance().restartGame();
+        if (e.key == Keyboard.Key.SPACE) {
+            getContext().<Runnable>getResource("function.restart").run();
+            getContext().getWindow().removeKeyListener(this);
+        }
     }
 }

@@ -94,7 +94,10 @@ public class LastHUD extends HUD implements KeyListener {
         if (e.key == Keyboard.Key.ESCAPE) endGame(false);
     }
     private void endGame(boolean restart) {
-        if (restart) GameContext.getInstance().restartGame();
+        if (restart) {
+            getContext().<Runnable>getResource("function.restart").run();
+            getContext().getWindow().removeKeyListener(this);
+        }
         else window.close();
     }
 }

@@ -12,7 +12,7 @@ public class Radioactive extends Game {
 
     public static final Color HUD_COLOR = new Color(40, 40, 80);
     private final AssetsBundle assets = getContext().getAssetsBundle();
-    private GameState gameState;
+    private GameState gameState = new GameState();
 
     public static void main(String[] args) {
         Game.run(Radioactive.class, args);
@@ -65,6 +65,7 @@ public class Radioactive extends Game {
         getContext().getAudioHandler().stopAllSounds();
         getContext().putResource("data.game_state", gameState);
         getContext().putResource("function.next_level", (Runnable) this::loadNextLevel);
+        getContext().putResource("function.restart", (Runnable) () -> loadNextLevel(true));
         getContext().getAudioHandler().createChannel("boats");
         getContext().getAudioHandler().createChannel("music");
         getContext().setupWindow(1280, 720, "Radioactive").setIcon(assets.<Icon>get("icon.barrel"));
@@ -73,7 +74,14 @@ public class Radioactive extends Game {
     }
 
     public void loadNextLevel() {
+        loadNextLevel(false);
+    }
+
+    public void loadNextLevel(boolean resetGameState) {
+        if (resetGameState) gameState = new GameState();
         final GameHUD hud = new GameHUD();
+        gameState.day = gameState.currentLevel;
+        hud.update();
         getContext().getWindow().setHUD(hud)
                     .setScene(new GameScene(assets.<DataAsset>get("data.level." + gameState.currentLevel++)
                                                   .convertTo(SceneLoader.SceneData.class)))

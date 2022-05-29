@@ -14,7 +14,6 @@ import com.rubynaxela.kyanite.util.Colors;
 import com.rubynaxela.kyanite.util.Vec2;
 import com.rubynaxela.kyanite.window.Window;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.RectangleShape;
 import org.jsfml.system.Vector2f;
@@ -31,7 +30,7 @@ public class GameHUD extends HUD {
     private final int fontSize = 24, margin = 16;
     private final ProgressBar fuel = new ProgressBar(lang.getString("label.fuel"), fontSize);
     private final ProgressBar barrelBar = new ProgressBar("", fontSize);
-//    private final FadingBar fadingBar = new FadingBar();
+    //    private final FadingBar fadingBar = new FadingBar();
     private final BarrelCounter barrels = new BarrelCounter(fontSize);
     private final Label day = new Label(), money = new Label(), pauseText = new Label(), pausedLabel = new Label(false);
     private final RectangleShape overlay = new RectangleShape();
@@ -106,12 +105,13 @@ public class GameHUD extends HUD {
     }
 
     public void update() {
+        if (state.barrelStates == null) state.prepBarrels();
         day.setText(String.format(lang.getString("label.day"), state.day));
         barrels.setBarrelsCount(state.barrelStates);
         money.setText(String.format(lang.getString("label.money"), state.money));
         fuel.setPercentage(state.fuel);
         barrelBar.setBarColor(new Color(0, 0, 0, 0));
-        if(getContext().getWindow().getScene() instanceof final GameScene scene ) {
+        if (getContext().getWindow().getScene() instanceof final GameScene scene) {
             barrelBar.setPercentage(100.0f - state.dropProgress);
             if (!scene.getPlayer().isCurrentlyDropping()) {
                 barrelBar.setBarColor(new Color(0, 0, 0, 0));
@@ -135,15 +135,16 @@ public class GameHUD extends HUD {
             audioHandler.resumeAllPausedSounds();
         }
     }
-    public void showDialog(){
+
+    public void showDialog() {
         final GameScene scene = getContext().getWindow().getScene();
-        if(!scene.isSuspended()){
+        if (!scene.isSuspended()) {
             scene.suspend();
             dialogueBox.setText(lang.getString("dialogue.intro"));
-            dialogueBox.setLocation(new Vector2f(1080,480));
+            dialogueBox.setLocation(new Vector2f(1080, 480));
             dialogueBox.show();
             add(dialogueBox);
-        }else{
+        } else {
             scene.resume();
             dialogueBox.hide();
         }
