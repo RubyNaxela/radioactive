@@ -2,6 +2,7 @@ package com.kyaniteteam.radioactive;
 
 import com.kyaniteteam.radioactive.ui.GameHUD;
 import com.rubynaxela.kyanite.game.Game;
+import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.assets.*;
 import com.rubynaxela.kyanite.window.event.KeyListener;
 import org.jsfml.window.Keyboard;
@@ -9,7 +10,8 @@ import org.jsfml.window.event.KeyEvent;
 
 public class Radioactive extends Game {
 
-    final AssetsBundle assets = getContext().getAssetsBundle();
+    private final AssetsBundle assets = getContext().getAssetsBundle();
+    private final GameState gameState = new GameState();
 
     public static void main(String[] args) {
         Game.run(Radioactive.class, args);
@@ -41,6 +43,7 @@ public class Radioactive extends Game {
         assets.register("texture.police.idle", new Texture("src/res/textures/boats/police_kalm.png"));
         assets.register("texture.police.angry1", new Texture("src/res/textures/boats/police_angry_1.png"));
         assets.register("texture.police.angry2", new Texture("src/res/textures/boats/police_angry_2.png"));
+        assets.register("texture.price_tag", new Texture("src/res/textures/rprice_tag.png"));
         assets.register("texture.shallow_water_1", new Texture("src/res/textures/terrain/shallow_water_1.png"));
         assets.register("texture.shark", new AnimatedTexture(new Texture[]{
                 new Texture("src/res/textures/shark/shark_2.png"), new Texture("src/res/textures/shark/shark_1.png"),
@@ -55,13 +58,20 @@ public class Radioactive extends Game {
 
     @Override
     protected void init() {
-        getContext().putResource("data.game_state", new GameState());
+        getContext().putResource("data.game_state", gameState);
+        getContext().putResource("function.next_level", (Runnable) this::loadNextLevel);
         getContext().getAudioHandler().createChannel("boats");
         getContext().getAudioHandler().createChannel("music");
+        getContext().setupWindow(1280, 720, "Radioactive").setIcon(assets.<Icon>get("icon.barrel"));
+        getContext().getAudioHandler().playSound("sound.astronomia", "music", 100, 1, true);
+        loadNextLevel();
+    }
+
+    public void loadNextLevel() {
         final GameHUD hud = new GameHUD();
-        getContext().setupWindow(1280, 720, "Radioactive")
-                    .setHUD(hud)
-                    .setScene(new GameScene(assets.<DataAsset>get("data.level.1").convertTo(SceneLoader.SceneData.class)))
+        getContext().getWindow().setHUD(hud)
+                    .setScene(new GameScene(assets.<DataAsset>get("data.level." + gameState.currentLevel++)
+                                                  .convertTo(SceneLoader.SceneData.class)))
                     .addKeyListener(new KeyListener() {
                         @Override
                         public void keyPressed(KeyEvent e) {
@@ -69,6 +79,5 @@ public class Radioactive extends Game {
                             if (e.key == Keyboard.Key.L) hud.showDialog();
                         }
                     });
-        getContext().getWindow().setIcon(assets.<Icon>get("icon.barrel"));
     }
 }

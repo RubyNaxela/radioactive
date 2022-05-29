@@ -42,13 +42,12 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
     private final Clock clock = GameContext.getInstance().getClock();
     private final GameScene scene;
     private final GameHUD hud;
-    private final GameState gameState;
-
-    private int waveCycle = 0;
-    public float lastBrokenFocusLength = 0.0f;
-
+    private final GameState gameState = GameContext.getInstance().getResource("data.game_state");
+    ;
     private final RectangleShape hull = hullTexture.createRectangleShape(false);
     private final List<RectangleShape> barrelSlots = new ArrayList<>(6);
+    public float lastBrokenFocusLength = 0.0f;
+    private int waveCycle = 0;
     private float baseVelocity = 80;
     private float lastBarrelDroppedTime = -1;
 
@@ -61,9 +60,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         super(Vec2.f(600, 600));
         this.scene = scene;
         this.hud = window.getHUD();
-        this.gameState = GameContext.getInstance().getResource("data.game_state");
-        gameState.setBarrels(5).setFuel(100);
-        gameState.prepBarrels(5);
+        //gameState.prepBarrels(); //TODO pass starting number of barrels in current level
 
         hull.setSize(Vec2.f(50, 87));
         hull.setPosition(Vec2.divideFloat(hull.getSize(), -2));
@@ -104,10 +101,9 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         scene.schedule(s -> s.bringToTop(this));
         gameState.barrels--;
         if (gameState.barrels >= 0) barrelSlots.get(gameState.barrels).setFillColor(Colors.TRANSPARENT);
-        if(safe){
+        if (safe) {
             gameState.barrelStates.set(gameState.barrels, "safelyDropped");
-        }
-        else{
+        } else {
             gameState.barrelStates.set(gameState.barrels, "leakyDropped");
         }
         gameState.dropProgress = 0.0f;
@@ -131,14 +127,13 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         }
         final Depth playerDepth = scene.getDepths().stream().filter(Depth::isPlayerInside).findFirst().orElse(null);
         if (Keyboard.isKeyPressed(Keyboard.Key.SPACE) && playerDepth != null && !playerDepth.ifFull() &&
-                gameState.barrels > 0 && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
+            gameState.barrels > 0 && clock.getTime().asSeconds() - lastBarrelDroppedTime > 2) {
             if (!currentlyDropping) {
                 playerDepth.addBarrel();
                 currentlyDropping = true;
                 barrelDropOrderTime = elapsedTime.asSeconds();
             }
         }
-
 
         if (currentlyDropping) {
             gameState.dropProgress = Math.min(100.0f, (elapsedTime.asSeconds() - barrelDropOrderTime) / 2 * 100);
@@ -158,7 +153,8 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
             if (waveCycle++ == 10) {
                 waveCycle = 0;
                 WavesAfterBoats waves = new WavesAfterBoats(scene, Vec2.add(getPosition(),
-                        Vec2.multiply(MathUtils.direction(getRotation()), -40)));
+                                                                            Vec2.multiply(MathUtils.direction(getRotation()),
+                                                                                          -40)));
                 waves.setRotation(getRotation());
                 scene.scheduleToAdd(waves);
                 scene.schedule(s -> s.bringToTop(this));

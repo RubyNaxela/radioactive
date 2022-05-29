@@ -7,62 +7,60 @@ import com.rubynaxela.kyanite.game.assets.Texture;
 import com.rubynaxela.kyanite.util.MathUtils;
 import com.rubynaxela.kyanite.util.Vec2;
 import com.rubynaxela.kyanite.window.Window;
+import org.jetbrains.annotations.NotNull;
 import org.jsfml.graphics.RectangleShape;
 import org.jsfml.system.Vector2f;
 
 public class Depth extends RectangleShape {
+
     private static final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
     private static final Texture depth = assets.get("texture.depth_ver3");
     private final Window window = GameContext.getInstance().getWindow();
     private final GameScene scene;
+    private final int capacity;
     private int barrelCounter = 0;
-
     private boolean isFull = false;
 
-    private int holeSize;
-
-    public Depth(GameScene scene, float size, int Holesize) {
+    public Depth(@NotNull GameScene scene, @NotNull Vector2f position, float sizeFactor, int capacity) {
         this.scene = scene;
-        this.holeSize = Holesize;
-        setPosition(randomSpawnPlace());
-        //float x = MathUtils.randomFloat(0.5f, 1);
-        setSize(Vec2.f(256 * size, 256 * size));
+        this.capacity = capacity;
+        setPosition(position);
+        setSize(Vec2.f(256 * sizeFactor, 256 * sizeFactor));
         setOrigin(Vec2.divideFloat(getSize(), 2));
         depth.apply(this);
     }
 
-    public Vector2f randomSpawnPlace() {
-        final float margin = 150;
-        float x = MathUtils.randomFloat(margin, window.getSize().x - margin);
-        float y = MathUtils.randomFloat(margin, window.getSize().y - margin);
-        return new Vector2f(x, y);
-    }
+//    public Vector2f randomSpawnPlace() {
+//        final float margin = 150;
+//        float x = MathUtils.randomFloat(margin, window.getSize().x - margin);
+//        float y = MathUtils.randomFloat(margin, window.getSize().y - margin);
+//        return new Vector2f(x, y);
+//    }
 
-    public int getBarrelCounter(){
+    public int getBarrelCounter() {
         return barrelCounter;
     }
 
-    public int getHoleSize(){
-        return holeSize;
+    public int getCapacity() {
+        return capacity;
     }
-    public boolean ifFull(){
+
+    public boolean ifFull() {
         return isFull;
     }
 
-    public void addBarrel(){
-        if(getBarrelCounter()<getHoleSize()){
+    public void addBarrel() {
+        if (getBarrelCounter() < getCapacity()) {
             barrelCounter++;
             System.out.println("adding barrel to depth");
-            if(getBarrelCounter()==getHoleSize()){
+            if (getBarrelCounter() == getCapacity()) {
                 isFull = true;
                 System.out.println("this hole is full now");
             }
         }
-
     }
 
     public boolean isPlayerInside() {
         return MathUtils.isInsideCircle(scene.getPlayer().getPosition(), getPosition(), getSize().x / 2);
     }
-
 }
