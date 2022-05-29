@@ -141,7 +141,7 @@ public class PlayerBoat extends CompoundEntity implements AnimatedEntity, Moving
         if (safe) {
             gameState.barrelStates.set(gameState.barrels, "safelyDropped");
         } else {
-            gameState.money = Math.max(0, (int) (gameState.startingMoney * 0.5f));
+            gameState.money = Math.max(0, (int)(gameState.money - gameState.startingMoney * 0.5f));
             gameState.barrelStates.set(gameState.barrels, "leakyDropped");
         }
         gameState.dropProgress = 0.0f;
