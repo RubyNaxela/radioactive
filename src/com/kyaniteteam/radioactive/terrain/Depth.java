@@ -14,7 +14,11 @@ import org.jsfml.system.Vector2f;
 public class Depth extends RectangleShape {
 
     private static final AssetsBundle assets = GameContext.getInstance().getAssetsBundle();
-    private static final Texture depth = assets.get("texture.depth_ver3");
+
+    private static final Texture depth_small = assets.get("texture.small_hole");
+    private static final Texture depth_medium = assets.get("texture.medium_hole");
+    private static final Texture depth_big = assets.get("texture.big_hole");
+
     private final Window window = GameContext.getInstance().getWindow();
     private final GameScene scene;
     private final int capacity;
@@ -27,15 +31,16 @@ public class Depth extends RectangleShape {
         setPosition(position);
         setSize(Vec2.f(256 * sizeFactor, 256 * sizeFactor));
         setOrigin(Vec2.divideFloat(getSize(), 2));
-        depth.apply(this);
+        if(capacity == 1){
+            depth_small.apply(this);
+        } else if (capacity == 2) {
+            depth_medium.apply(this);
+        } else {
+            depth_big.apply(this);
+        }
+
     }
 
-//    public Vector2f randomSpawnPlace() {
-//        final float margin = 150;
-//        float x = MathUtils.randomFloat(margin, window.getSize().x - margin);
-//        float y = MathUtils.randomFloat(margin, window.getSize().y - margin);
-//        return new Vector2f(x, y);
-//    }
 
     public int getBarrelCounter() {
         return barrelCounter;

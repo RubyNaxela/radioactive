@@ -33,7 +33,9 @@ public class Radioactive extends Game {
         assets.register("texture.barrel_check", new Texture("src/res/textures/barrels/x_for_barrel.png"));
         assets.register("texture.barrel_top", new Texture("src/res/textures/barrels/barrel_top.png"));
         assets.register("texture.barrel_top_leak", new Texture("src/res/textures/barrels/barrel_top_leak.png"));
-        assets.register("texture.depth_ver3", new Texture("src/res/textures/terrain/depth_ver3.png"));
+        assets.register("texture.small_hole", new Texture("src/res/textures/terrain/small_hole.png"));
+        assets.register("texture.medium_hole", new Texture("src/res/textures/terrain/medium_hole.png"));
+        assets.register("texture.big_hole", new Texture("src/res/textures/terrain/big_hole.png"));
         assets.register("texture.dialogBox_narrow", new Texture("src/res/textures/speech_boxes/narratoru_boxu.png"));
         assets.register("texture.dialogBox_talking", new Texture("src/res/textures/speech_boxes/talking_boxu.png"));
         assets.register("texture.molo", new Texture("src/res/textures/molo.png"));
