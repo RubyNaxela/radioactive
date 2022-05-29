@@ -12,6 +12,7 @@ import com.rubynaxela.kyanite.game.assets.AudioHandler;
 import com.rubynaxela.kyanite.util.MathUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jsfml.graphics.Color;
+import org.jsfml.system.Time;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class GameScene extends Scene {
     private static final GameState gameState = GameContext.getInstance().getResource("data.game_state");
     private final Background backgroundShader = new Background();
     private final PlayerBoat player;
+    private Time lastDropTime = null;
 
     private float latestShark = Float.NEGATIVE_INFINITY, nextShark = 8f;
 
@@ -62,8 +64,13 @@ public class GameScene extends Scene {
             latestShark = elapsedTime;
         }
         if (gameState.barrels == 0) {
-            getContext().getWindow().setHUD(new PostHUD());
-            suspend();
+            if (lastDropTime == null) lastDropTime = getContext().getClock().getTime();
+        }
+        if (lastDropTime != null) {
+            if (getContext().getClock().getTime().asSeconds() - lastDropTime.asSeconds() >= 1.69f) {
+                getContext().getWindow().setHUD(new PostHUD());
+                suspend();
+            }
         }
     }
 }

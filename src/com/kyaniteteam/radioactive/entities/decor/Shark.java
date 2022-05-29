@@ -24,6 +24,7 @@ public class Shark extends RectangleShape implements AnimatedEntity, MovingEntit
     private final float angle = MathUtils.randomFloat(0, 360);
     private final Vector2f direction = MathUtils.direction(angle);
     private float opacity = 0;
+    private boolean broughtToBottom = false;
 
     public Shark(@NotNull GameScene scene) {
         super(Vec2.f(192, 192));
@@ -39,7 +40,11 @@ public class Shark extends RectangleShape implements AnimatedEntity, MovingEntit
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
         opacity += deltaTime.asSeconds() / 5f;
         setFillColor(Colors.opacity(Colors.DARK_SLATE_BLUE, Math.min(opacity, 1)));
-        scene.schedule(s -> s.bringToBottom(this));
+        if (!broughtToBottom) {
+            scene.schedule(s -> s.bringToBottom(this));
+            scene.schedule(s -> ((GameScene) s).getDepths().forEach(s::bringToBottom));
+            broughtToBottom = true;
+        }
         if (!window.isInside(this)) scene.scheduleToRemove(this);
     }
 
