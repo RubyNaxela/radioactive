@@ -4,9 +4,9 @@ import com.kyaniteteam.radioactive.entities.boats.EnemyBoat;
 import com.kyaniteteam.radioactive.entities.boats.PatrolBoat;
 import com.kyaniteteam.radioactive.entities.boats.PoliceBoat;
 import com.kyaniteteam.radioactive.terrain.Depth;
-import com.rubynaxela.kyanite.util.Vec2;
+import com.rubynaxela.kyanite.math.Vec2;
+import com.rubynaxela.kyanite.math.Vector2f;
 import org.jetbrains.annotations.NotNull;
-import org.jsfml.system.Vector2f;
 
 import java.util.List;
 import java.util.NoSuchElementException;

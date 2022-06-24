@@ -1,27 +1,22 @@
 package com.kyaniteteam.radioactive.ui;
 
 import com.rubynaxela.kyanite.game.GameContext;
-import com.rubynaxela.kyanite.game.assets.FontFace;
 import com.rubynaxela.kyanite.game.entities.CompoundEntity;
-import com.rubynaxela.kyanite.game.gui.Text;
-import com.rubynaxela.kyanite.util.Colors;
+import com.rubynaxela.kyanite.graphics.*;
 import org.jetbrains.annotations.NotNull;
-import org.jsfml.graphics.Color;
-
-import java.util.Objects;
 
 public class Label extends CompoundEntity {
 
-    private static final FontFace font = GameContext.getInstance().getAssetsBundle().get("font.dpcomic");
+    private static final Typeface font = GameContext.getInstance().getAssetsBundle().get("font.dpcomic");
     private final Text foregroundText = new Text(), shadowText = new Text();
 
     public Label(boolean shadow) {
         setColor(Colors.WHITE);
         foregroundText.setPosition(0, 0);
-        font.apply(foregroundText);
+        foregroundText.setTypeface(font, false);
         if (shadow) {
             shadowText.setPosition(2, 2);
-            font.apply(shadowText);
+            shadowText.setTypeface(font, false);
             add(shadowText);
         }
         add(foregroundText);
@@ -32,14 +27,13 @@ public class Label extends CompoundEntity {
     }
 
     public void setCharacterSize(int characterSize) {
-        Objects.requireNonNull(FontFace.of(foregroundText)).disableAntialiasing(characterSize);
         foregroundText.setCharacterSize(characterSize);
         shadowText.setCharacterSize(characterSize);
     }
 
     public void setColor(Color color) {
         foregroundText.setColor(color);
-        shadowText.setColor(Colors.darker(Colors.darker(color)));
+        shadowText.setColor(color.darker(0.75f));
     }
 
     public void setText(@NotNull String text) {
@@ -47,12 +41,13 @@ public class Label extends CompoundEntity {
         shadowText.setText(text);
     }
 
-    public void setAlignment(@NotNull Text.Alignment alignment) {
+    public void setAlignment(@NotNull Alignment alignment) {
         foregroundText.setAlignment(alignment);
         shadowText.setAlignment(alignment);
     }
-    public void remove(){
-        foregroundText.setColor(Color.TRANSPARENT);
-        shadowText.setColor(Color.TRANSPARENT);
+
+    public void remove() {
+        foregroundText.setColor(Colors.TRANSPARENT);
+        shadowText.setColor(Colors.TRANSPARENT);
     }
 }

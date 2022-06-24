@@ -4,17 +4,17 @@ import com.kyaniteteam.radioactive.GameScene;
 import com.kyaniteteam.radioactive.particles.WaterCircle;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.assets.AssetsBundle;
-import com.rubynaxela.kyanite.game.assets.Texture;
 import com.rubynaxela.kyanite.game.entities.AnimatedEntity;
 import com.rubynaxela.kyanite.game.entities.CompoundEntity;
-import com.rubynaxela.kyanite.util.Colors;
-import com.rubynaxela.kyanite.util.MathUtils;
-import com.rubynaxela.kyanite.util.Vec2;
+import com.rubynaxela.kyanite.graphics.CircleShape;
+import com.rubynaxela.kyanite.graphics.Colors;
+import com.rubynaxela.kyanite.graphics.RectangleShape;
+import com.rubynaxela.kyanite.graphics.Texture;
+import com.rubynaxela.kyanite.math.MathUtils;
+import com.rubynaxela.kyanite.math.Vec2;
+import com.rubynaxela.kyanite.math.Vector2f;
+import com.rubynaxela.kyanite.util.Time;
 import org.jetbrains.annotations.NotNull;
-import org.jsfml.graphics.CircleShape;
-import org.jsfml.graphics.RectangleShape;
-import org.jsfml.system.Time;
-import org.jsfml.system.Vector2f;
 
 public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
 
@@ -25,20 +25,20 @@ public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
             toxicTexture1 = assets.get("texture.toxic_water.1"),
             toxicTexture2 = assets.get("texture.toxic_water.2"),
             toxicTexture3 = assets.get("texture.toxic_water.3");
-    private RectangleShape water;
     private final CircleShape barrel;
     public boolean safelyDropped;
     float animationProgress = 0;
+    private RectangleShape water;
 
     public DroppedBarrel(@NotNull GameScene scene, @NotNull Vector2f position, boolean safe) {
 
         safelyDropped = safe;
         if (!safe) {
-            water = new RectangleShape(Vec2.f(128, 128));
+            water = new RectangleShape(128, 128);
             water.setOrigin(64, 64);
-            if (MathUtils.probability(1 / 3f)) toxicTexture1.apply(water);
-            else if (MathUtils.probability(1 / 2f)) toxicTexture2.apply(water);
-            else toxicTexture3.apply(water);
+            if (MathUtils.probability(1 / 3f)) water.setTexture(toxicTexture1);
+            else if (MathUtils.probability(1 / 2f)) water.setTexture(toxicTexture2);
+            else water.setTexture(toxicTexture3);
             water.setRotation(MathUtils.randomFloat(0, 360));
             if (MathUtils.probability(0.5f)) water.scale(-1, 1);
             if (MathUtils.probability(0.5f)) water.scale(1, -1);
@@ -47,8 +47,8 @@ public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
 
         barrel = new CircleShape(15);
         barrel.setOrigin(15, 15);
-        if (safelyDropped) barrelTexture.apply(barrel);
-        if (!safelyDropped) toxicBarrelTexture.apply(barrel);
+        if (safelyDropped) barrel.setTexture(barrelTexture);
+        if (!safelyDropped) barrel.setTexture(toxicBarrelTexture);
         barrel.setRotation(MathUtils.randomFloat(0, 360));
         if (MathUtils.probability(0.5f)) barrel.scale(-1, 1);
         if (MathUtils.probability(0.5f)) barrel.scale(1, -1);
@@ -63,10 +63,10 @@ public class DroppedBarrel extends CompoundEntity implements AnimatedEntity {
         animationProgress += 0.25f * deltaTime.asSeconds();
         if (animationProgress <= 1) {
             if (!safelyDropped) {
-                water.setFillColor(Colors.opacity(Colors.WHITE, Math.max(0, animationProgress * 2 - 1f)));
+                water.setFillColor(Colors.WHITE.withOpacity(Math.max(0, animationProgress * 2 - 1f)));
                 water.setScale(Math.max(0, animationProgress * 2 - 1f), Math.max(0, animationProgress * 2 - 1f));
             }
-            barrel.setFillColor(Colors.opacity(Colors.WHITE, 1 - animationProgress * (!safelyDropped ? 1 : 0.75f)));
+            barrel.setFillColor(Colors.WHITE.withOpacity(1 - animationProgress * (!safelyDropped ? 1 : 0.75f)));
         }
     }
 

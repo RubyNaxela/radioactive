@@ -1,0 +1,61 @@
+{
+  "animated_textures": {
+    "texture.shark": {
+      "frame_duration": 0.3333,
+      "frames": [
+        "assets/textures/shark/shark_2.png",
+        "assets/textures/shark/shark_1.png",
+        "assets/textures/shark/shark_3.png",
+        "assets/textures/shark/shark_1.png"
+      ]
+    }
+  },
+  "data_assets": {
+    "data.level.1": "assets/levels/level1.json",
+    "data.level.2": "assets/levels/level2.json",
+    "data.level.3": "assets/levels/level3.json",
+    "lang.en_us": "assets/lang/en_us.json"
+  },
+  "icons": {
+    "icon.barrel": "assets/icons/barrel_clean.png"
+  },
+  "sounds": {
+    "sound.astronomia": "assets/sounds/astronomia.ogg",
+    "sound.police": "assets/sounds/police.ogg"
+  },
+  "textures": {
+    "texture.background": "assets/textures/waves/waves_shader.png",
+    "texture.barrel": "assets/textures/barrels/barrel_clean.png",
+    "texture.barrel_leaked": "assets/textures/barrels/barrel_leak.png",
+    "texture.barrel_check": "assets/textures/barrels/x_for_barrel.png",
+    "texture.barrel_top": "assets/textures/barrels/barrel_top.png",
+    "texture.barrel_top_leak": "assets/textures/barrels/barrel_top_leak.png",
+    "texture.dialog_box_narrow": "assets/textures/speech_boxes/narratoru_boxu.png",
+    "texture.dialog_box_talking": "assets/textures/speech_boxes/talking_boxu.png",
+    "texture.hole.big": "assets/textures/terrain/big_hole.png",
+    "texture.hole.medium": "assets/textures/terrain/medium_hole.png",
+    "texture.hole.small": "assets/textures/terrain/small_hole.png",
+    "texture.molo": "assets/textures/molo.png",
+    "texture.patrol_boat": "assets/textures/boats/boat_control_v1.png",
+    "texture.player_boat": "assets/textures/boats/barrel_boat.png",
+    "texture.player_boat1": "assets/textures/boats/barrel_boat_1.png",
+    "texture.police.idle": "assets/textures/boats/police_kalm.png",
+    "texture.police.angry1": "assets/textures/boats/police_angry_1.png",
+    "texture.police.angry2": "assets/textures/boats/police_angry_2.png",
+    "texture.price_tag": "assets/textures/rprice_tag.png",
+    "texture.shallow_water_1": "assets/textures/terrain/shallow_water_1.png",
+    "texture.squirrel_basic": "assets/textures/squirrel_basic.png",
+    "texture.toxic_water.1": "assets/textures/terrain/toxic_water_1.png",
+    "texture.toxic_water.2": "assets/textures/terrain/toxic_water_2.png",
+    "texture.toxic_water.3": "assets/textures/terrain/toxic_water_3.png",
+    "texture.water_circles": "assets/textures/particles/water_circles.png",
+    "texture.wave.1": "assets/textures/waves/wave_1.png",
+    "texture.wave.2": "assets/textures/waves/wave_2.png",
+    "texture.wave.3": "assets/textures/waves/wave_3.png",
+    "texture.wave.4": "assets/textures/waves/wave_4.png",
+    "texture.wave.5": "assets/textures/waves/wave_5.png"
+  },
+  "typefaces": {
+    "font.dpcomic": "assets/fonts/dpcomic.ttf"
+  }
+}

@@ -6,18 +6,17 @@ import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.HUD;
 import com.rubynaxela.kyanite.game.assets.AssetsBundle;
 import com.rubynaxela.kyanite.game.assets.DataAsset;
-import com.rubynaxela.kyanite.game.assets.Texture;
 import com.rubynaxela.kyanite.game.gui.RectangleButton;
-import com.rubynaxela.kyanite.game.gui.Text;
-import com.rubynaxela.kyanite.util.Colors;
-import com.rubynaxela.kyanite.util.Vec2;
+import com.rubynaxela.kyanite.graphics.Alignment;
+import com.rubynaxela.kyanite.graphics.Colors;
+import com.rubynaxela.kyanite.graphics.RectangleShape;
+import com.rubynaxela.kyanite.graphics.Texture;
+import com.rubynaxela.kyanite.input.Keyboard;
+import com.rubynaxela.kyanite.math.Vec2;
+import com.rubynaxela.kyanite.window.event.KeyEvent;
 import com.rubynaxela.kyanite.window.event.KeyListener;
+import com.rubynaxela.kyanite.window.event.MouseButtonEvent;
 import org.jetbrains.annotations.NotNull;
-import org.jsfml.graphics.Color;
-import org.jsfml.graphics.RectangleShape;
-import org.jsfml.window.Keyboard;
-import org.jsfml.window.event.KeyEvent;
-import org.jsfml.window.event.MouseButtonEvent;
 
 import java.util.ArrayList;
 
@@ -47,9 +46,9 @@ public class PostHUD extends HUD implements KeyListener {
         setBackgroundColor(Radioactive.HUD_COLOR);
 
         final RectangleShape priceTag = plateTexture.createRectangleShape();
-        priceTag.setSize(Vec2.f(484, 306));
+        priceTag.setSize(484, 306);
         priceTag.setOrigin(242, 153);
-        priceTag.setPosition(Vec2.divideFloat(getContext().getWindow().getSize(), 2f));
+        priceTag.setPosition(Vec2.f(Vec2.divideFloat(getContext().getWindow().getSize(), 2f)));
         add(priceTag);
 
         for (int i = 0; i < 6; i++) {
@@ -57,8 +56,8 @@ public class PostHUD extends HUD implements KeyListener {
             if (gameState.barrelStates.get(i).equals("safelyDropped")) barrel = barrelTexture.createRectangleShape();
             else if (gameState.barrelStates.get(i).equals("leakyDropped")) barrel = barrelLeakedTexture.createRectangleShape();
             else break;
-            barrel.setSize(Vec2.f(characterSize * 3.0f, characterSize * 3.0f));
-            barrel.setOrigin(Vec2.divideFloat(barrel.getSize(), 2));
+            barrel.setSize(characterSize * 3.0f, characterSize * 3.0f);
+            barrel.setOrigin(Vec2.divide(barrel.getSize(), 2));
             allBarrels.add(barrel);
         }
         final int howManyBarrels = allBarrels.size();
@@ -71,7 +70,7 @@ public class PostHUD extends HUD implements KeyListener {
         summaryLabel.setPosition(640, 560);
         summaryLabel.setCharacterSize(60);
         summaryLabel.setText(String.format(lang.getString("label.summary"), levelScore, gameState.fullScore));
-        summaryLabel.setAlignment(Text.Alignment.CENTER);
+        summaryLabel.setAlignment(Alignment.CENTER);
         add(summaryLabel);
 
         getContext().getWindow().addKeyListener(this);
@@ -81,8 +80,8 @@ public class PostHUD extends HUD implements KeyListener {
                 proceed();
             }
         };
-        plateTexture.apply(nextLevelButton);
-        nextLevelButton.setSize(Vec2.f(161, 102));
+        nextLevelButton.setTexture(plateTexture);
+        nextLevelButton.setSize(161, 102);
         nextLevelButton.setFillColor(Colors.INDIAN_RED);
         nextLevelButton.setOrigin(81, 51);
         nextLevelButton.setPosition(Vec2.subtract(Vec2.divideFloat(getContext().getWindow().getSize(), 2f), Vec2.f(0, 250)));
@@ -92,7 +91,7 @@ public class PostHUD extends HUD implements KeyListener {
         nextLevelLabel.setCharacterSize(characterSize);
         nextLevelLabel.setText(lang.getString("button.next_level"));
         nextLevelLabel.setPosition(Vec2.subtract(Vec2.divideFloat(getContext().getWindow().getSize(), 2f), Vec2.f(0, 260)));
-        nextLevelLabel.setAlignment(Text.Alignment.CENTER);
+        nextLevelLabel.setAlignment(Alignment.CENTER);
         add(nextLevelLabel);
     }
 

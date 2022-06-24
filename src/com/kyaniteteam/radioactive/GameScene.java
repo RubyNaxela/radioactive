@@ -9,9 +9,9 @@ import com.kyaniteteam.radioactive.ui.LastHUD;
 import com.kyaniteteam.radioactive.ui.PostHUD;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.Scene;
-import com.rubynaxela.kyanite.util.MathUtils;
+import com.rubynaxela.kyanite.math.MathUtils;
+import com.rubynaxela.kyanite.util.Time;
 import org.jetbrains.annotations.NotNull;
-import org.jsfml.system.Time;
 
 import java.util.List;
 

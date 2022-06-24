@@ -5,15 +5,14 @@ import com.kyaniteteam.radioactive.entities.FieldOfView;
 import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.entities.AnimatedEntity;
 import com.rubynaxela.kyanite.game.entities.MovingEntity;
-import com.rubynaxela.kyanite.util.Colors;
-import com.rubynaxela.kyanite.util.MathUtils;
-import com.rubynaxela.kyanite.util.Vec2;
+import com.rubynaxela.kyanite.graphics.Color;
+import com.rubynaxela.kyanite.graphics.RectangleShape;
+import com.rubynaxela.kyanite.math.MathUtils;
+import com.rubynaxela.kyanite.math.Vec2;
+import com.rubynaxela.kyanite.math.Vector2f;
+import com.rubynaxela.kyanite.util.Time;
 import com.rubynaxela.kyanite.window.Window;
 import org.jetbrains.annotations.NotNull;
-import org.jsfml.graphics.Color;
-import org.jsfml.graphics.RectangleShape;
-import org.jsfml.system.Time;
-import org.jsfml.system.Vector2f;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,20 +24,19 @@ public class EnemyBoat extends RectangleShape implements AnimatedEntity, MovingE
     private final GameScene scene;
     private final FieldOfView lightRay;
     private final List<Vector2f> patrolPath = new ArrayList<>();
+    private final Color idleLightColor = new Color(89, 221, 117, 51);
+    private final Color aggroLightColor = new Color(219, 74, 44, 153);
     protected boolean chase = false;
     protected float baseSpeed = 50, aggroTime = 10, chaseStartedTime = Float.NEGATIVE_INFINITY;
-    private Vector2f target = Vector2f.ZERO;
+    private Vector2f target = Vector2f.zero();
     private int patrolPathPoint = 0;
-
-    private Color idleLightColor = Colors.opacity(new Color(89, 221, 117), 0.2f);
-    private Color aggroLightColor = Colors.opacity(new Color(219, 74, 44), 0.6f);
 
     public EnemyBoat(@NotNull GameScene scene, @NotNull Vector2f size, float lightLength, float lightSpread) {
         super(size);
         this.scene = scene;
         this.lightRay = new FieldOfView(lightLength, lightSpread);
 
-        setOrigin(Vec2.divideFloat(getSize(), 2));
+        setOrigin(Vec2.divide(getSize(), 2));
 
         scene.scheduleToAdd(lightRay);
         scene.schedule(s -> s.bringToTop(this));
@@ -69,15 +67,16 @@ public class EnemyBoat extends RectangleShape implements AnimatedEntity, MovingE
         float chaseTime = scene.getContext().getClock().getTime().asSeconds() - chaseStartedTime;
         if (chase) {
             setLightColor(new Color((int) (idleLightColor.r + (aggroLightColor.r - idleLightColor.r)
-                    * Math.min(aggroTime - chaseTime, aggroTime) / aggroTime),
-                    (int) (idleLightColor.g + (aggroLightColor.g - idleLightColor.g)
-                            * Math.min(aggroTime - chaseTime, aggroTime) / aggroTime),
-                    (int) (idleLightColor.b + (aggroLightColor.b - idleLightColor.b)
-                            * Math.min(aggroTime - chaseTime, aggroTime) / aggroTime),
-                    (int) (idleLightColor.a + (aggroLightColor.a - idleLightColor.a)
-                            * Math.min(aggroTime - chaseTime, aggroTime) / aggroTime)));
+                                                              * Math.min(aggroTime - chaseTime, aggroTime) / aggroTime),
+                                    (int) (idleLightColor.g + (aggroLightColor.g - idleLightColor.g)
+                                                              * Math.min(aggroTime - chaseTime, aggroTime) / aggroTime),
+                                    (int) (idleLightColor.b + (aggroLightColor.b - idleLightColor.b)
+                                                              * Math.min(aggroTime - chaseTime, aggroTime) / aggroTime),
+                                    (int) (idleLightColor.a + (aggroLightColor.a - idleLightColor.a)
+                                                              * Math.min(aggroTime - chaseTime, aggroTime) / aggroTime)));
         }
     }
+
     @Override
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
 
@@ -90,7 +89,7 @@ public class EnemyBoat extends RectangleShape implements AnimatedEntity, MovingE
         else if (deltaAlpha < -180) deltaAlpha += 360;
 
         if (Math.abs(deltaAlpha) > baseSpeed) deltaAlpha = baseSpeed * (deltaAlpha < 0 ? -1 : 1);
-        rotate(deltaAlpha*1.5f * deltaTime.asSeconds());
+        rotate(deltaAlpha * 1.5f * deltaTime.asSeconds());
 
         if (targetReached() && !chase) target = patrolPath.get(++patrolPathPoint % patrolPath.size());
         if (scene.getPlayer().isVisibleBy(this)) {
@@ -118,4 +117,3 @@ public class EnemyBoat extends RectangleShape implements AnimatedEntity, MovingE
         throw new UnsupportedOperationException("EnemyBoat is not controllable via setVelocity");
     }
 }
-

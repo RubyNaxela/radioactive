@@ -2,18 +2,18 @@ package com.kyaniteteam.radioactive.entities.decor;
 
 import com.kyaniteteam.radioactive.GameScene;
 import com.rubynaxela.kyanite.game.GameContext;
-import com.rubynaxela.kyanite.game.assets.AnimatedTexture;
 import com.rubynaxela.kyanite.game.assets.AssetsBundle;
 import com.rubynaxela.kyanite.game.entities.AnimatedEntity;
 import com.rubynaxela.kyanite.game.entities.MovingEntity;
-import com.rubynaxela.kyanite.util.Colors;
-import com.rubynaxela.kyanite.util.MathUtils;
-import com.rubynaxela.kyanite.util.Vec2;
+import com.rubynaxela.kyanite.graphics.AnimatedTexture;
+import com.rubynaxela.kyanite.graphics.Colors;
+import com.rubynaxela.kyanite.graphics.RectangleShape;
+import com.rubynaxela.kyanite.math.MathUtils;
+import com.rubynaxela.kyanite.math.Vec2;
+import com.rubynaxela.kyanite.math.Vector2f;
+import com.rubynaxela.kyanite.util.Time;
 import com.rubynaxela.kyanite.window.Window;
 import org.jetbrains.annotations.NotNull;
-import org.jsfml.graphics.RectangleShape;
-import org.jsfml.system.Time;
-import org.jsfml.system.Vector2f;
 
 public class Shark extends RectangleShape implements AnimatedEntity, MovingEntity {
 
@@ -33,13 +33,13 @@ public class Shark extends RectangleShape implements AnimatedEntity, MovingEntit
         setPosition(Vec2.f(MathUtils.randomFloat(0, window.getSize().x), MathUtils.randomFloat(0, window.getSize().y)));
         setRotation(angle - 150);
         setFillColor(Colors.TRANSPARENT);
-        idleTexture.apply(this);
+        setTexture(idleTexture);
     }
 
     @Override
     public void animate(@NotNull Time deltaTime, @NotNull Time elapsedTime) {
         opacity += deltaTime.asSeconds() / 5f;
-        setFillColor(Colors.opacity(Colors.DARK_SLATE_BLUE, Math.min(opacity, 1)));
+        setFillColor(Colors.DARK_SLATE_BLUE.withOpacity(Math.min(opacity, 1)));
         if (!broughtToBottom) {
             scene.schedule(s -> s.bringToBottom(this));
             scene.schedule(s -> ((GameScene) s).getDepths().forEach(s::bringToBottom));

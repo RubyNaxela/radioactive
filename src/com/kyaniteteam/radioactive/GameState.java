@@ -44,11 +44,7 @@ public class GameState {
     public void prepBarrels() {
         barrelStates = new ArrayList<>(6);
         startingBarrelsCount = barrels;
-        for (int i = 0; i < startingBarrelsCount; i++) {
-            barrelStates.add("ready");
-        }
-        for (int i = startingBarrelsCount; i < 6; i++) {
-            barrelStates.add("nonexistent");
-        }
+        for (int i = 0; i < startingBarrelsCount; i++) barrelStates.add("ready");
+        for (int i = startingBarrelsCount; i < 6; i++) barrelStates.add("nonexistent");
     }
 }

@@ -1,15 +1,15 @@
 package com.kyaniteteam.radioactive.entities.boats;
 
 import com.kyaniteteam.radioactive.GameScene;
+import com.rubynaxela.kyanite.audio.Sound;
 import com.rubynaxela.kyanite.game.GameContext;
-import com.rubynaxela.kyanite.game.assets.AnimatedTexture;
 import com.rubynaxela.kyanite.game.assets.AssetsBundle;
 import com.rubynaxela.kyanite.game.assets.AudioHandler;
-import com.rubynaxela.kyanite.game.assets.Texture;
-import com.rubynaxela.kyanite.util.Vec2;
+import com.rubynaxela.kyanite.graphics.AnimatedTexture;
+import com.rubynaxela.kyanite.graphics.Texture;
+import com.rubynaxela.kyanite.math.Vec2;
+import com.rubynaxela.kyanite.util.Time;
 import org.jetbrains.annotations.NotNull;
-import org.jsfml.audio.Sound;
-import org.jsfml.system.Time;
 
 public class PoliceBoat extends EnemyBoat {
 
@@ -25,7 +25,7 @@ public class PoliceBoat extends EnemyBoat {
 
     public PoliceBoat(@NotNull GameScene scene, float lightLength, float lightSpread) {
         super(scene, Vec2.f(55, 97), lightLength, lightSpread);
-        idleTexture.apply(this);
+        setTexture(idleTexture);
     }
 
     @Override
@@ -33,15 +33,13 @@ public class PoliceBoat extends EnemyBoat {
         super.animate(deltaTime, elapsedTime);
         if (chase) {
             if (!chasingMode) {
-                animatedTexture.apply(this);
+                setTexture(animatedTexture);
                 chasingMode = true;
                 sound = audioHandler.playSound("sound.police", "boats", 100, 1, true);
-
             }
         } else {
             if (chasingMode) {
-                animatedTexture.remove(this);
-                idleTexture.apply(this);
+                setTexture(idleTexture);
                 chasingMode = false;
                 sound.stop();
             }

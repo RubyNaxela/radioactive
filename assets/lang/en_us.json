@@ -1,0 +1,18 @@
+{
+  "button.next_level": "Next level",
+  "button.pause": "Pause",
+  "button.resume": "Resume",
+  "button.play_again": "Play again",
+  "button.quit": "Quit game",
+  "label.barrels": "Barrels left:",
+  "label.day": "Day %d",
+  "label.fuel": "Fuel:",
+  "label.money": "Salary: %d",
+  "label.paused": "Paused",
+  "label.time": "Dropping time",
+  "label.game_over": "Game Over",
+  "label.press_space": "Press SPACE to continue",
+  "label.summary": "Level score: %d   Full score: %d",
+  "dialogue.intro": "hey, you are finally\n\n awake",
+  "dialogue.outro": "Thank you for playing!"
+}

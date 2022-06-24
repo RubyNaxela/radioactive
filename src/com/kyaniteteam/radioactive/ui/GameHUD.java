@@ -6,19 +6,17 @@ import com.rubynaxela.kyanite.game.GameContext;
 import com.rubynaxela.kyanite.game.HUD;
 import com.rubynaxela.kyanite.game.assets.AudioHandler;
 import com.rubynaxela.kyanite.game.assets.DataAsset;
-import com.rubynaxela.kyanite.game.assets.Texture;
-import com.rubynaxela.kyanite.game.entities.GlobalRect;
 import com.rubynaxela.kyanite.game.gui.RectangleButton;
-import com.rubynaxela.kyanite.game.gui.Text;
-import com.rubynaxela.kyanite.util.Colors;
-import com.rubynaxela.kyanite.util.Vec2;
+import com.rubynaxela.kyanite.graphics.Alignment;
+import com.rubynaxela.kyanite.graphics.Color;
+import com.rubynaxela.kyanite.graphics.Colors;
+import com.rubynaxela.kyanite.graphics.RectangleShape;
+import com.rubynaxela.kyanite.input.Mouse;
+import com.rubynaxela.kyanite.math.Vec2;
+import com.rubynaxela.kyanite.math.Vector2f;
 import com.rubynaxela.kyanite.window.Window;
+import com.rubynaxela.kyanite.window.event.MouseButtonEvent;
 import org.jetbrains.annotations.NotNull;
-import org.jsfml.graphics.Color;
-import org.jsfml.graphics.RectangleShape;
-import org.jsfml.system.Vector2f;
-import org.jsfml.window.Mouse;
-import org.jsfml.window.event.MouseButtonEvent;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class GameHUD extends HUD {
@@ -41,7 +39,6 @@ public class GameHUD extends HUD {
         }
     };
 
-    private final Texture SquirrelBasicTexture = GameContext.getInstance().getAssetsBundle().get("texture.squirrel_basic");
     DialogBox dialogueBox = new DialogBox();
 
     @Override
@@ -60,8 +57,6 @@ public class GameHUD extends HUD {
         barrelBar.setPosition(500, margin);
         add(barrelBar);
 
-//        add(fadingBar);
-
         money.setText(String.format(lang.getString("label.money"), 0));
         money.setCharacterSize(fontSize);
         money.setPosition(margin, margin + fontSize);
@@ -75,7 +70,7 @@ public class GameHUD extends HUD {
 
         day.setText(String.format(lang.getString("label.day"), gameState.currentLevel));
         day.setCharacterSize(fontSize);
-        day.setAlignment(Text.Alignment.BOTTOM_LEFT);
+        day.setAlignment(Alignment.BOTTOM_LEFT);
         day.setPosition(margin, window.getSize().y - fontSize / 2f - margin);
         day.setColor(Colors.WHITE);
         add(day);
@@ -91,16 +86,16 @@ public class GameHUD extends HUD {
 
         pausedLabel.setText(lang.getString("label.paused"));
         pausedLabel.setCharacterSize(fontSize * 2);
-        pausedLabel.setAlignment(Text.Alignment.BOTTOM_CENTER);
-        pausedLabel.setPosition(Vec2.divideFloat(window.getSize(), 2));
+        pausedLabel.setAlignment(Alignment.BOTTOM_CENTER);
+        pausedLabel.setPosition(Vec2.f(Vec2.divideFloat(window.getSize(), 2)));
         pausedLabel.setColor(Colors.TRANSPARENT);
         add(pausedLabel);
 
         pauseText.setText(lang.getString("button.pause"));
         pauseText.setCharacterSize(fontSize);
-        pauseText.setAlignment(Text.Alignment.CENTER);
+        pauseText.setAlignment(Alignment.CENTER);
         pauseText.setColor(Colors.WHITE);
-        pauseText.setPosition(Vec2.subtract(GlobalRect.from(pause.getGlobalBounds()).getCenter(), Vec2.f(0, fontSize / 3f)));
+        pauseText.setPosition(Vec2.subtract(pause.getGlobalBounds().getCenter(), Vec2.f(0, fontSize / 3f)));
         add(pauseText);
     }
 
@@ -110,12 +105,10 @@ public class GameHUD extends HUD {
         barrels.setBarrelsCount(state.barrelStates);
         money.setText(String.format(lang.getString("label.money"), state.money));
         fuel.setPercentage(state.fuel);
-        barrelBar.setBarColor(new Color(0, 0, 0, 0));
+        barrelBar.setBarColor(Colors.TRANSPARENT);
         if (getContext().getWindow().getScene() instanceof final GameScene scene) {
             barrelBar.setPercentage(100.0f - state.dropProgress);
-            if (!scene.getPlayer().isCurrentlyDropping()) {
-                barrelBar.setBarColor(new Color(0, 0, 0, 0));
-            }
+            if (!scene.getPlayer().isCurrentlyDropping()) barrelBar.setBarColor(Colors.TRANSPARENT);
         }
     }
 
@@ -124,7 +117,7 @@ public class GameHUD extends HUD {
         if (!scene.isSuspended()) {
             scene.suspend();
             pauseText.setText(lang.getString("button.resume"));
-            overlay.setFillColor(Colors.opacity(Colors.BLACK, 0.5f));
+            overlay.setFillColor(Colors.BLACK.withOpacity(0.5f));
             pausedLabel.setColor(Colors.WHITE);
             audioHandler.pauseAllPlayingSounds();
         } else {
